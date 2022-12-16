@@ -1,0 +1,120 @@
+.filters {
+	display: flex;
+	gap: 1.5rem;
+	margin-bottom: 2.5rem;
+}
+
+.filterLabel {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+}
+
+.cardDesk {
+	display: grid;
+	gap: 0.125rem;
+	background-color: var(--table-head-color);
+
+	&:not(.marginBottom) {
+		margin-bottom: 1.25rem;
+	}
+
+	&.marginBottom {
+		margin-bottom: 2.5rem;
+	}
+
+	&.cardDeskGrid2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	&.cardDeskGrid3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	&.cardDeskGrid4 {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	&.bgWhite {
+		background-color: #fff;
+	}
+}
+
+.cardWrapper {
+	&:not(:last-child) {
+		padding-right: 2rem;
+	}
+
+	&:not(:first-child) {
+		padding-left: 2rem;
+	}
+
+	background-color: var(--white-color);
+}
+
+.cardBody {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+
+	&.fileCardBody {
+		flex-direction: column;
+	}
+}
+
+.cardBodyLabel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: center;
+
+	input:not([type="file"]) {
+		width: 100%;
+	}
+}
+
+.topBottomBorder {
+	padding: 1.25rem;
+	margin-bottom: 1.25rem;
+	border-top: 2px solid var(--table-head-color);
+	border-bottom: 2px solid var(--table-head-color);
+}
+
+.cardRows {
+	display: flex;
+	flex-direction: column;
+}
+
+.cardRow {
+	input {
+		max-width: 6.25rem;
+	}
+}
+
+.cardRowLabel {
+	padding: 0.5rem 0.75rem;
+	background-color: var(--table-head-color);
+	border: 1px solid var(--table-border-color);
+	box-shadow: var(--shadow-but);
+}
+
+.columnFillFrom2 {
+	grid-column: 2/-1;
+}
+
+.percentGrid3 {
+	display: grid;
+	grid-template-columns: 25% 1fr 12.75%;
+}
+
+.labelDeskGrid5 {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	align-items: center;
+}
+
+.labelDeskGrid2 {
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr 5.5rem;
+}

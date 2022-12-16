@@ -1,0 +1,9 @@
+build
+coverage
+node_modules
+public
+.next
+*.json
+*.log
+scripts
+*.d.ts

@@ -1,0 +1,41 @@
+.mySelect {
+	:global(.my__control) {
+		height: 2.594rem;
+		border-radius: var(--rounded);
+		border: 1px solid var(--table-border-color);
+	}
+
+	&::placeholder {
+		:global(.my__control) {
+			color: var(--muted-text-color);
+		}
+	}
+
+	&:hover,
+	&:active,
+	&:focus {
+		:global(.my__control) {
+			outline: none;
+			background-color: #fff;
+		}
+	}
+
+	// bg color
+	&.colored {
+		:global(.my__control) {
+			background-color: var(--table-head-color);
+		}
+	}
+
+	// size (dimension)
+	&.sm {
+		:global(.my__control) {
+		}
+	}
+
+	&.lg {
+		:global(.my__control) {
+			padding: 0.75rem 1.25rem;
+		}
+	}
+}

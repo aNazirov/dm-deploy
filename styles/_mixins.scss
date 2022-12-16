@@ -1,0 +1,239 @@
+@mixin absolute_vertical_alignment {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+@mixin flex(
+	$v_align: false,
+	$h_align: false,
+	$direction: false,
+	$v_h_align: false,
+	$c_gap: false,
+	$r_gap: false,
+	$gap: false,
+	$wrap: false,
+	$options: false,
+	$all_included: false,
+	$basis: false
+) {
+	display: flex;
+
+	@if ($v_align) {
+		align-items: $v_align;
+	}
+
+	@if ($h_align) {
+		justify-content: $h_align;
+	}
+
+	@if ($direction) {
+		flex-direction: $direction;
+	}
+
+	@if ($v_h_align) {
+		align-items: $v_h_align;
+		justify-content: $v_h_align;
+	}
+
+	@if ($c_gap) {
+		column-gap: $c_gap;
+	}
+
+	@if ($r_gap) {
+		row-gap: $r_gap;
+	}
+
+	@if ($gap) {
+		gap: $gap;
+	}
+
+	@if ($wrap) {
+		flex-wrap: $wrap;
+	}
+
+	@if ($options) {
+		flex: $options;
+	}
+
+	@if ($all_included) {
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	@if ($basis) {
+		flex-basis: $basis;
+	}
+}
+
+@mixin block_1800 {
+	@media (max-width: 1800.98px) {
+		@content;
+	}
+}
+
+@mixin block_1600 {
+	@media (max-width: 1600.98px) {
+		@content;
+	}
+}
+
+@mixin block_1400 {
+	@media (max-width: 1400.98px) {
+		@content;
+	}
+}
+
+@mixin block_1320 {
+	@media (max-width: 1320.98px) {
+		@content;
+	}
+}
+
+@mixin block_1200 {
+	@media (max-width: 1200.98px) {
+		@content;
+	}
+}
+
+@mixin block_992 {
+	@media (max-width: 992.98px) {
+		@content;
+	}
+}
+
+@mixin block_768 {
+	@media (max-width: 768.98px) {
+		@content;
+	}
+}
+
+@mixin block_576 {
+	@media (max-width: 576.98px) {
+		@content;
+	}
+}
+
+@mixin block_480 {
+	@media (max-width: 480.98px) {
+		@content;
+	}
+}
+
+@mixin block_360 {
+	@media (max-width: 360.98px) {
+		@content;
+	}
+}
+
+@mixin custom-media($size) {
+	@media (max-width: $size) {
+		@content;
+	}
+}
+
+@mixin h1 {
+	font-size: 4.5rem;
+	font-weight: 700;
+	letter-spacing: 0.02rem;
+	line-height: 1.2;
+}
+
+@mixin h2 {
+	font-size: 3.375rem;
+	font-weight: 500;
+	letter-spacing: 0.014rem;
+	line-height: 1.15;
+}
+
+@mixin h3 {
+	font-size: 2.75rem;
+	font-weight: 500;
+	letter-spacing: 0.012rem;
+	line-height: 1.18;
+}
+
+@mixin h4 {
+	font-size: 2.25rem;
+	font-weight: 500;
+	letter-spacing: 0.01em;
+	line-height: 1.17;
+}
+
+@mixin h5 {
+	font-size: 1.625rem;
+	font-weight: 500;
+	letter-spacing: 0.008rem;
+	line-height: 1.3;
+}
+
+@mixin h6 {
+	font-size: 1.125rem;
+	font-weight: 500;
+	letter-spacing: 0.008rem;
+	line-height: 1.33;
+}
+
+@mixin subtitle {
+	font-size: 1rem;
+	font-weight: 400;
+	letter-spacing: 0.015rem;
+	line-height: 1.5;
+}
+
+@mixin subtitle-md {
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: 0.015rem;
+	line-height: 1.37;
+}
+
+@mixin body {
+	font-size: 1rem;
+	letter-spacing: 0.015rem;
+	line-height: 1.25;
+}
+
+@mixin body-md {
+	font-size: 0.875rem;
+	font-weight: 500;
+	letter-spacing: 0.016rem;
+	line-height: 1.29;
+}
+
+@mixin body-sm {
+	font-size: 0.875rem;
+	font-weight: 400;
+	letter-spacing: 0.012rem;
+	line-height: 1.43;
+}
+
+@mixin caption {
+	font-size: 0.75rem;
+	font-weight: 400;
+	letter-spacing: 0.015rem;
+	line-height: 1.33;
+}
+
+@mixin overline {
+	font-size: 0.625rem;
+	letter-spacing: 0.06em;
+	line-height: 1.6;
+	text-transform: uppercase;
+}
+
+@mixin pageWrapper {
+	background-image: linear-gradient(157.09deg, #f4f7fa 15.24%, #e6ecf2 85.86%);
+	border: 1.5px solid #fff;
+	border-radius: 24px;
+	box-shadow: 0 49px 80px -35px rgb(0 0 0 / 12%);
+	min-height: 100%;
+	padding: 24px;
+
+	@include block_768 {
+		border: 0;
+		border-radius: 8px;
+		padding: 8px;
+	}
+}

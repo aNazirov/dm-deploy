@@ -1,0 +1,32 @@
+.badge {
+	box-shadow: var(--shadow-but);
+	border-radius: var(--rounded);
+	color: var(--white-color);
+	padding: 0.125rem 1.5rem;
+	width: max-content;
+}
+
+.warning {
+	background-color: var(--status-sent-color);
+
+	&:hover {
+		background-color: var(--status-hover-sent-color);
+	}
+}
+
+
+.danger {
+	background-color: var(--status-reject-color);
+
+	&:hover {
+		background-color: var(--status-hover-reject-color);
+	}
+}
+
+.success {
+	background-color: var(--status-hover-submit-color);
+
+	&:hover {
+		background-color: var(--status-hover-submit-color);
+	}
+}

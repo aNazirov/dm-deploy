@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines",
+    "stylelint-prettier/recommended"
+  ],
+  "defaultSeverity": "warning",
+  "rules": {
+    "indentation": "tab",
+    "order/properties-alphabetical-order": true,
+    "scss/dollar-variable-pattern": null,
+    "no-descending-specificity": null,
+    "selector-no-qualifying-type": null,
+    "color-no-invalid-hex": true,
+    "no-empty-source": null,
+    "color-named": null,
+    "scss/at-mixin-pattern": "^[a-z][a-z0-9-_]*[a-z0-9]$",
+    "selector-max-id": null,
+    "selector-max-compound-selectors": 4,
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "max-nesting-depth": [
+      4,
+      {
+        "severity": "warning",
+        "message": "Exceeded maximum nesting depth (4)",
+        "ignore": [
+          "pseudo-classes"
+        ]
+      }
+    ]
+  }
+}

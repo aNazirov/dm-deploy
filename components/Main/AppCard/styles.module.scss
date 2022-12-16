@@ -1,0 +1,18 @@
+.card {
+	background-color: var(--white-color);
+	box-shadow: var(--shadow);
+
+	&.tableShadow {
+		box-shadow: var(--shadow-table);
+	}
+}
+
+.cardHeader {
+	background-color: var(--table-head-color);
+	padding: 1rem;
+	text-align: center;
+}
+
+.cardBody {
+	padding: 1.25rem;
+}

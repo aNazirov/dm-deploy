@@ -1,0 +1,82 @@
+.aside {
+	width: 19.75rem;
+	padding: 0.75rem 1rem 2.5rem;
+	display: flex;
+	flex-direction: column;
+	transition: 0.3s all;
+
+	&.collapsed {
+		padding: 0.75rem 0 2.5rem;
+		width: 3.375rem;
+		margin-left: 1rem;
+
+		.asideLink {
+			justify-content: center;
+			padding: 0.75rem 0.688rem;
+
+			svg + span, span + svg {
+				display: none;
+			}
+		}
+
+		.collapseBtn {
+			padding: 0;
+		}
+	}
+}
+
+.asideListWrapper {
+	background-color: var(--white-color);
+	box-shadow: var(--shadow);
+	padding: 0 0.375rem;
+	max-height: 35.938rem;
+	overflow: hidden auto;
+}
+
+.asideList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+	background-color: var(--main-select-color);
+
+	li {
+		background-color: var(--white-color);
+	}
+}
+
+.asideLink {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 0.625rem;
+	margin: 0.75rem 0;
+	background-color: var(--white-color);
+
+	&:has(+.asideSubList) {
+		padding: 0.325rem 0.625rem;
+	}
+
+	&:hover {
+		background-color: var(--main-select-color);
+	}
+
+	&.active {
+		background-color: var(--main-select-color);
+
+		.chevronIcon {
+			transform: rotate(180deg);
+		}
+	}
+
+	.chevronIcon {
+		transition: all 0.3s;
+	}
+}
+
+.asideSubList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 0 0.5rem 0.75rem;
+	background-color: var(--white-color);
+}

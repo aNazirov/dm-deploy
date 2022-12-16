@@ -1,0 +1,22 @@
+{
+  "printWidth": 120,
+  "useTabs": true,
+  "trailingComma": "all",
+  "endOfLine": "auto",
+  "bracketSpacing": false,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ["*.ts, *.tsx"],
+      "options": {
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ["*.scss", "*.css"],
+      "options": {
+        "singleQuote": true
+      }
+    }
+  ]
+}
