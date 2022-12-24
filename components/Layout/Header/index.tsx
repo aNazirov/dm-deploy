@@ -10,6 +10,7 @@ import {AppButton, AppDropdown, ThemeButton} from "../../Main";
 
 import {useAppDispatch} from "../../../core/hooks";
 import {autoLoginThunk, userLogoutThunk} from "../../../core/store/user/user.thunks";
+import {setUserAction} from "../../../core/store/user/user.slices";
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
@@ -17,7 +18,12 @@ export const Header = ({className}: HeaderProps) => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		dispatch(autoLoginThunk());
+		const promises = [dispatch(autoLoginThunk())];
+
+		return () => {
+			promises.forEach((p) => p.abort());
+			dispatch(setUserAction(null));
+		};
 	}, []);
 
 	const onLogout = () => {

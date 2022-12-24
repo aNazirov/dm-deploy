@@ -1,9 +1,44 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider, AppTable} from "../../components/Main";
-import ChevronIcon from "../../assets/images/icons/filled/arrows/chevron-left.svg";
+import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main";
+import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
+import {useRouter} from "next/router";
+import {useAppDispatch, useAppSelector} from "../../../core/hooks";
+import {
+	changeStatusOfFinancialExpensesReportThunk,
+	getFinancialExpensesReportByIdThunk,
+} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
+import {setFinancialExpenseReportByIdAction} from "../../../core/store/report/financialExpenses/financial-expenses-report.slices";
+import {eReportStatusType} from "../../../core/models";
 
 const CenterFinancialExpensesListInfoPage = () => {
+	const router = useRouter();
+	const reportId = router.query["reportId"] as string;
+
+	const dispatch = useAppDispatch();
+	const report = useAppSelector(({financialExpensesReport}) => financialExpensesReport.current);
+
+	useEffect(() => {
+		if (reportId) {
+			const id = +reportId;
+
+			if (!isNaN(id)) {
+				const promises = [dispatch(getFinancialExpensesReportByIdThunk(id))];
+
+				return () => {
+					promises.forEach((p) => p.abort());
+					dispatch(setFinancialExpenseReportByIdAction(null));
+				};
+			}
+		}
+	}, [reportId]);
+
+	const onClick = (statusTypeId: eReportStatusType) => () => {
+		dispatch(changeStatusOfFinancialExpensesReportThunk({id: +reportId, statusId: statusTypeId}));
+	};
+
+	if (!report) return null;
+
 	return (
 		<>
 			<Head>
@@ -70,15 +105,15 @@ const CenterFinancialExpensesListInfoPage = () => {
 			</div>
 			{/*TODO: add padding-top to avoid adhesion in small heights of screen*/}
 			<div className="flex-justify-between mt-auto pe-2.5">
-				<AppButton useAs="link" href="/" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href="/reports/financial-expenses" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<div className="d-flex gap-0.5">
-					<AppButton size="lg" variant="danger">
+					<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
 						Отказать
 					</AppButton>
-					<AppButton size="lg" variant="success">
+					<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
 						Принять
 					</AppButton>
 				</div>

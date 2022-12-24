@@ -1,14 +1,14 @@
 .list {
-	position: absolute;
-	padding: 0.5rem;
-	margin-top: 0.325rem;
+	background-color: var(--white-color);
 	border: 1px solid var(--table-border-color);
-	filter: drop-shadow(#{var(--shadow-but)});
-	min-width: 21.875rem;
 	display: flex;
+	filter: drop-shadow(#{var(--shadow-but)});
 	flex-direction: column;
 	gap: 2px;
-	background-color: var(--white-color);
+	margin-top: 0.325rem;
+	min-width: 21.875rem;
+	padding: 0.5rem;
+	position: absolute;
 
 	&.left {
 		left: 0;
@@ -28,8 +28,8 @@
 	}
 
 	&.text-end {
-		text-align: end;
 		align-items: flex-end;
+		text-align: end;
 
 		button {
 			text-align: end;
@@ -37,8 +37,8 @@
 	}
 
 	&.text-center {
-		text-align: center;
 		align-items: center;
+		text-align: center;
 
 		button {
 			text-align: center;
@@ -47,19 +47,16 @@
 
 	li,
 	button {
-		width: 100%;
-		flex: 1;
 		display: block;
+		flex: 1;
+		width: 100%;
 	}
 }
 
 .listHeader {
-	padding-top: 0.25rem;
-	padding-bottom: 0.25rem;
-	margin-right: 0.5rem;
-	margin-left: 0.5rem;
 	border-bottom: 1px solid #000;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+	padding-bottom: 0.25rem;
+	padding-top: 0.25rem;
 }
-
-
-

@@ -4,6 +4,7 @@ import cn from "classnames";
 
 interface TableProps extends DetailedHTMLProps<HTMLAttributes<HTMLTableElement>, HTMLTableElement> {
 	wrapperClassName?: string;
+	linked?: boolean;
 }
 interface TableHeadSectionProps
 	extends DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement> {
@@ -11,10 +12,10 @@ interface TableHeadSectionProps
 }
 type TableSectionProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
 
-export const AppTable = ({children, wrapperClassName, className, ...props}: TableProps) => {
+export const AppTable = ({children, linked, wrapperClassName, className, ...props}: TableProps) => {
 	return (
 		<div className={cn(styles.tableWrapper, wrapperClassName)}>
-			<table className={cn(styles.table, className)} {...props}>
+			<table className={cn(styles.table, className, {"linked-table": linked})} {...props}>
 				{children}
 			</table>
 		</div>

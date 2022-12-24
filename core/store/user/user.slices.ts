@@ -16,7 +16,7 @@ export const {
 	name: "user",
 	initialState,
 	reducers: {
-		setUserAction: (state: IState, action: PayloadAction<UserModel>) => {
+		setUserAction: (state: IState, action: PayloadAction<UserModel | null>) => {
 			state.user = action.payload;
 		},
 	},

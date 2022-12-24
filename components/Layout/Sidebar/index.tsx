@@ -115,33 +115,21 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 							<span>Повышение квалификации</span>
 						</Link>
 					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/training-list")})}
-							href="/reports/training-list"
-						>
-							{isCurrentPath("/reports/training-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
 
-							<span>Повышение квалификации (ОЦ)</span>
-						</Link>
-					</li>
 					<li>
 						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/training-list-info")})}
-							href="/reports/training-list-info"
+							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/financial-expenses")})}
+							href="/reports/financial-expenses"
 						>
-							{isCurrentPath("/reports/training-list-info") ? (
+							{isCurrentPath("/reports/financial-expenses") ? (
 								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							) : (
 								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							)}
-							<span>Повышение квалификации (детали)</span>
+							<span>Финансовые расходы центра (ОЦ)</span>
 						</Link>
 					</li>
+
 					<li>
 						<Link
 							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done")})}
@@ -179,47 +167,6 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							)}
 							<span>Проделанная работа в регионах (детали)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/center-financial-expenses")})}
-							href="/reports/center-financial-expenses"
-						>
-							{isCurrentPath("/reports/center-financial-expenses") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Финансовые расходы центра (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/center-financial-expenses-list")})}
-							href="/reports/center-financial-expenses-list"
-						>
-							{isCurrentPath("/reports/center-financial-expenses-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Финансовые расходы центра (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {
-								active: isCurrentPath("/reports/center-financial-expenses-list-info"),
-							})}
-							href="/reports/center-financial-expenses-list-info"
-						>
-							{isCurrentPath("/reports/center-financial-expenses-list-info") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Финансовые расходы центра (детали)</span>
 						</Link>
 					</li>
 					<li>
@@ -332,19 +279,6 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 							href="/reports/telemedicine"
 						>
 							{isCurrentPath("/reports/telemedicine") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Телемедицина (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/telemedicine-list")})}
-							href="/reports/telemedicine-list"
-						>
-							{isCurrentPath("/reports/telemedicine-list") ? (
 								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							) : (
 								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />

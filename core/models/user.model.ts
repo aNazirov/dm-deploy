@@ -27,7 +27,7 @@ export class UserModel {
 	organization: {id: number; title: ITranslate};
 	permissions?: PermissionModel[];
 	contact: IContact;
-	role: RoleModel;
+	// role: RoleModel;
 	speciality: ISpeciality;
 	position: IPosition;
 	firstName?: string;
@@ -42,7 +42,7 @@ export class UserModel {
 		this.speciality = user.speciality;
 		this.position = user.position;
 
-		this.role = new RoleModel(user.role);
+		// this.role = new RoleModel(user.role);
 
 		if (user.permissions) {
 			this.permissions = user.permissions.map((p) => new PermissionModel(p));

@@ -6,14 +6,20 @@ import {
 	StateFromReducersMapObject,
 } from "@reduxjs/toolkit";
 
-import {dailyReport} from "./report/daily/daily-report.slices";
+import {dailyReportReducer} from "./report/daily/daily-report.slices";
+import {financialExpensesReportReducer} from "./report/financialExpenses/financial-expenses-report.slices";
+import {TelemedicineReportReducer} from "./report/telemedicine/telemedicine.slices";
+import {trainingReportReducer} from "./report/training/training-report.slices";
 import {themeReducer} from "./theme/theme.slices";
 import {userReducer} from "./user/user.slices";
 
 const State = {
-	theme: themeReducer,
 	user: userReducer,
-	dailyReport: dailyReport,
+	theme: themeReducer,
+	dailyReport: dailyReportReducer,
+	trainingReport: trainingReportReducer,
+	financialExpensesReport: financialExpensesReportReducer,
+	telemedicineReport: TelemedicineReportReducer,
 };
 
 export const appReducer = combineReducers(State);

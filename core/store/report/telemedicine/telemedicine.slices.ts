@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {DailyReportModel} from "../../../models";
+import {TelemedicineReportModel} from "../../../models";
 
 interface IState {
-	list: DailyReportModel[];
+	list: TelemedicineReportModel[];
 	count: number;
-	current: DailyReportModel | null;
+	current: TelemedicineReportModel | null;
 }
 
 const initialState: IState = {
@@ -15,13 +15,13 @@ const initialState: IState = {
 };
 
 export const {
-	reducer: dailyReportReducer,
-	actions: {setDailyReportByIdAction, setAllDailyReportsAction},
+	reducer: TelemedicineReportReducer,
+	actions: {setTelemedicineReportByIdAction, setAllTelemedicineReportsAction},
 } = createSlice({
-	name: "dailyReport",
+	name: "telemedicineReport",
 	initialState,
 	reducers: {
-		setDailyReportByIdAction: (state: IState, action: PayloadAction<DailyReportModel | null>) => {
+		setTelemedicineReportByIdAction: (state: IState, action: PayloadAction<TelemedicineReportModel | null>) => {
 			state.current = action.payload;
 
 			if (action.payload) {
@@ -33,7 +33,10 @@ export const {
 				}
 			}
 		},
-		setAllDailyReportsAction: (state: IState, action: PayloadAction<{list: DailyReportModel[]; count: number}>) => {
+		setAllTelemedicineReportsAction: (
+			state: IState,
+			action: PayloadAction<{list: TelemedicineReportModel[]; count: number}>,
+		) => {
 			state.count = action.payload.count;
 			if (state.list.length) {
 				const ids = new Set(action.payload.list.map((r) => r.id));

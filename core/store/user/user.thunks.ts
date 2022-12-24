@@ -17,13 +17,13 @@ export const userLoginThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
-export const userLogoutThunk = createAsyncThunk("user/logout", async () => {
+export const userLogoutThunk = createAsyncThunk("user/logout", () => {
 	const token = localStorage.getItem("jwt");
 
 	if (token) {
 		localStorage.removeItem("jwt");
-		window.location.href = "/auth/login";
 	}
+	window.location.href = "/auth/login";
 });
 
 export const autoLoginThunk = createAsyncThunk(

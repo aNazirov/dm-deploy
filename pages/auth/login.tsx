@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import {useForm} from "react-hook-form";
@@ -18,11 +18,7 @@ const LoginPage = () => {
 
 	const dispatch = useAppDispatch();
 
-	const {
-		register,
-		handleSubmit,
-		formState: {errors},
-	} = useForm<ILogin>({
+	const {register, handleSubmit} = useForm<ILogin>({
 		defaultValues: {
 			phone: "+998908380334",
 			password: "k5Hx1Tl9e1G$",

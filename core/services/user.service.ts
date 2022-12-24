@@ -20,7 +20,7 @@ export const UserService = {
 				return {user: new UserModel(res.data)};
 			})
 			.catch((e) => {
-				if (e.response?.status === 404) {
+				if (e.response?.status === 404 || e.response?.status === 403) {
 					store.dispatch(userLogoutThunk());
 				}
 				Toast.error(e);

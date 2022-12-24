@@ -4,22 +4,22 @@
 }
 
 .iconWrapper {
-	background-color: var(--main-button-color);
-	width: 3rem;
-	height: 3rem;
-	display: flex;
 	align-items: center;
+	background-color: var(--main-button-color);
+	display: flex;
+	height: 3rem;
 	justify-content: center;
 	transition: all 0.3s;
+	width: 3rem;
 
-	&:has(+.input:hover,+.input:active, +.input:focus) {
+	&:has(+ .input:hover, + .input:active, + .input:focus) {
 		background-color: var(--main-hover-button-color);
 	}
 }
 
 .input {
-	transition: all 0.3s;
 	border: 1px solid var(--table-border-color);
+	transition: all 0.3s;
 
 	&::placeholder {
 		color: var(--muted-text-color);
@@ -28,8 +28,8 @@
 	&:hover,
 	&:active,
 	&:focus {
-		outline: none;
 		background-color: #fff;
+		outline: none;
 	}
 
 	// bg color
@@ -48,29 +48,30 @@
 }
 
 .file {
+	border: 0;
+	height: 0;
 	opacity: 0;
+	overflow: hidden;
 	visibility: hidden;
 	width: 0;
-	height: 0;
-	overflow: hidden;
-	border: 0;
 
-	&.sm, &.lg {
+	&.sm,
+	&.lg {
 		padding: 0;
 	}
 }
 
 .fileWrapper {
-	width: 100%;
-	padding: 0.5rem 0.75rem;
-	display: flex;
-	justify-content: center;
 	align-items: center;
-	gap: 0.5rem;
 	background-color: var(--print-button-color);
-	color: var(--white-color);
 	box-shadow: var(--shadow-but);
+	color: var(--white-color);
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
+	padding: 0.5rem 0.75rem;
 	transition: 0.3s all;
+	width: 100%;
 
 	&:hover,
 	&:active,

@@ -1,4 +1,4 @@
-@import "mixins";
+@import 'mixins';
 
 .layout {
 	column-gap: 1.5rem;
@@ -19,12 +19,12 @@
 }
 
 .main {
+	display: flex;
+	flex-direction: column;
 	grid-column: col-start 3 / span 10;
 	grid-row: 2 / 4;
 	overflow-y: auto;
 	padding: 0 2.5rem 2.5rem 1.5rem;
-	display: flex;
-	flex-direction: column;
 
 	&.large {
 		grid-column: col-start / span 12;

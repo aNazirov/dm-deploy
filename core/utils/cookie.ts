@@ -3,7 +3,7 @@ export function getCookie(name: string, cookie = "") {
 	return matches ? decodeURIComponent(matches[1]) : "";
 }
 
-export function setCookie(name: string, value: string, options: any = {}) {
+export function setCookie(name: string, value: string, options: Record<string, unknown> = {}) {
 	options = {
 		path: "/",
 		...options,

@@ -1,3 +1,4 @@
+import {ePlace} from "./table.model";
 import {ITranslate} from "./user.model";
 
 export enum eReportStatusType {
@@ -5,6 +6,7 @@ export enum eReportStatusType {
 	Approved,
 	Rejected,
 }
+
 export interface IReportDailyCreateParams {
 	freeBeds: number;
 	occupiedBeds: number;
@@ -20,8 +22,71 @@ export interface IReportDailyCreateParams {
 	hospitalReceiptsCash: number;
 	gfms: number;
 	otherReceipts: number;
+	note?: string;
 }
+
+export interface IReportTrainingCreateParams {
+	confNational: number;
+	confInternational: number;
+	learnNationalShort: number;
+	learnInternationalShort: number;
+	learnNationalMid: number;
+	learnInternationalMid: number;
+	learnNationalLong: number;
+	learnInternationalLong: number;
+	note?: string;
+	files?: number[];
+}
+
+export interface IReportFinancialExpensesCreateParams {
+	businessTrips: number;
+	salaries: number;
+	repairs: number;
+	sponsorships: number;
+	innovations: number;
+	education: number;
+	materials: number;
+	inventory: number;
+	otherExpenses: number;
+	socialPayments: number;
+	communalPayments: number;
+	outsource: number;
+	total: number;
+	note?: string;
+}
+
+export interface IReportTelemedicineCreateParams {
+	telemedicineParts: Omit<TelemedicinePartModel, "id">[];
+}
+
 export interface IReportDailyGetParams {
+	skip: number;
+	take: number;
+	organizationId?: number;
+	statusId?: eReportStatusType;
+	start?: string;
+	end?: string;
+}
+
+export interface IReportTrainingGetParams {
+	skip: number;
+	take: number;
+	organizationId?: number;
+	statusId?: eReportStatusType;
+	start?: string;
+	end?: string;
+}
+
+export interface IReportFinancialExpensesGetParams {
+	skip: number;
+	take: number;
+	organizationId?: number;
+	statusId?: eReportStatusType;
+	start?: string;
+	end?: string;
+}
+
+export interface IReportTelemedicineGetParams {
 	skip: number;
 	take: number;
 	organizationId?: number;
@@ -30,13 +95,14 @@ export interface IReportDailyGetParams {
 	end?: string;
 }
 
+// TODO: when you start config multi-translate, make class and pass title dynamically by current language
 export interface IShortOrganizationInfo {
 	id: number;
 	title: ITranslate;
 }
 
 export interface IStatus {
-	id: number;
+	id: eReportStatusType;
 	title: ITranslate;
 }
 
@@ -60,7 +126,7 @@ export class DailyReportModel {
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
 	updatedAt: Date;
-	notes?: string;
+	note?: string;
 
 	constructor(report: DailyReportModel) {
 		this.id = report.id;
@@ -83,7 +149,7 @@ export class DailyReportModel {
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
 
-		if (report.notes) this.notes = report.notes;
+		if (report.note) this.note = report.note;
 	}
 }
 
@@ -101,7 +167,7 @@ export class TrainingReportModel {
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
 	updatedAt: Date;
-	notes?: string;
+	note?: string;
 
 	constructor(report: TrainingReportModel) {
 		this.id = report.id;
@@ -118,7 +184,7 @@ export class TrainingReportModel {
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
 
-		if (report.notes) this.notes = report.notes;
+		if (report.note) this.note = report.note;
 	}
 }
 
@@ -133,12 +199,16 @@ export class FinancialExpensesReportModel {
 	materials: number;
 	inventory: number;
 	expenses: number;
+	socialPayments: number;
+	communalPayments: number;
+	outsource: number;
+	total: number;
 	otherExpenses: number;
 	status: IStatus;
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
 	updatedAt: Date;
-	notes?: string;
+	note?: string;
 
 	constructor(report: FinancialExpensesReportModel) {
 		this.id = report.id;
@@ -155,9 +225,65 @@ export class FinancialExpensesReportModel {
 		this.status = report.status;
 		this.organization = report.organization;
 		this.id = report.id;
+		this.socialPayments = report.socialPayments;
+		this.communalPayments = report.communalPayments;
+		this.outsource = report.outsource;
+		this.total = report.total;
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
 
-		if (report.notes) this.notes = report.notes;
+		if (report.note) this.note = report.note;
+	}
+}
+
+export class TelemedicineReportModel {
+	id: number;
+	telemedicineParts: TelemedicinePartModel[];
+	note?: string;
+	user?: any;
+	status: eReportStatusType;
+	organization: IShortOrganizationInfo;
+	createdAt: Date;
+	updatedAt: Date;
+
+	constructor(report: TelemedicineReportModel) {
+		this.id = report.id;
+		this.status = report.status;
+		this.organization = report.organization;
+		this.createdAt = new Date(report.createdAt);
+		this.updatedAt = new Date(report.updatedAt);
+		this.telemedicineParts = report.telemedicineParts.map((p) => new TelemedicinePartModel(p));
+
+		if (report.note) {
+			this.note = report.note;
+		}
+		if (report.user) {
+			console.log(report.user);
+		}
+	}
+}
+
+export class TelemedicinePartModel {
+	id: number;
+	consultations: number;
+	councils: number;
+	demonstrationOperations: number;
+	seminars: number;
+	symposiums: number;
+	place: ePlace;
+	note?: string;
+
+	constructor(part: TelemedicinePartModel) {
+		this.id = part.id;
+		this.consultations = part.consultations;
+		this.councils = part.councils;
+		this.demonstrationOperations = part.demonstrationOperations;
+		this.seminars = part.seminars;
+		this.symposiums = part.symposiums;
+		this.place = part.place;
+
+		if (part.note) {
+			this.note = part.note;
+		}
 	}
 }

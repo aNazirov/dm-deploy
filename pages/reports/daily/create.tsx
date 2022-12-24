@@ -16,19 +16,12 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const DailyReportPage = () => {
+const DailyReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
 
-	const {
-		register,
-		handleSubmit,
-		watch,
-		setValue,
-		formState: {errors},
-		getValues,
-	} = useForm<IReportDailyCreateParams>();
+	const {register, handleSubmit, watch, setValue, getValues} = useForm<IReportDailyCreateParams>();
 
 	useEffect(() => {
 		const subscription = watch((value, {name}) => {
@@ -52,7 +45,7 @@ const DailyReportPage = () => {
 			void router.push(`/reports/daily/${id}`);
 		}
 	};
-	// TODO: URGENT check sum and set disabled first card
+
 	return (
 		<>
 			<Head>
@@ -278,10 +271,10 @@ const DailyReportPage = () => {
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Сохранить</span>
+					<span>Отправить отчёт</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
-export default DailyReportPage;
+export default DailyReportCreatePage;

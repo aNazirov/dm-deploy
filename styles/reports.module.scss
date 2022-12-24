@@ -5,15 +5,15 @@
 }
 
 .filterLabel {
-	display: flex;
 	align-items: center;
+	display: flex;
 	gap: 1.25rem;
 }
 
 .cardDesk {
+	background-color: var(--table-head-color);
 	display: grid;
 	gap: 0.125rem;
-	background-color: var(--table-head-color);
 
 	&:not(.marginBottom) {
 		margin-bottom: 1.25rem;
@@ -41,6 +41,8 @@
 }
 
 .cardWrapper {
+	background-color: var(--white-color);
+
 	&:not(:last-child) {
 		padding-right: 2rem;
 	}
@@ -48,14 +50,12 @@
 	&:not(:first-child) {
 		padding-left: 2rem;
 	}
-
-	background-color: var(--white-color);
 }
 
 .cardBody {
 	display: flex;
-	justify-content: center;
 	gap: 1rem;
+	justify-content: center;
 
 	&.fileCardBody {
 		flex-direction: column;
@@ -63,21 +63,21 @@
 }
 
 .cardBodyLabel {
+	align-items: center;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	align-items: center;
 
-	input:not([type="file"]) {
+	input:not([type='file']) {
 		width: 100%;
 	}
 }
 
 .topBottomBorder {
-	padding: 1.25rem;
-	margin-bottom: 1.25rem;
-	border-top: 2px solid var(--table-head-color);
 	border-bottom: 2px solid var(--table-head-color);
+	border-top: 2px solid var(--table-head-color);
+	margin-bottom: 1.25rem;
+	padding: 1.25rem;
 }
 
 .cardRows {
@@ -92,10 +92,10 @@
 }
 
 .cardRowLabel {
-	padding: 0.5rem 0.75rem;
 	background-color: var(--table-head-color);
 	border: 1px solid var(--table-border-color);
 	box-shadow: var(--shadow-but);
+	padding: 0.5rem 0.75rem;
 }
 
 .columnFillFrom2 {
@@ -108,13 +108,19 @@
 }
 
 .labelDeskGrid5 {
+	align-items: center;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
+}
+
+.labelDeskGrid6 {
 	align-items: center;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
 }
 
 .labelDeskGrid2 {
-	display: grid;
 	align-items: center;
+	display: grid;
 	grid-template-columns: 1fr 5.5rem;
 }

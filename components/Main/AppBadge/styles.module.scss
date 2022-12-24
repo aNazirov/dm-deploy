@@ -1,6 +1,6 @@
 .badge {
-	box-shadow: var(--shadow-but);
 	border-radius: var(--rounded);
+	box-shadow: var(--shadow-but);
 	color: var(--white-color);
 	padding: 0.125rem 1.5rem;
 	width: max-content;
@@ -13,7 +13,6 @@
 		background-color: var(--status-hover-sent-color);
 	}
 }
-
 
 .danger {
 	background-color: var(--status-reject-color);

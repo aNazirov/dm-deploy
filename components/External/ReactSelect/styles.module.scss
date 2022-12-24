@@ -1,8 +1,8 @@
 .mySelect {
 	:global(.my__control) {
-		height: 2.594rem;
-		border-radius: var(--rounded);
 		border: 1px solid var(--table-border-color);
+		border-radius: var(--rounded);
+		height: 2.594rem;
 	}
 
 	&::placeholder {
@@ -15,8 +15,8 @@
 	&:active,
 	&:focus {
 		:global(.my__control) {
-			outline: none;
 			background-color: #fff;
+			outline: none;
 		}
 	}
 

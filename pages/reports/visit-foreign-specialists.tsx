@@ -182,7 +182,7 @@ const VisitForeignSpecialistsPage = () => {
 				</AppButton>
 				<AppButton size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Сохранить</span>
+					<span>Отправить отчёт</span>
 				</AppButton>
 			</div>
 		</>
