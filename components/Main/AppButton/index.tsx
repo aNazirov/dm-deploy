@@ -3,17 +3,18 @@ import {AppButtonProps} from "./props";
 import cn from "classnames";
 import Link from "next/link";
 
-export const AppButton = ({children, variant, size, withIcon, className, ...props}: AppButtonProps) => {
+export const AppButton = ({children, variant, size, rounded, withIcon, className, ...props}: AppButtonProps) => {
 	if (props.useAs === "link") {
 		const {useAs, ...restProps} = props;
 		return (
 			<Link
-				className={cn("btn", "rounded", {
+				className={cn("btn", {
 					["text-btn"]: !variant,
 					[`${variant}-btn`]: variant,
 					[`${className}`]: className,
 					[`btn-${size}`]: size,
 					"text-with-icon": withIcon,
+					...(rounded ? {[`rounded-${rounded}`]: rounded} : {rounded: true}),
 				})}
 				{...restProps}
 			>
@@ -26,12 +27,13 @@ export const AppButton = ({children, variant, size, withIcon, className, ...prop
 			<a
 				target="_blank"
 				rel="noopener noreferrer"
-				className={cn("btn", "rounded", {
+				className={cn("btn", {
 					["text-btn"]: !variant,
 					[`${variant}-btn`]: variant,
 					[`${className}`]: className,
 					[`btn-${size}`]: size,
 					"text-with-icon": withIcon,
+					...(rounded ? {[`rounded-${rounded}`]: rounded} : {rounded: true}),
 				})}
 				{...restProps}
 			>
@@ -42,12 +44,13 @@ export const AppButton = ({children, variant, size, withIcon, className, ...prop
 		const {useAs, ...restProps} = props;
 		return (
 			<button
-				className={cn("btn", "rounded", {
+				className={cn("btn", {
 					["text-btn"]: !variant,
 					[`${variant}-btn`]: variant,
 					[`${className}`]: className,
 					[`btn-${size}`]: size,
 					"text-with-icon": withIcon,
+					...(rounded ? {[`rounded-${rounded}`]: rounded} : {rounded: true}),
 				})}
 				{...restProps}
 			>

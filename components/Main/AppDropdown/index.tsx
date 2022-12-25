@@ -53,7 +53,9 @@ export const AppDropdown = ({list, position, textAlign, header, changeCb, childr
 
 	return (
 		<div ref={parentRef} className={className}>
-			<div onClick={onToggleDropdown}>{children}</div>
+			<div className={cn("h-100", styles.parentOfChildren)} onClick={onToggleDropdown}>
+				{children}
+			</div>
 
 			{isOpen && (
 				<ul

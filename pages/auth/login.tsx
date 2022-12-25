@@ -28,7 +28,7 @@ const LoginPage = () => {
 	const onSubmit = async (fields: ILogin) => {
 		const action = await dispatch(userLoginThunk(fields));
 		if (action.payload) {
-			void router.push("/reports/daily");
+			void router.push("/");
 		}
 	};
 

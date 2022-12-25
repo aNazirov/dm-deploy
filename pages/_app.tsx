@@ -18,11 +18,11 @@ const App = ({Component, ...rest}: AppProps) => {
 
 	useEffect(() => {
 		if (localStorage.getItem("jwt")) {
-			if (currentPath?.includes("/auth/")) {
+			if (currentPath?.includes("/auth")) {
 				void router.push("/reports/daily");
 			}
-		} else {
-			void router.push("/auth/login");
+		} else if (!currentPath?.includes("/auth")) {
+			void router.push("/auth");
 		}
 	}, [currentPath]);
 
@@ -30,7 +30,7 @@ const App = ({Component, ...rest}: AppProps) => {
 		<Provider store={store}>
 			<ToastContainer />
 			<NextNProgress />
-			{currentPath?.includes("/auth/") ? (
+			{currentPath?.includes("/auth") ? (
 				<Component {...props.pageProps} />
 			) : (
 				<div className={styles.layout}>

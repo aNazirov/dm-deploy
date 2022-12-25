@@ -7,6 +7,7 @@ type BaseProps = {
 	variant?: "main" | "primary-outline" | "success" | "warning" | "danger" | "dark" | "outline-success" | "text";
 	size?: "xl" | "lg" | "square";
 	className?: string;
+	rounded?: "md" | "lg";
 };
 
 type ButtonAsButton = BaseProps &

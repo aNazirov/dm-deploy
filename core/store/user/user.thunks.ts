@@ -23,7 +23,7 @@ export const userLogoutThunk = createAsyncThunk("user/logout", () => {
 	if (token) {
 		localStorage.removeItem("jwt");
 	}
-	window.location.href = "/auth/login";
+	window.location.href = "/auth";
 });
 
 export const autoLoginThunk = createAsyncThunk(

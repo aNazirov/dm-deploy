@@ -4,15 +4,18 @@ import cn from "classnames";
 
 interface ICardProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	shadow?: "table";
+	rounded?: "md" | "lg";
 }
+
 type IHeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 type IBodyProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export const AppCard = ({children, shadow, className, ...props}: ICardProps) => {
+export const AppCard = ({children, shadow, className, rounded, ...props}: ICardProps) => {
 	return (
 		<div
-			className={cn("rounded", styles.card, className, {
+			className={cn(styles.card, className, {
 				[styles.tableShadow]: shadow === "table",
+				...(rounded ? {[`rounded-${rounded}`]: rounded} : {rounded: true}),
 			})}
 			{...props}
 		>

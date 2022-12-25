@@ -177,7 +177,7 @@ const DailyReportCreatePage = () => {
 			</div>
 
 			<div className="flex-center">
-				<h2 className={cn("h2", styles.topBottomBorder)}>Поступившие деньги</h2>
+				<h2 className={cn("h3", styles.topBottomBorder)}>Поступившие деньги</h2>
 			</div>
 
 			<div className={cn(styles.cardDesk, styles.cardDeskGrid4)}>

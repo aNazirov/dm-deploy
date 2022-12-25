@@ -2,10 +2,18 @@
 	background-image: var(--light-gradient);
 	min-height: 100vh;
 	text-align: center;
+
+	padding: 3.75rem;
+	overflow-y: auto;
+
+	&.authPageWithNav {
+		padding-top: 5rem;
+	}
 }
 
-.logo {
-	margin-bottom: 3.125rem;
+.authPageContent {
+	width: 96.25rem;
+	max-width: 100%;
 }
 
 .loginForm {
@@ -16,4 +24,25 @@
 
 .signupLink {
 	color: var(--main-button-color);
+}
+
+.loginBtnSize {
+	width: 9.125rem;
+}
+
+.authPageHeader {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.footerNav {
+	background-color: var(--footer-nav-bg-color);
+	padding-left: 1.25rem;
+	padding-right: 1.25rem;
+	box-shadow: var(--shadow-table);
+
+	a {
+		display: inline-block;
+	}
 }

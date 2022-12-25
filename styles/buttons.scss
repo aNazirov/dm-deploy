@@ -86,6 +86,28 @@ a {
 	}
 }
 
+.outline-success-btn{
+	background-color: var(--white-color);
+	border: 1px solid var(--main-button-color);
+	box-shadow: none;
+	filter: drop-shadow(#{var(--shadow-but)});
+
+	// TODO: make more higher or global to prevent duplicates
+	svg {
+		transition: all 0.3s;
+	}
+
+	&:hover,
+	&.active {
+		background-color: var(--main-button-color);
+		color: var(--white-color);
+
+		svg {
+			color: var(--white-color);
+		}
+	}
+}
+
 .success-btn {
 	background-color: var(--status-submit-color);
 	color: var(--white-color);

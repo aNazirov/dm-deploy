@@ -6,4 +6,5 @@ export * from "./AppDropdown";
 export * from "./AppInput";
 export * from "./AppPagination";
 export * from "./AppTable";
+export * from "./LinksCardDesk";
 export * from "./ThemeButton";

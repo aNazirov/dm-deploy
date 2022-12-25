@@ -9,6 +9,7 @@
 	min-width: 21.875rem;
 	padding: 0.5rem;
 	position: absolute;
+	z-index: 1;
 
 	&.left {
 		left: 0;
@@ -59,4 +60,8 @@
 	margin-right: 0.5rem;
 	padding-bottom: 0.25rem;
 	padding-top: 0.25rem;
+}
+
+.parentOfChildren > * {
+	height: 100%;
 }
