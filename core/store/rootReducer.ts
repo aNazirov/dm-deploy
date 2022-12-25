@@ -9,6 +9,7 @@ import {
 import {globalReducer} from "./global/global.slices";
 import {dailyReportReducer} from "./report/daily/daily-report.slices";
 import {financialExpensesReportReducer} from "./report/financialExpenses/financial-expenses-report.slices";
+import {mediaPlaceReportReducer} from "./report/mediaPlace/mediaPlace.slices";
 import {telemedicineReportReducer} from "./report/telemedicine/telemedicine.slices";
 import {trainingReportReducer} from "./report/training/training-report.slices";
 import {visitForeignSpecialistsReportReducer} from "./report/visitForeignSpecialists/visitForeignSpecialists.slices";
@@ -22,6 +23,7 @@ const State = {
 	financialExpensesReport: financialExpensesReportReducer,
 	telemedicineReport: telemedicineReportReducer,
 	visitForeignSpecialistsReport: visitForeignSpecialistsReportReducer,
+	mediaPlaceReport: mediaPlaceReportReducer,
 };
 
 export const appReducer = combineReducers(State);

@@ -107,6 +107,18 @@
 	grid-template-columns: 25% 1fr 12.75%;
 }
 
+.labelDeskGrid2 {
+	align-items: center;
+	display: grid;
+	grid-template-columns: 1fr 5.5rem;
+}
+
+.labelDeskGrid3 {
+	align-items: center;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+}
+
 .labelDeskGrid5 {
 	align-items: center;
 	display: grid;
@@ -117,10 +129,4 @@
 	align-items: center;
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
-}
-
-.labelDeskGrid2 {
-	align-items: center;
-	display: grid;
-	grid-template-columns: 1fr 5.5rem;
 }

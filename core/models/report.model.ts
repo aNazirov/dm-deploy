@@ -9,6 +9,14 @@ export enum eReportStatusType {
 	Rejected,
 }
 
+export enum eMediaPlace {
+	Radio = "Radio",
+	TV = "TV",
+	Socials = "Socials",
+	Magazine = "Magazine",
+	Newspaper = "Newspaper",
+}
+
 export interface IReportDailyCreateParams {
 	freeBeds: number;
 	occupiedBeds: number;
@@ -75,6 +83,11 @@ export interface IReportVisitsOfForeignSpecialistsCreateParams {
 	visitsOfForeignSpecialists: IReportVisitsOfForeignSpecialistsCreateParamsPart[];
 }
 
+export interface IReportMediaPlaceCreateParams {
+	mediaParts: Omit<IMediaPart, "id">[];
+}
+
+// TODO: join get params
 export interface IReportDailyGetParams {
 	skip: number;
 	take: number;
@@ -112,6 +125,15 @@ export interface IReportTelemedicineGetParams {
 }
 
 export interface IReportVisitsOfForeignSpecialistsGetParams {
+	skip: number;
+	take: number;
+	organizationId?: number;
+	statusId?: number;
+	start?: string;
+	end?: string;
+}
+
+export interface IReportMediaPlaceGetParams {
 	skip: number;
 	take: number;
 	organizationId?: number;
@@ -375,4 +397,41 @@ export class VisitOfForeignSpecialistModel {
 		this.speciality = visit.speciality;
 		this.file = visit.file;
 	}
+}
+
+export class MediaPlaceReportModel {
+	id: number;
+	mediaParts: IMediaPart[];
+	status: IStatus;
+	organization: IShortOrganizationInfo;
+	note?: string;
+	user?: IUserShortInfo;
+	createdAt: Date;
+	updatedAt: Date;
+
+	constructor(media: MediaPlaceReportModel) {
+		this.id = media.id;
+		this.mediaParts = media.mediaParts;
+		this.status = media.status;
+		this.organization = media.organization;
+		this.createdAt = new Date(media.createdAt);
+		this.updatedAt = new Date(media.updatedAt);
+
+		if (media.note) {
+			this.note = media.note;
+		}
+
+		if (media.user) {
+			this.user = media.user;
+		}
+	}
+}
+
+export interface IMediaPart {
+	id: number;
+	title: string;
+	place: eMediaPlace;
+	// TODO: type string or Date
+	date: string;
+	file: IFile;
 }

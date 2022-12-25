@@ -20,7 +20,7 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const VisitForeignSpecialistsPage = () => {
+const TelemedicineCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -225,4 +225,4 @@ const VisitForeignSpecialistsPage = () => {
 	);
 };
 
-export default VisitForeignSpecialistsPage;
+export default TelemedicineCreatePage;

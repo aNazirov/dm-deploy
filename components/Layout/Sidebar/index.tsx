@@ -155,7 +155,19 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 							<span>Телемедицина (ОЦ)</span>
 						</Link>
 					</li>
-
+					<li>
+						<Link
+							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/media-place")})}
+							href="/reports/media-place"
+						>
+							{isCurrentPath("/reports/media-place") ? (
+								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							) : (
+								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							)}
+							<span>Медиа-площадка</span>
+						</Link>
+					</li>
 					<li>
 						<Link
 							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done")})}
