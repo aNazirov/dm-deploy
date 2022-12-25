@@ -165,7 +165,7 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 							) : (
 								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							)}
-							<span>Медиа-площадка</span>
+							<span>Медиа отчёт</span>
 						</Link>
 					</li>
 					<li>

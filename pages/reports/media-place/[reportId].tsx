@@ -66,8 +66,8 @@ const MediaPlaceListPageListInfoPage = () => {
 				<AppTable wrapperClassName="p-0">
 					<AppTable.THead extended>
 						<tr>
-							<th>Название:</th>
-							<th>Площадка:</th>
+							<th>Тема:</th>
+							<th>Место публикации:</th>
 							<th>Дата:</th>
 						</tr>
 					</AppTable.THead>
