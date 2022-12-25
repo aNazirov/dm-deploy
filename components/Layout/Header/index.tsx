@@ -11,6 +11,8 @@ import {AppButton, AppDropdown, ThemeButton} from "../../Main";
 import {useAppDispatch} from "../../../core/hooks";
 import {autoLoginThunk, userLogoutThunk} from "../../../core/store/user/user.thunks";
 import {setUserAction} from "../../../core/store/user/user.slices";
+import {getGlobalListThunk} from "../../../core/store/global/global.thunks";
+import {setGlobalListAction} from "../../../core/store/global/global.slices";
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
@@ -18,11 +20,17 @@ export const Header = ({className}: HeaderProps) => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		const promises = [dispatch(autoLoginThunk())];
+		const promises = [
+			dispatch(autoLoginThunk()),
+			dispatch(getGlobalListThunk("specialities")),
+			dispatch(getGlobalListThunk("countries")),
+		];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setUserAction(null));
+			dispatch(setGlobalListAction({listType: "specialities", data: []}));
+			dispatch(setGlobalListAction({listType: "countries", data: []}));
 		};
 	}, []);
 

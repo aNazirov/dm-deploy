@@ -21,3 +21,8 @@ export class FileModel {
 		this.updatedAt = new Date(file.updatedAt);
 	}
 }
+
+export interface IFile {
+	id: number;
+	url: string;
+}

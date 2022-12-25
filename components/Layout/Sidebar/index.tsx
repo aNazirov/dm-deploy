@@ -129,6 +129,32 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 							<span>Финансовые расходы центра (ОЦ)</span>
 						</Link>
 					</li>
+					<li>
+						<Link
+							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/visit-foreign-specialists")})}
+							href="/reports/visit-foreign-specialists"
+						>
+							{isCurrentPath("/reports/visit-foreign-specialists") ? (
+								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							) : (
+								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							)}
+							<span>Визит иностранных специалистов (ОЦ)</span>
+						</Link>
+					</li>
+					<li>
+						<Link
+							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/telemedicine")})}
+							href="/reports/telemedicine"
+						>
+							{isCurrentPath("/reports/telemedicine") ? (
+								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							) : (
+								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+							)}
+							<span>Телемедицина (ОЦ)</span>
+						</Link>
+					</li>
 
 					<li>
 						<Link
@@ -245,45 +271,6 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
 							)}
 							<span>Наука (детали)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/visit-foreign-specialists")})}
-							href="/reports/visit-foreign-specialists"
-						>
-							{isCurrentPath("/reports/visit-foreign-specialists") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Визит иностранных специалистов</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/visit-foreign-specialists-list")})}
-							href="/reports/visit-foreign-specialists-list"
-						>
-							{isCurrentPath("/reports/visit-foreign-specialists-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Визит иностранных специалистов (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/telemedicine")})}
-							href="/reports/telemedicine"
-						>
-							{isCurrentPath("/reports/telemedicine") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Телемедицина (ОЦ)</span>
 						</Link>
 					</li>
 				</ul>

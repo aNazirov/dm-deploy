@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {TelemedicineReportModel} from "../../../models";
+import {VisitsOfForeignSpecialistsModel} from "../../../models";
 
 interface IState {
-	list: TelemedicineReportModel[];
+	list: VisitsOfForeignSpecialistsModel[];
 	count: number;
-	current: TelemedicineReportModel | null;
+	current: VisitsOfForeignSpecialistsModel | null;
 }
 
 const initialState: IState = {
@@ -15,13 +15,16 @@ const initialState: IState = {
 };
 
 export const {
-	reducer: telemedicineReportReducer,
-	actions: {setTelemedicineReportByIdAction, setAllTelemedicineReportsAction},
+	reducer: visitForeignSpecialistsReportReducer,
+	actions: {setVisitForeignSpecialistsReportByIdAction, setAllVisitForeignSpecialistsReportsAction},
 } = createSlice({
-	name: "telemedicineReport",
+	name: "visitForeignSpecialistsReport",
 	initialState,
 	reducers: {
-		setTelemedicineReportByIdAction: (state: IState, action: PayloadAction<TelemedicineReportModel | null>) => {
+		setVisitForeignSpecialistsReportByIdAction: (
+			state: IState,
+			action: PayloadAction<VisitsOfForeignSpecialistsModel | null>,
+		) => {
 			state.current = action.payload;
 
 			if (action.payload) {
@@ -33,9 +36,9 @@ export const {
 				}
 			}
 		},
-		setAllTelemedicineReportsAction: (
+		setAllVisitForeignSpecialistsReportsAction: (
 			state: IState,
-			action: PayloadAction<{list: TelemedicineReportModel[]; count: number}>,
+			action: PayloadAction<{list: VisitsOfForeignSpecialistsModel[]; count: number}>,
 		) => {
 			state.count = action.payload.count;
 			if (state.list.length) {

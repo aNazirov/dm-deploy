@@ -1,5 +1,7 @@
+import {IFile} from "./file.model";
+import {IGlobalListItem} from "./global.model";
 import {ePlace} from "./table.model";
-import {ITranslate} from "./user.model";
+import {ISpeciality, ITranslate, IUserShortInfo} from "./user.model";
 
 export enum eReportStatusType {
 	Sent = 1,
@@ -58,6 +60,20 @@ export interface IReportFinancialExpensesCreateParams {
 export interface IReportTelemedicineCreateParams {
 	telemedicineParts: Omit<TelemedicinePartModel, "id">[];
 }
+export interface IReportVisitsOfForeignSpecialistsCreateParamsPart {
+	id?: number;
+	displayName: string;
+	startDate: string;
+	endDate: string;
+	organization: string;
+	countryId: number;
+	specialityId: number;
+	fileId: number;
+}
+
+export interface IReportVisitsOfForeignSpecialistsCreateParams {
+	visitsOfForeignSpecialists: IReportVisitsOfForeignSpecialistsCreateParamsPart[];
+}
 
 export interface IReportDailyGetParams {
 	skip: number;
@@ -87,6 +103,15 @@ export interface IReportFinancialExpensesGetParams {
 }
 
 export interface IReportTelemedicineGetParams {
+	skip: number;
+	take: number;
+	organizationId?: number;
+	statusId?: number;
+	start?: string;
+	end?: string;
+}
+
+export interface IReportVisitsOfForeignSpecialistsGetParams {
 	skip: number;
 	take: number;
 	organizationId?: number;
@@ -167,6 +192,7 @@ export class TrainingReportModel {
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
 	updatedAt: Date;
+	files?: IFile[];
 	note?: string;
 
 	constructor(report: TrainingReportModel) {
@@ -184,7 +210,12 @@ export class TrainingReportModel {
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
 
-		if (report.note) this.note = report.note;
+		if (report.files) {
+			this.files = report.files;
+		}
+		if (report.note) {
+			this.note = report.note;
+		}
 	}
 }
 
@@ -240,7 +271,7 @@ export class TelemedicineReportModel {
 	id: number;
 	telemedicineParts?: TelemedicinePartModel[];
 	note?: string;
-	user?: {displayName: ITranslate; id: number};
+	user?: IUserShortInfo;
 	status: IStatus;
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
@@ -288,5 +319,60 @@ export class TelemedicinePartModel {
 		if (part.note) {
 			this.note = part.note;
 		}
+	}
+}
+
+export class VisitsOfForeignSpecialistsModel {
+	id: number;
+	visitsOfForeignSpecialists?: VisitOfForeignSpecialistModel[];
+	note?: string;
+	user?: IUserShortInfo;
+	status: IStatus;
+	organization: IShortOrganizationInfo;
+	createdAt: Date;
+	updatedAt: Date;
+
+	constructor(visit: VisitsOfForeignSpecialistsModel) {
+		this.id = visit.id;
+		this.status = visit.status;
+		this.organization = visit.organization;
+		this.createdAt = new Date(visit.createdAt);
+		this.updatedAt = new Date(visit.updatedAt);
+
+		if (visit.visitsOfForeignSpecialists) {
+			this.visitsOfForeignSpecialists = visit.visitsOfForeignSpecialists.map(
+				(v) => new VisitOfForeignSpecialistModel(v),
+			);
+		}
+
+		if (visit.user) {
+			this.user = visit.user;
+		}
+
+		if (visit.note) {
+			this.note = visit.note;
+		}
+	}
+}
+
+export class VisitOfForeignSpecialistModel {
+	id: number;
+	displayName: string;
+	startDate: string;
+	endDate: string;
+	organization: string;
+	country: IGlobalListItem;
+	speciality: ISpeciality;
+	file: IFile;
+
+	constructor(visit: VisitOfForeignSpecialistModel) {
+		this.id = visit.id;
+		this.displayName = visit.displayName;
+		this.startDate = visit.startDate;
+		this.endDate = visit.endDate;
+		this.organization = visit.organization;
+		this.country = visit.country;
+		this.speciality = visit.speciality;
+		this.file = visit.file;
 	}
 }

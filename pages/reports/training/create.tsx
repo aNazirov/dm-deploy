@@ -11,7 +11,6 @@ import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
 import {useAppDispatch} from "../../../core/hooks";
 import {IReportTrainingCreateParams} from "../../../core/models";
 import {createTrainingReportThunk} from "../../../core/store/report/training/training-report.thunks";
-import {formatData} from "../../../core/utils/formatData";
 
 const fieldOptions = {
 	required: true,
@@ -25,10 +24,7 @@ const TrainingReportCreatePage = () => {
 
 	const {register, handleSubmit, getValues} = useForm<IReportTrainingCreateParams>();
 
-	const [files, setFiles] = useState<{formData: FormData | null; list: File[]}>({
-		formData: null,
-		list: [],
-	});
+	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
 
 	const onSubmit = async (fields: IReportTrainingCreateParams) => {
@@ -43,10 +39,12 @@ const TrainingReportCreatePage = () => {
 				}
 			}, 0);
 
-			if (sum === files.list.length && files.formData) {
+			if (sum === files.length) {
 				setErrText("");
+				const formData = new FormData();
+				files.forEach((f) => formData.append("files", f));
 
-				const action = await dispatch(createTrainingReportThunk({payload: fields, formData: files.formData}));
+				const action = await dispatch(createTrainingReportThunk({payload: fields, formData}));
 				const id = action.payload as number;
 
 				if (id) {
@@ -60,15 +58,12 @@ const TrainingReportCreatePage = () => {
 
 	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
-			const formData = formatData({files: e.target.files});
-			setFiles((prev) => ({...prev, formData: formData}));
-
 			for (const key in e.target.files) {
 				const file = e.target.files[key];
 
 				if (file instanceof File) {
-					if (!files.list.some((f) => f.name === file.name)) {
-						setFiles((prev) => ({...prev, list: [...prev.list, file]}));
+					if (!files.some((f) => f.name === file.name)) {
+						setFiles((prev) => [...prev, file]);
 					}
 				}
 			}
@@ -76,12 +71,12 @@ const TrainingReportCreatePage = () => {
 	};
 
 	const onFileRemove = (fileName: string) => () => {
-		const index = files.list.findIndex((f) => f.name === fileName);
-		setFiles((prev) => ({...prev, list: prev.list.filter((f, i) => i !== index)}));
+		const index = files.findIndex((f) => f.name === fileName);
+		setFiles((prev) => prev.filter((f, i) => i !== index));
 	};
 
 	const renderFiles = () => {
-		return files.list.map((file) => (
+		return files.map((file) => (
 			<div className="flex-center gap-0.5" key={file.name}>
 				<label className={styles.cardBodyLabel}>
 					<AppInput className="text-center" type="file" disabled readOnly placeholder={file.name} />

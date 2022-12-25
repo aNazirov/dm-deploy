@@ -6,54 +6,67 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {
-	changeStatusOfTrainingReportThunk,
-	getTrainingReportByIdThunk,
-} from "../../../core/store/report/training/training-report.thunks";
-import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
 import {eReportStatusType} from "../../../core/models";
 import Moment from "react-moment";
+import {
+	changeStatusOfVisitForeignSpecialistsReportThunk,
+	getVisitForeignSpecialistsReportByIdThunk,
+} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
+import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
 
-const TrainingListInfoPage = () => {
+const VisitForeignSpecialistsListInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
-	const report = useAppSelector(({trainingReport}) => trainingReport.current);
+	const report = useAppSelector(({visitForeignSpecialistsReport}) => visitForeignSpecialistsReport.current);
 
 	useEffect(() => {
 		if (reportId) {
 			const id = +reportId;
 
 			if (!isNaN(id)) {
-				const promises = [dispatch(getTrainingReportByIdThunk(id))];
+				const promises = [dispatch(getVisitForeignSpecialistsReportByIdThunk(id))];
 
 				return () => {
 					promises.forEach((p) => p.abort());
-					dispatch(setDailyReportByIdAction(null));
+					dispatch(setVisitForeignSpecialistsReportByIdAction(null));
 				};
 			}
 		}
 	}, [reportId]);
 
 	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfTrainingReportThunk({id: +reportId, statusId: statusTypeId}));
+		dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
 	};
 
 	if (!report) return null;
 
 	const renderFileList = () => {
-		return report.files?.map((f) => (
-			<div className="flex-center gap-0.5 w-max" key={f.id}>
+		return report.visitsOfForeignSpecialists?.map((v) => (
+			<div className="flex-center gap-0.5 w-max" key={v.file.id}>
 				<label className={styles.cardBodyLabel}>
-					<a href={f.url} download>
-						<AppInput className="text-center" type="file" placeholder={`${f.url}`} />
+					<a href={v.file.url} download>
+						<AppInput className="text-center" type="file" placeholder={`${v.file.url}`} />
 					</a>
 				</label>
 				<AppButton variant="danger" size="square">
 					<TrashIcon width="24px" height="24px" />
 				</AppButton>
 			</div>
+		));
+	};
+
+	const renderTableRow = () => {
+		return report.visitsOfForeignSpecialists?.map((v) => (
+			<tr key={v.id}>
+				<td>{v.displayName}</td>
+				<td>{v.speciality.title.ru}</td>
+				<td>{v.country.title.ru}</td>
+				<td>{v.organization}</td>
+				<td>{<Moment format="DD.MM.YYYY">{v.startDate}</Moment>}</td>
+				<td>{<Moment format="DD.MM.YYYY">{v.endDate}</Moment>}</td>
+			</tr>
 		));
 	};
 
@@ -71,44 +84,21 @@ const TrainingListInfoPage = () => {
 			<AppTable wrapperClassName="mb-1.5">
 				<AppTable.THead extended>
 					<tr>
-						<th rowSpan={2}>Дата</th>
-						<th colSpan={2}>Конференция, симпозиум ва х.к</th>
-						<th colSpan={2}>Учеба/повышение квалификации до 10 дней</th>
-						<th colSpan={2}>Учеба/повышение квалификации от 10 до 30 дней</th>
-						<th colSpan={2}>Учеба/повышение квалификации более 30 дней</th>
-					</tr>
-					<tr>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
+						<th>Ф.И.О. пребывающего специалиста</th>
+						<th>Специальность</th>
+						<th>Страна пребывания</th>
+						<th>Место основной работы (учреждение)</th>
+						<th>Срок пребывания до:</th>
+						<th>Срок пребывания от:</th>
 					</tr>
 				</AppTable.THead>
-				<AppTable.TBody>
-					<tr>
-						<td>
-							<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
-						</td>
-						<td>{report.confNational}</td>
-						<td>{report.confInternational}</td>
-						<td>{report.learnNationalShort}</td>
-						<td>{report.learnInternationalShort}</td>
-						<td>{report.learnNationalMid}</td>
-						<td>{report.learnInternationalMid}</td>
-						<td>{report.learnNationalLong}</td>
-						<td>{report.learnInternationalLong}</td>
-					</tr>
-				</AppTable.TBody>
+				<AppTable.TBody>{renderTableRow()}</AppTable.TBody>
 			</AppTable>
 
 			<div className="flex-col gap-0.5">{renderFileList()}</div>
 
 			<div className="flex-justify-between mt-auto pe-2.5">
-				<AppButton useAs="link" href="/reports/training" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href="/reports/visit-foreign-specialists" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
@@ -127,4 +117,4 @@ const TrainingListInfoPage = () => {
 	);
 };
 
-export default TrainingListInfoPage;
+export default VisitForeignSpecialistsListInfoPage;

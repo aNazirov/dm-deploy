@@ -13,6 +13,7 @@ import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
 import {ePlace, IReportTelemedicineCreateParams} from "../../../core/models";
 import {createTelemedicineReportThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
+import {countryOptions} from "../../../core/utils/countries";
 
 const fieldOptions = {
 	required: true,
@@ -38,7 +39,7 @@ const VisitForeignSpecialistsPage = () => {
 			],
 		},
 	});
-	const {fields, append, remove, swap, move, insert} = useFieldArray({
+	const {fields, append, remove} = useFieldArray({
 		control,
 		name: "telemedicineParts",
 	});
@@ -65,8 +66,7 @@ const VisitForeignSpecialistsPage = () => {
 
 	const onSubmit = async (fieldsArr: IReportTelemedicineCreateParams) => {
 		const action = await dispatch(createTelemedicineReportThunk(fieldsArr));
-		console.log(fieldsArr);
-		console.log(action.payload);
+
 		const id = action.payload as number;
 
 		if (id) {
@@ -226,22 +226,3 @@ const VisitForeignSpecialistsPage = () => {
 };
 
 export default VisitForeignSpecialistsPage;
-
-const countryOptions = [
-	{value: ePlace.Intenational, label: "Международный"},
-	{value: ePlace.Karakalpak, label: "Каракалпакстан"},
-	{value: ePlace.TashkentCity, label: "город Ташкент"},
-	{value: ePlace.Tashkent, label: "Ташкент"},
-	{value: ePlace.Fergana, label: "Фергана"},
-	{value: ePlace.Andijan, label: "Андижан"},
-	{value: ePlace.Namangan, label: "Наманган"},
-	{value: ePlace.Qashqadarya, label: "Кашкадарья"},
-	{value: ePlace.Surhandarya, label: "Сурхандарья"},
-	{value: ePlace.Samarkand, label: "Самарканд"},
-	{value: ePlace.Sirdarya, label: "Сырдарья"},
-	{value: ePlace.Buhara, label: "Бухара"},
-	{value: ePlace.Harezm, label: "Хорезм"},
-	{value: ePlace.Navai, label: "Навои"},
-	{value: ePlace.Jizzah, label: "Джиззах"},
-	{value: ePlace.Other, label: "Другое"},
-];

@@ -10,6 +10,11 @@ export interface IContact {
 	phone: string;
 }
 
+export interface IUserShortInfo {
+	displayName: ITranslate;
+	id: number;
+}
+
 export interface ITranslate {
 	ru: string;
 	uz: string;
