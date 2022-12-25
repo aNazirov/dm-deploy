@@ -170,6 +170,7 @@ const telemedicineReport = {
 				signal,
 			})
 			.then((res) => {
+				console.log(res.data);
 				return {data: res.data.data.map((d) => new TelemedicineReportModel(d)), count: res.data.count};
 			});
 	},

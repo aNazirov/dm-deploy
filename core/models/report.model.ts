@@ -238,10 +238,10 @@ export class FinancialExpensesReportModel {
 
 export class TelemedicineReportModel {
 	id: number;
-	telemedicineParts: TelemedicinePartModel[];
+	telemedicineParts?: TelemedicinePartModel[];
 	note?: string;
-	user?: any;
-	status: eReportStatusType;
+	user?: {displayName: ITranslate; id: number};
+	status: IStatus;
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
 	updatedAt: Date;
@@ -252,13 +252,16 @@ export class TelemedicineReportModel {
 		this.organization = report.organization;
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
-		this.telemedicineParts = report.telemedicineParts.map((p) => new TelemedicinePartModel(p));
+
+		if (report.telemedicineParts) {
+			this.telemedicineParts = report.telemedicineParts.map((p) => new TelemedicinePartModel(p));
+		}
 
 		if (report.note) {
 			this.note = report.note;
 		}
 		if (report.user) {
-			console.log(report.user);
+			this.user = report.user;
 		}
 	}
 }

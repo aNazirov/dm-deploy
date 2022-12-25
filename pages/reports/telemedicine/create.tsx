@@ -24,7 +24,20 @@ const VisitForeignSpecialistsPage = () => {
 
 	const dispatch = useAppDispatch();
 
-	const {register, control, handleSubmit, watch, setValue, getValues} = useForm<IReportTelemedicineCreateParams>();
+	const {register, control, handleSubmit, setValue} = useForm<IReportTelemedicineCreateParams>({
+		defaultValues: {
+			telemedicineParts: [
+				{
+					consultations: undefined,
+					place: undefined,
+					demonstrationOperations: undefined,
+					seminars: undefined,
+					symposiums: undefined,
+					councils: undefined,
+				},
+			],
+		},
+	});
 	const {fields, append, remove, swap, move, insert} = useFieldArray({
 		control,
 		name: "telemedicineParts",
@@ -54,6 +67,11 @@ const VisitForeignSpecialistsPage = () => {
 		const action = await dispatch(createTelemedicineReportThunk(fieldsArr));
 		console.log(fieldsArr);
 		console.log(action.payload);
+		const id = action.payload as number;
+
+		if (id) {
+			void router.push(`/reports/telemedicine/${id}`);
+		}
 	};
 
 	const renderFieldRows = () => {
@@ -119,9 +137,15 @@ const VisitForeignSpecialistsPage = () => {
 				</div>
 
 				<div className={styles.cardBodyLabel}>
-					<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
-						<TrashIcon width="24px" height="24px" />
-					</AppButton>
+					{index === fields.length - 1 ? (
+						<AppButton onClick={onAppend} type="button" variant="dark" size="square" withIcon>
+							<PlusIcon width="24px" height="24px" />
+						</AppButton>
+					) : (
+						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
+							<TrashIcon width="24px" height="24px" />
+						</AppButton>
+					)}
 				</div>
 			</div>
 		));
@@ -183,82 +207,7 @@ const VisitForeignSpecialistsPage = () => {
 						</div>
 					</div>
 
-					<div className="flex-col gap-2.5">
-						{renderFieldRows()}
-
-						<div className={cn("gap-1", styles.labelDeskGrid2)}>
-							<div className={cn("gap-1", styles.labelDeskGrid6)}>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<ReactSelect
-											onChange={onSelect(fields.length - 1)}
-											options={countryOptions}
-											styles={{
-												indicatorSeparator: () => ({display: "none"}),
-											}}
-											placeholder="Выберите учреждение"
-										/>
-									</div>
-								</label>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<AppInput
-											className="text-center"
-											type="number"
-											placeholder="-"
-											{...register(`telemedicineParts.${fields.length - 1}.consultations`, fieldOptions)}
-										/>
-									</div>
-								</label>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<AppInput
-											className="text-center"
-											type="number"
-											placeholder="-"
-											{...register(`telemedicineParts.${fields.length - 1}.councils`, fieldOptions)}
-										/>
-									</div>
-								</label>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<AppInput
-											className="text-center"
-											type="number"
-											placeholder="-"
-											{...register(`telemedicineParts.${fields.length - 1}.demonstrationOperations`, fieldOptions)}
-										/>
-									</div>
-								</label>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<AppInput
-											className="text-center"
-											type="number"
-											placeholder="-"
-											{...register(`telemedicineParts.${fields.length - 1}.seminars`, fieldOptions)}
-										/>
-									</div>
-								</label>
-								<label className={styles.cardBodyLabel}>
-									<div className="w-100">
-										<AppInput
-											className="text-center"
-											type="number"
-											placeholder="-"
-											{...register(`telemedicineParts.${fields.length - 1}.symposiums`, fieldOptions)}
-										/>
-									</div>
-								</label>
-							</div>
-
-							<div className={styles.cardBodyLabel}>
-								<AppButton onClick={onAppend} type="button" variant="dark" size="square" withIcon>
-									<PlusIcon width="24px" height="24px" />
-								</AppButton>
-							</div>
-						</div>
-					</div>
+					<div className="flex-col gap-2.5">{renderFieldRows()}</div>
 				</AppCard.Body>
 			</AppCard>
 

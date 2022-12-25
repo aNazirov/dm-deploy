@@ -1,11 +1,52 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Head from "next/head";
 import {AppBadge, AppButton, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import styles from "../../../styles/reports.module.scss";
 
 import FilterIcon from "../../../assets/images/icons/filled/filter.svg";
+import {useAppDispatch, useAppSelector} from "../../../core/hooks";
+import {useRouter} from "next/router";
+import {getAllTelemedicineReportsThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
+import {setAllTelemedicineReportsAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
+import Moment from "react-moment";
 
 const TelemedicineListPage = () => {
+	const dispatch = useAppDispatch();
+	const telemedicineReport = useAppSelector(({telemedicineReport}) => telemedicineReport);
+
+	const router = useRouter();
+
+	useEffect(() => {
+		const promises = [dispatch(getAllTelemedicineReportsThunk())];
+
+		return () => {
+			promises.forEach((p) => p.abort());
+			dispatch(setAllTelemedicineReportsAction({list: [], count: 0}));
+		};
+	}, []);
+
+	const onOpenReport = (reportId: number) => () => {
+		void router.push(`/reports/telemedicine/${reportId}`);
+	};
+
+	const renderTableBodyRow = () => {
+		return telemedicineReport.list.map((report) => (
+			<tr onClick={onOpenReport(report.id)} key={report.id}>
+				<td>{report.id}</td>
+				<td>{report.id}</td>
+				<td>
+					<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
+				</td>
+				<td>{report.organization.title.ru}</td>
+				<td>{report.note ?? "-"}</td>
+				<td>
+					<AppBadge statusId={report.status.id} className="mx-auto">
+						{report.status.title.ru}
+					</AppBadge>
+				</td>
+			</tr>
+		));
+	};
 	return (
 		<>
 			<Head>
@@ -48,73 +89,23 @@ const TelemedicineListPage = () => {
 				</AppButton>
 			</div>
 
-			<AppTable>
-				<AppTable.THead>
-					<tr>
-						<th>ID</th>
-						<th>Номер</th>
-						<th>Дата</th>
-						<th>Организация</th>
-						<th>Комментарии</th>
-						<th>Статус</th>
-					</tr>
-				</AppTable.THead>
-				<AppTable.TBody>
-					<tr>
-						<td>6344</td>
-						<td>77</td>
-						<td>14.11.2022</td>
-						<td>
-							Республика ихтисослаштирилган онкология ва тиббий радиология илмий-амалий тиббиёт маркази (200935935)
-						</td>
-						<td>Комментарий</td>
-						<td>
-							<AppBadge className="mx-auto" variant="warning">
-								Отправлен
-							</AppBadge>
-						</td>
-					</tr>
-					<tr>
-						<td>6344</td>
-						<td>77</td>
-						<td>14.11.2022</td>
-						<td>
-							Республиканский специализированный научно-практический медицинской центр терапии и медицинской
-							реабилитации (201037707)
-						</td>
-						<td>Комментарий</td>
-						<td>
-							<AppBadge className="mx-auto" variant="warning">
-								Отправлен
-							</AppBadge>
-						</td>
-					</tr>
-					<tr>
-						<td>6344</td>
-						<td>77</td>
-						<td>14.11.2022</td>
-						<td>Республика ихтисослаштирилган кўз микрохирургияси илмий-амалий тиббиёт маркази (200541105)</td>
-						<td>Комментарий</td>
-						<td>
-							<AppBadge className="mx-auto" variant="warning">
-								Отправлен
-							</AppBadge>
-						</td>
-					</tr>
-					<tr>
-						<td>6344</td>
-						<td>77</td>
-						<td>14.11.2022</td>
-						<td>Республиканский специализированный центр хирургии им. В.В. Вахидова (200794510)</td>
-						<td>Комментарий</td>
-						<td>
-							<AppBadge className="mx-auto" variant="warning">
-								Отправлен
-							</AppBadge>
-						</td>
-					</tr>
-				</AppTable.TBody>
-			</AppTable>
+			{telemedicineReport.list.length > 0 ? (
+				<AppTable linked wrapperClassName="p-0">
+					<AppTable.THead>
+						<tr>
+							<th>ID</th>
+							<th>Номер</th>
+							<th>Дата</th>
+							<th>Организация</th>
+							<th>Комментарии</th>
+							<th>Статус</th>
+						</tr>
+					</AppTable.THead>
+					<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
+				</AppTable>
+			) : (
+				"Список отчётов пуст"
+			)}
 
 			<div className="mt-auto">
 				<AppDivider className="my-1.25" />

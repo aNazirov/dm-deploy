@@ -46,7 +46,7 @@ export const getAllTelemedicineReportsThunk = createAsyncThunk(
 	"telemedicineReport/getAllThunk",
 	async (payload: IReportTelemedicineGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.telemedicine.get(payload, thunkAPI.signal);
-
+		console.log(result);
 		if (result) {
 			thunkAPI.dispatch(setAllTelemedicineReportsAction({list: result.data, count: result.count}));
 		}
