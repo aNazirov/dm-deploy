@@ -1,14 +1,14 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppBadge, AppButton, AppDivider, AppPagination, AppTable} from "../../../components/Main";
-import styles from "../../../styles/reports.module.scss";
+import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 
-import FilterIcon from "../../../assets/images/icons/filled/filter.svg";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {useRouter} from "next/router";
 import Moment from "react-moment";
 import {getAllVisitForeignSpecialistsReportsThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {setAllVisitForeignSpecialistsReportsAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
+import {eTable} from "../../../core/models";
+import {ReportListPageWrapper} from "../../../components/Layout";
 
 const VisitForeignSpecialistsListPage = () => {
 	const dispatch = useAppDispatch();
@@ -60,62 +60,26 @@ const VisitForeignSpecialistsListPage = () => {
 			<h1 className="h1 text-center">Визит иностранных специалистов (ОЦ)</h1>
 
 			<AppDivider className="my-1.25" />
+			<ReportListPageWrapper table={eTable.VisitsOfForeignSpecialistsReport}>
+				<AppTable linked>
+					<AppTable.THead>
+						<tr>
+							<th>ID</th>
+							<th>Номер</th>
+							<th>Дата</th>
+							<th>Организация</th>
+							<th>Комментарии</th>
+							<th>Статус</th>
+						</tr>
+					</AppTable.THead>
+					<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
+				</AppTable>
 
-			<div className={styles.filters}>
-				<div className={styles.filterLabel}>
-					<AppButton variant="primary-outline" size="lg" withIcon>
-						<FilterIcon width="24px" height="24px" className="main-btn-text-color" />
-						<span>Фильтр</span>
-					</AppButton>
+				<div className="mt-auto">
+					<AppDivider className="my-1.25" />
+					<AppPagination />
 				</div>
-
-				<div className={styles.filterLabel}>
-					<span className="text-main-bold">Статус:</span>
-					<div className="d-flex gap-0.125">
-						<AppButton className="active" variant="primary-outline" size="lg">
-							Все
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Отправлен
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Принят
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Отказан
-						</AppButton>
-					</div>
-				</div>
-
-				<AppButton
-					useAs="link"
-					href="/reports/visit-foreign-specialists/create"
-					className="ms-auto"
-					variant="main"
-					size="lg"
-				>
-					Создать
-				</AppButton>
-			</div>
-
-			<AppTable linked>
-				<AppTable.THead>
-					<tr>
-						<th>ID</th>
-						<th>Номер</th>
-						<th>Дата</th>
-						<th>Организация</th>
-						<th>Комментарии</th>
-						<th>Статус</th>
-					</tr>
-				</AppTable.THead>
-				<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
-			</AppTable>
-
-			<div className="mt-auto">
-				<AppDivider className="my-1.25" />
-				<AppPagination />
-			</div>
+			</ReportListPageWrapper>
 		</>
 	);
 };

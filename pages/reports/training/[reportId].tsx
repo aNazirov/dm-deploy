@@ -6,13 +6,11 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {
-	changeStatusOfTrainingReportThunk,
-	getTrainingReportByIdThunk,
-} from "../../../core/store/report/training/training-report.thunks";
+import {getTrainingReportByIdThunk} from "../../../core/store/report/training/training-report.thunks";
 import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
-import {eReportStatusType} from "../../../core/models";
+import {eReportStatusType, eTable} from "../../../core/models";
 import Moment from "react-moment";
+import {ReportPageUpdate} from "../../../components/Layout";
 
 const TrainingListInfoPage = () => {
 	const router = useRouter();
@@ -35,10 +33,6 @@ const TrainingListInfoPage = () => {
 			}
 		}
 	}, [reportId]);
-
-	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfTrainingReportThunk({id: +reportId, statusId: statusTypeId}));
-	};
 
 	if (!report) return null;
 
@@ -113,14 +107,7 @@ const TrainingListInfoPage = () => {
 					Назад
 				</AppButton>
 				{report.status.id === eReportStatusType.Sent && (
-					<div className="d-flex gap-0.5">
-						<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</div>
+					<ReportPageUpdate reportId={+reportId} table={eTable.TrainingReport} />
 				)}
 			</div>
 		</div>

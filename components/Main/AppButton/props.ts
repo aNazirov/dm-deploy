@@ -4,7 +4,16 @@ import {LinkProps} from "next/link";
 type BaseProps = {
 	children: ReactNode;
 	withIcon?: boolean;
-	variant?: "main" | "primary-outline" | "success" | "warning" | "danger" | "dark" | "outline-success" | "text";
+	variant?:
+		| "main"
+		| "primary-outline"
+		| "success"
+		| "warning"
+		| "danger"
+		| "dark"
+		| "print"
+		| "outline-success"
+		| "text";
 	size?: "xl" | "lg" | "square";
 	className?: string;
 	rounded?: "md" | "lg";

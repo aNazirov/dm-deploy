@@ -4,12 +4,10 @@ import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType} from "../../../core/models";
-import {
-	changeStatusOfTelemedicineReportThunk,
-	getTelemedicineReportByIdThunk,
-} from "../../../core/store/report/telemedicine/telemedicine.thunks";
+import {eReportStatusType, eTable} from "../../../core/models";
+import {getTelemedicineReportByIdThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {setTelemedicineReportByIdAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
+import {ReportPageUpdate} from "../../../components/Layout";
 
 const TelemedicineListInfoPage = () => {
 	const router = useRouter();
@@ -32,10 +30,6 @@ const TelemedicineListInfoPage = () => {
 			}
 		}
 	}, [reportId]);
-
-	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfTelemedicineReportThunk({id: +reportId, statusId: statusTypeId}));
-	};
 
 	if (!report) return null;
 	const renderTableBodyRows = () => {
@@ -85,14 +79,7 @@ const TelemedicineListInfoPage = () => {
 				</AppButton>
 
 				{report.status.id === eReportStatusType.Sent && (
-					<div className="d-flex gap-0.5">
-						<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</div>
+					<ReportPageUpdate reportId={+reportId} table={eTable.TelemedicineReport} />
 				)}
 			</div>
 		</>

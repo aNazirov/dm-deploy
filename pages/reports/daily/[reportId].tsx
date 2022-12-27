@@ -4,13 +4,11 @@ import {AppButton, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {
-	changeStatusOfDailyReportThunk,
-	getDailyReportByIdThunk,
-} from "../../../core/store/report/daily/daily-report.thunks";
-import {eReportStatusType} from "../../../core/models";
+import {getDailyReportByIdThunk} from "../../../core/store/report/daily/daily-report.thunks";
+import {eReportStatusType, eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
+import {ReportPageUpdate} from "../../../components/Layout";
 
 const DailyListInfoPage = () => {
 	const router = useRouter();
@@ -33,10 +31,6 @@ const DailyListInfoPage = () => {
 			}
 		}
 	}, [reportId]);
-
-	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfDailyReportThunk({id: +reportId, statusId: statusTypeId}));
-	};
 
 	if (!report) return null;
 
@@ -111,14 +105,7 @@ const DailyListInfoPage = () => {
 				</AppButton>
 
 				{report.status.id === eReportStatusType.Sent && (
-					<div className="d-flex gap-0.5">
-						<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</div>
+					<ReportPageUpdate reportId={+reportId} table={eTable.DailyReport} />
 				)}
 			</div>
 		</div>

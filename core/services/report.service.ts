@@ -269,8 +269,8 @@ const visitForeignSpecialistsReport = {
 const mediaPlaceReport = {
 	create: (body: IReportMediaPlaceCreateParams, signal?: AbortSignal) => {
 		return api
-			.post<{mediaPlaceReport: MediaPlaceReportModel}>("media-report", body, {signal})
-			.then((res) => new MediaPlaceReportModel(res.data.mediaPlaceReport));
+			.post<{mediaReport: MediaPlaceReportModel}>("media-report", body, {signal})
+			.then((res) => new MediaPlaceReportModel(res.data.mediaReport));
 	},
 	get(params: IReportMediaPlaceGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api

@@ -16,7 +16,11 @@ const initialState: IState = {
 
 export const {
 	reducer: visitForeignSpecialistsReportReducer,
-	actions: {setVisitForeignSpecialistsReportByIdAction, setAllVisitForeignSpecialistsReportsAction},
+	actions: {
+		setVisitForeignSpecialistsReportByIdAction,
+		setAllVisitForeignSpecialistsReportsAction,
+		deleteVisitForeignSpecialistsReportAction,
+	},
 } = createSlice({
 	name: "visitForeignSpecialistsReport",
 	initialState,
@@ -46,6 +50,12 @@ export const {
 				state.list = state.list.filter((old) => !ids.has(old.id)).concat(action.payload.list);
 			} else {
 				state.list = action.payload.list;
+			}
+		},
+		deleteVisitForeignSpecialistsReportAction: (state: IState, action: PayloadAction<number>) => {
+			const index = state.list.findIndex((r) => r.id === action.payload);
+			if (index !== -1) {
+				state.list.splice(index, 1);
 			}
 		},
 	},

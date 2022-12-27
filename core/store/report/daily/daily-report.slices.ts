@@ -16,7 +16,7 @@ const initialState: IState = {
 
 export const {
 	reducer: dailyReportReducer,
-	actions: {setDailyReportByIdAction, setAllDailyReportsAction},
+	actions: {setDailyReportByIdAction, setAllDailyReportsAction, deleteDailyReportAction},
 } = createSlice({
 	name: "dailyReport",
 	initialState,
@@ -40,6 +40,12 @@ export const {
 				state.list = state.list.filter((old) => !ids.has(old.id)).concat(action.payload.list);
 			} else {
 				state.list = action.payload.list;
+			}
+		},
+		deleteDailyReportAction: (state: IState, action: PayloadAction<number>) => {
+			const index = state.list.findIndex((r) => r.id === action.payload);
+			if (index !== -1) {
+				state.list.splice(index, 1);
 			}
 		},
 	},

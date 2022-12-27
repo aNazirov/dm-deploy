@@ -1,16 +1,16 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main";
+import {AppButton, AppCard, AppDivider, AppInput, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType} from "../../../core/models";
-import {
-	changeStatusOfMediaPlaceReportThunk,
-	getMediaPlaceReportByIdThunk,
-} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
+import {eReportStatusType, eTable} from "../../../core/models";
+import {getMediaPlaceReportByIdThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
 import {setMediaPlaceReportByIdAction} from "../../../core/store/report/mediaPlace/mediaPlace.slices";
 import Moment from "react-moment";
+import styles from "../../../styles/reports.module.scss";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
+import {ReportPageUpdate} from "../../../components/Layout";
 
 const MediaPlaceListPageListInfoPage = () => {
 	const router = useRouter();
@@ -34,11 +34,22 @@ const MediaPlaceListPageListInfoPage = () => {
 		}
 	}, [reportId]);
 
-	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfMediaPlaceReportThunk({id: +reportId, statusId: statusTypeId}));
+	if (!report) return null;
+	const renderFileList = () => {
+		return report.mediaParts?.map((f) => (
+			<div className="flex-center gap-0.5 w-max" key={f.id}>
+				<label className={styles.cardBodyLabel}>
+					<a href={f.file.url} download>
+						<AppInput className="text-center" type="file" placeholder={`${f.file.url}`} />
+					</a>
+				</label>
+				<AppButton variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
 	};
 
-	if (!report) return null;
 	const renderTableBodyRows = () => {
 		return report.mediaParts?.map((part) => (
 			<tr key={part.id}>
@@ -62,7 +73,7 @@ const MediaPlaceListPageListInfoPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<AppCard shadow="table">
+			<AppCard shadow="table" className="mb-1.5">
 				<AppTable wrapperClassName="p-0">
 					<AppTable.THead extended>
 						<tr>
@@ -75,6 +86,8 @@ const MediaPlaceListPageListInfoPage = () => {
 				</AppTable>
 			</AppCard>
 
+			<div className="flex-col gap-0.5">{renderFileList()}</div>
+
 			<div className="flex-justify-between mt-auto pe-2.5">
 				<AppButton useAs="link" href="/reports/media-place" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
@@ -82,14 +95,7 @@ const MediaPlaceListPageListInfoPage = () => {
 				</AppButton>
 
 				{report.status.id === eReportStatusType.Sent && (
-					<div className="d-flex gap-0.5">
-						<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</div>
+					<ReportPageUpdate reportId={+reportId} table={eTable.MediaReport} />
 				)}
 			</div>
 		</>

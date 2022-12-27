@@ -16,7 +16,7 @@ const initialState: IState = {
 
 export const {
 	reducer: telemedicineReportReducer,
-	actions: {setTelemedicineReportByIdAction, setAllTelemedicineReportsAction},
+	actions: {setTelemedicineReportByIdAction, setAllTelemedicineReportsAction, deleteTelemedicineReportAction},
 } = createSlice({
 	name: "telemedicineReport",
 	initialState,
@@ -43,6 +43,12 @@ export const {
 				state.list = state.list.filter((old) => !ids.has(old.id)).concat(action.payload.list);
 			} else {
 				state.list = action.payload.list;
+			}
+		},
+		deleteTelemedicineReportAction: (state: IState, action: PayloadAction<number>) => {
+			const index = state.list.findIndex((r) => r.id === action.payload);
+			if (index !== -1) {
+				state.list.splice(index, 1);
 			}
 		},
 	},

@@ -124,7 +124,7 @@ const CenterFinancialExpensesPage = () => {
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
-								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>Спонсортсво</span>
+								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>Спонсорство</span>
 								<AppInput
 									className="text-center"
 									type="number"

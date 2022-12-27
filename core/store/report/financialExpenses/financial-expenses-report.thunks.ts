@@ -7,6 +7,7 @@ import {
 } from "../../../models";
 import {ReportService} from "../../../services";
 import {
+	deleteFinancialExpensesReportAction,
 	setAllFinancialExpensesReportsAction,
 	setFinancialExpenseReportByIdAction,
 } from "./financial-expenses-report.slices";
@@ -67,7 +68,8 @@ export const deleteFinancialExpensesReportThunk = createAsyncThunk(
 		const result = await ReportService.financialExpenses.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteFinancialExpensesReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},

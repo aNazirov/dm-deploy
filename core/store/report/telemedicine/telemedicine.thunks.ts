@@ -2,7 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {eReportStatusType, IReportTelemedicineCreateParams, IReportTelemedicineGetParams} from "../../../models";
 import {ReportService} from "../../../services";
-import {setAllTelemedicineReportsAction, setTelemedicineReportByIdAction} from "./telemedicine.slices";
+import {
+	deleteTelemedicineReportAction,
+	setAllTelemedicineReportsAction,
+	setTelemedicineReportByIdAction,
+} from "./telemedicine.slices";
 
 export const createTelemedicineReportThunk = createAsyncThunk(
 	"telemedicineReport/createThunk",
@@ -60,7 +64,8 @@ export const deleteTelemedicineReportThunk = createAsyncThunk(
 		const result = await ReportService.telemedicine.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteTelemedicineReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},

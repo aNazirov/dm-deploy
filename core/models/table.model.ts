@@ -5,7 +5,7 @@ export enum eTable {
 	DailyReport = "DailyReport",
 	TrainingReport = "TrainingReport",
 	TelemedicineReport = "TelemedicineReport",
-	VisitOfForeignSpecialistsReport = "VisitOfForeignSpecialistsReport",
+	VisitsOfForeignSpecialistsReport = "VisitsOfForeignSpecialistsReport",
 	MediaReport = "MediaReport",
 }
 

@@ -1,14 +1,13 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppBadge, AppButton, AppDivider, AppPagination, AppTable} from "../../../components/Main";
-import styles from "../../../styles/reports.module.scss";
-
-import FilterIcon from "../../../assets/images/icons/filled/filter.svg";
+import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getAllDailyReportsThunk} from "../../../core/store/report/daily/daily-report.thunks";
 import {setAllDailyReportsAction} from "../../../core/store/report/daily/daily-report.slices";
 import Moment from "react-moment";
 import {useRouter} from "next/router";
+import {ReportListPageWrapper} from "../../../components/Layout";
+import {eTable} from "../../../core/models";
 
 const DailyListPage = () => {
 	const dispatch = useAppDispatch();
@@ -59,59 +58,30 @@ const DailyListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<div className={styles.filters}>
-				<div className={styles.filterLabel}>
-					<AppButton variant="primary-outline" size="lg" withIcon>
-						<FilterIcon width="24px" height="24px" className="main-btn-text-color" />
-						<span>Фильтр</span>
-					</AppButton>
+			<ReportListPageWrapper table={eTable.DailyReport}>
+				{dailyReport.list.length > 0 ? (
+					<AppTable linked wrapperClassName="p-0">
+						<AppTable.THead>
+							<tr>
+								<th>ID</th>
+								<th>Номер</th>
+								<th>Дата</th>
+								<th>Организация</th>
+								<th>Комментарии</th>
+								<th>Статус</th>
+							</tr>
+						</AppTable.THead>
+						<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
+					</AppTable>
+				) : (
+					"Список отчётов пуст"
+				)}
+
+				<div className="mt-auto">
+					<AppDivider className="my-1.25" />
+					<AppPagination />
 				</div>
-
-				<div className={styles.filterLabel}>
-					<span className="text-main-bold">Статус:</span>
-					<div className="d-flex gap-0.125">
-						<AppButton className="active" variant="primary-outline" size="lg">
-							Все
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Отправлен
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Принят
-						</AppButton>
-						<AppButton variant="primary-outline" size="lg">
-							Отказан
-						</AppButton>
-					</div>
-				</div>
-
-				<AppButton useAs="link" href="/reports/daily/create" className="ms-auto" variant="main" size="lg">
-					Создать
-				</AppButton>
-			</div>
-
-			{dailyReport.list.length > 0 ? (
-				<AppTable linked wrapperClassName="p-0">
-					<AppTable.THead>
-						<tr>
-							<th>ID</th>
-							<th>Номер</th>
-							<th>Дата</th>
-							<th>Организация</th>
-							<th>Комментарии</th>
-							<th>Статус</th>
-						</tr>
-					</AppTable.THead>
-					<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
-				</AppTable>
-			) : (
-				"Список отчётов пуст"
-			)}
-
-			<div className="mt-auto">
-				<AppDivider className="my-1.25" />
-				<AppPagination />
-			</div>
+			</ReportListPageWrapper>
 		</>
 	);
 };

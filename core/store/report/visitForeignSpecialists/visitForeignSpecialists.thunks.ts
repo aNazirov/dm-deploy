@@ -7,6 +7,7 @@ import {
 } from "../../../models";
 import {FileService, ReportService} from "../../../services";
 import {
+	deleteVisitForeignSpecialistsReportAction,
 	setAllVisitForeignSpecialistsReportsAction,
 	setVisitForeignSpecialistsReportByIdAction,
 } from "./visitForeignSpecialists.slices";
@@ -80,7 +81,8 @@ export const deleteVisitForeignSpecialistsReportThunk = createAsyncThunk(
 		const result = await ReportService.visitForeignSpecialists.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteVisitForeignSpecialistsReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},

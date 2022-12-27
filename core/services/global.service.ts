@@ -9,7 +9,7 @@ export const GlobalService = {
 	},
 	getSpecialities: () => {
 		return api
-			.get<GlobalListItemModel[]>("global/spicialities")
+			.get<GlobalListItemModel[]>("global/specialities")
 			.then((res) => res.data.map((d) => new GlobalListItemModel(d)));
 	},
 	positions: () => {

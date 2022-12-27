@@ -6,13 +6,11 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType} from "../../../core/models";
+import {eReportStatusType, eTable} from "../../../core/models";
 import Moment from "react-moment";
-import {
-	changeStatusOfVisitForeignSpecialistsReportThunk,
-	getVisitForeignSpecialistsReportByIdThunk,
-} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
+import {getVisitForeignSpecialistsReportByIdThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
+import {ReportPageUpdate} from "../../../components/Layout";
 
 const VisitForeignSpecialistsListInfoPage = () => {
 	const router = useRouter();
@@ -35,10 +33,6 @@ const VisitForeignSpecialistsListInfoPage = () => {
 			}
 		}
 	}, [reportId]);
-
-	const onClick = (statusTypeId: eReportStatusType) => () => {
-		dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
-	};
 
 	if (!report) return null;
 
@@ -103,14 +97,7 @@ const VisitForeignSpecialistsListInfoPage = () => {
 					Назад
 				</AppButton>
 				{report.status.id === eReportStatusType.Sent && (
-					<div className="d-flex gap-0.5">
-						<AppButton onClick={onClick(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onClick(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</div>
+					<ReportPageUpdate reportId={+reportId} table={eTable.VisitsOfForeignSpecialistsReport} />
 				)}
 			</div>
 		</div>

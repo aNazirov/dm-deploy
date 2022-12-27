@@ -2,7 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {eReportStatusType, IReportMediaPlaceCreateParams, IReportMediaPlaceGetParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
-import {setAllMediaPlaceReportsAction, setMediaPlaceReportByIdAction} from "./mediaPlace.slices";
+import {
+	deleteMediaPlaceReportAction,
+	setAllMediaPlaceReportsAction,
+	setMediaPlaceReportByIdAction,
+} from "./mediaPlace.slices";
 
 export const createMediaPlaceReportThunk = createAsyncThunk(
 	"mediaPlaceReport/createThunk",
@@ -66,7 +70,8 @@ export const deleteMediaPlaceReportThunk = createAsyncThunk(
 		const result = await ReportService.mediaPlace.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteMediaPlaceReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},

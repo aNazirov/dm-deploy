@@ -11,16 +11,24 @@ import ChevronDownIcon from "../../../assets/images/icons/filled/arrows/chevron-
 import ExchangeIcon from "../../../assets/images/icons/filled/arrows/exchange.svg";
 import {AppButton} from "../../Main";
 import {useRouter} from "next/router";
+import {eTable, eTablePermission} from "../../../core/models";
+import {useAppSelector} from "../../../core/hooks";
 
 type SidebarProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Sidebar = ({className}: SidebarProps) => {
+	const permissions = useAppSelector(({user}) => user.user?.permissions);
 	// react hooks
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	const onSidebarCollapse = () => {
 		setIsCollapsed((prev) => !prev);
 	};
+
+	const filteredOrganizationsReportLinks = organizationsReportLinks.filter((link) => {
+		const current = permissions?.find((p) => p.table === link.table);
+		return current?.permissions.includes(eTablePermission.Read);
+	});
 
 	return (
 		<aside className={cn(styles.aside, className, {[styles.collapsed]: isCollapsed})}>
@@ -32,9 +40,11 @@ export const Sidebar = ({className}: SidebarProps) => {
 							<span>Главная</span>
 						</Link>
 					</li>
-					<CollapsableList title="Отчёт учреждений" />
-					<CollapsableList title="Свод отчётов" />
-					<CollapsableList title="Отчёты" />
+					{filteredOrganizationsReportLinks.length > 0 ? (
+						<CollapsableList linksList={filteredOrganizationsReportLinks} title="Отчёт учреждений" />
+					) : null}
+					<CollapsableList linksList={[]} title="Свод отчётов" />
+					<CollapsableList linksList={[]} title="Отчёты" />
 				</ul>
 			</div>
 			<AppButton onClick={onSidebarCollapse} className={cn("flex-center mt-auto", styles.collapseBtn)}>
@@ -47,10 +57,11 @@ export const Sidebar = ({className}: SidebarProps) => {
 // TODO: move to separate file
 interface CollapsableListProps {
 	title: string;
+	linksList: {title: string; url: string; table: eTable}[];
 }
 
 // TODO: onClick to collapse btn, hide all opened submenus
-const CollapsableList = ({title}: CollapsableListProps) => {
+const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 	// next hooks
 	const router = useRouter();
 
@@ -65,109 +76,38 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 		}
 	}, [menuRef]);
 
-	const onToggle = (e: Event) => {
+	const onToggle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 		e.preventDefault();
 		setIsOpened((prev) => !prev);
 	};
 
-	const isCurrentPath = (path: string) => router.pathname === path;
+	const isCurrentPath = (path: string) => router.pathname.includes(path);
+
+	const renderList = () => {
+		return linksList.map((link, i) => (
+			<li key={i}>
+				<Link className={cn("list-item rounded-md", {active: isCurrentPath(link.url)})} href={link.url}>
+					{isCurrentPath(link.url) ? (
+						<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+					) : (
+						<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+					)}
+					<span>{link.title}</span>
+				</Link>
+			</li>
+		));
+	};
 
 	return (
 		<li ref={menuRef}>
-			<Link className={cn("rounded", styles.asideLink, {[styles.active]: isOpened})} href="/">
+			<Link href="#" onClick={onToggle} className={cn("rounded w-100", styles.asideLink, {[styles.active]: isOpened})}>
 				<ListIcon width="24px" height="24px" className="main-btn-text-color" />
 				<span>{title}</span>
-
-				<ChevronDownIcon
-					onClick={onToggle}
-					width="18px"
-					height="18px"
-					className={cn("main-btn-text-color ms-auto", styles.chevronIcon)}
-				/>
+				<ChevronDownIcon width="18px" height="18px" className={cn("main-btn-text-color ms-auto", styles.chevronIcon)} />
 			</Link>
 			{isOpened && (
 				<ul className={styles.asideSubList}>
-					{/* TODO: add routes array mapping  */}
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/daily")})}
-							href="/reports/daily"
-						>
-							{isCurrentPath("/reports/daily") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Ежедневный отчёт</span>
-						</Link>
-					</li>
-
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/training")})}
-							href="/reports/training"
-						>
-							{isCurrentPath("/reports/training") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Повышение квалификации</span>
-						</Link>
-					</li>
-
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/financial-expenses")})}
-							href="/reports/financial-expenses"
-						>
-							{isCurrentPath("/reports/financial-expenses") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Финансовые расходы центра (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/visit-foreign-specialists")})}
-							href="/reports/visit-foreign-specialists"
-						>
-							{isCurrentPath("/reports/visit-foreign-specialists") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Визит иностранных специалистов (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/telemedicine")})}
-							href="/reports/telemedicine"
-						>
-							{isCurrentPath("/reports/telemedicine") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Телемедицина (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/media-place")})}
-							href="/reports/media-place"
-						>
-							{isCurrentPath("/reports/media-place") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Медиа отчёт</span>
-						</Link>
-					</li>
+					{renderList()}
 					<li>
 						<Link
 							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done")})}
@@ -290,3 +230,16 @@ const CollapsableList = ({title}: CollapsableListProps) => {
 		</li>
 	);
 };
+
+const organizationsReportLinks = [
+	{title: "Ежедневный отчёт", url: "/reports/daily", table: eTable.DailyReport},
+	{title: "Повышение квалификации", url: "/reports/training", table: eTable.TrainingReport},
+	{title: "Финансовые расходы центра (ОЦ)", url: "/reports/financial-expenses", table: eTable.FinancialExpensesReport},
+	{
+		title: "Визит иностранных специалистов (ОЦ)",
+		url: "/reports/visit-foreign-specialists",
+		table: eTable.VisitsOfForeignSpecialistsReport,
+	},
+	{title: "Телемедицина (ОЦ)", url: "/reports/telemedicine", table: eTable.TelemedicineReport},
+	{title: "Медиа отчёт", url: "/reports/media-place", table: eTable.MediaReport},
+];

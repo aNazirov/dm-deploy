@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {eReportStatusType, IReportDailyCreateParams, IReportDailyGetParams} from "../../../models";
 import {ReportService} from "../../../services";
-import {setAllDailyReportsAction, setDailyReportByIdAction} from "./daily-report.slices";
+import {deleteDailyReportAction, setAllDailyReportsAction, setDailyReportByIdAction} from "./daily-report.slices";
 
 export const createDailyReportThunk = createAsyncThunk(
 	"dailyReport/createThunk",
@@ -60,7 +60,8 @@ export const deleteDailyReportThunk = createAsyncThunk(
 		const result = await ReportService.daily.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteDailyReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},

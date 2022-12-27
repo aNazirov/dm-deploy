@@ -138,6 +138,16 @@ a {
 	}
 }
 
+.print-btn{
+	background-color: var(--print-button-color);
+	color: var(--white-color);
+
+	&:hover,
+	&.active {
+		background-color: var(--print-active-button-color);
+	}
+}
+
 .text-btn {
 	box-shadow: none;
 }

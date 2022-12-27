@@ -2,7 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {eReportStatusType, IReportTrainingCreateParams, IReportTrainingGetParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
-import {setAllTrainingReportsAction, setTrainingReportByIdAction} from "./training-report.slices";
+import {
+	deleteTrainingReportAction,
+	setAllTrainingReportsAction,
+	setTrainingReportByIdAction,
+} from "./training-report.slices";
 
 export const createTrainingReportThunk = createAsyncThunk(
 	"trainingReport/createThunk",
@@ -64,7 +68,8 @@ export const deleteTrainingReportThunk = createAsyncThunk(
 		const result = await ReportService.training.delete(id, thunkAPI.signal);
 
 		if (result) {
-			console.log("res");
+			thunkAPI.dispatch(deleteTrainingReportAction(id));
+			return result.status;
 		}
 	},
 	{dispatchConditionRejection: true},
