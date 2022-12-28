@@ -186,19 +186,7 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 							<span>Обращения физических и юридических лиц (детали)</span>
 						</Link>
 					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/science")})}
-							href="/reports/science"
-						>
-							{isCurrentPath("/reports/science") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Наука (ОЦ)</span>
-						</Link>
-					</li>
+
 					<li>
 						<Link
 							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/science-list")})}
@@ -242,4 +230,5 @@ const organizationsReportLinks = [
 	},
 	{title: "Телемедицина (ОЦ)", url: "/reports/telemedicine", table: eTable.TelemedicineReport},
 	{title: "Медиа отчёт", url: "/reports/media-place", table: eTable.MediaReport},
+	{title: "Научные проекты (ОЦ)", url: "/reports/science", table: eTable.ScienceReport},
 ];

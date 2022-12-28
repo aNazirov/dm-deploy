@@ -106,9 +106,13 @@ const TrainingListInfoPage = () => {
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
-				{report.status.id === eReportStatusType.Sent && (
-					<ReportPageUpdate reportId={+reportId} table={eTable.TrainingReport} />
-				)}
+
+				<ReportPageUpdate
+					reportStatusId={report.status.id}
+					paternalId={report.organization.paternalId}
+					reportId={+reportId}
+					table={eTable.TrainingReport}
+				/>
 			</div>
 		</div>
 	);

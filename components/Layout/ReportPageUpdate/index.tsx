@@ -33,11 +33,14 @@ import {useRouter} from "next/router";
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	reportId: number;
 	table: eTable;
+	paternalId: number;
+	reportStatusId: number;
 }
-export const ReportPageUpdate = ({reportId, table, ...props}: IProps) => {
+export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, ...props}: IProps) => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
+	const user = useAppSelector(({user}) => user.user);
 	const permissions = useAppSelector(({user}) => user.user?.permissions);
 
 	const currentPermission = permissions?.find((p) => p.table === table);
@@ -134,16 +137,18 @@ export const ReportPageUpdate = ({reportId, table, ...props}: IProps) => {
 				</AppButton>
 			)}
 
-			{currentPermission?.permissions.includes(eTablePermission.Status) && (
-				<>
-					<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
-						Отказать
-					</AppButton>
-					<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
-						Принять
-					</AppButton>
-				</>
-			)}
+			{currentPermission?.permissions.includes(eTablePermission.Status) &&
+				reportStatusId === eReportStatusType.Sent &&
+				user?.organization.id === paternalId && (
+					<>
+						<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
+							Отказать
+						</AppButton>
+						<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
+							Принять
+						</AppButton>
+					</>
+				)}
 		</div>
 	);
 };

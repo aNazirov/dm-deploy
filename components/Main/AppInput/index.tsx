@@ -20,7 +20,9 @@ const Input = ({Icon, className, bg, dimension, ...props}: AppInputProps, ref: F
 			{props.type === "file" && (
 				<div className={cn(styles.fileWrapper, "rounded", "text-main-regular")}>
 					<UploadIcon width="24px" height="24px" fill="white" />
-					{props.placeholder && <span>{props.placeholder ?? "Прикрепить файл"}</span>}
+					{props.placeholder && (
+						<span className="text-truncate w-max-20">{props.placeholder ?? "Прикрепить файл"}</span>
+					)}
 				</div>
 			)}
 

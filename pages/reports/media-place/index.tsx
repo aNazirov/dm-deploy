@@ -73,7 +73,7 @@ const MediaPlaceListPage = () => {
 						<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
 					</AppTable>
 				) : (
-					"Список отчётов пуст"
+					"Список отчётов пуст."
 				)}
 
 				<div className="mt-auto">

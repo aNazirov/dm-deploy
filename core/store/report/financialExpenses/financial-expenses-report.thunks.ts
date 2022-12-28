@@ -1,10 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {
-	eReportStatusType,
-	IReportFinancialExpensesCreateParams,
-	IReportFinancialExpensesGetParams,
-} from "../../../models";
+import {eReportStatusType, IReportFinancialExpensesCreateParams, IReportGetParams} from "../../../models";
 import {ReportService} from "../../../services";
 import {
 	deleteFinancialExpensesReportAction,
@@ -52,7 +48,7 @@ export const changeStatusOfFinancialExpensesReportThunk = createAsyncThunk(
 
 export const getAllFinancialExpensesReportsThunk = createAsyncThunk(
 	"financialExpensesReport/getAllThunk",
-	async (payload: IReportFinancialExpensesGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.financialExpenses.get(payload, thunkAPI.signal);
 
 		if (result) {

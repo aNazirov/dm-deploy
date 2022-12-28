@@ -13,7 +13,6 @@ import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
 import {eMediaPlace, IFile, IReportMediaPlaceCreateParams} from "../../../core/models";
 import {createMediaPlaceReportThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
-import {createVisitForeignSpecialistsReportThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 
 const fieldOptions = {
 	required: true,
@@ -47,7 +46,7 @@ const MediaPlaceCreatePage = () => {
 		append({
 			place: undefined as unknown as eMediaPlace,
 			title: undefined as unknown as string,
-			date: undefined as unknown as string,
+			date: undefined as unknown as Date,
 			file: undefined as unknown as IFile,
 		});
 	};
@@ -230,7 +229,7 @@ const MediaPlaceCreatePage = () => {
 				</div>
 			</div>
 
-			<div className="flex-justify-between mt-auto">
+			<div className="flex-justify-between mt-auto pt-2.5">
 				<AppButton useAs="link" href="/reports/media-place" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад

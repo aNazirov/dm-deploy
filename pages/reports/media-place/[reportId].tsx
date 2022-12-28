@@ -94,9 +94,12 @@ const MediaPlaceListPageListInfoPage = () => {
 					Назад
 				</AppButton>
 
-				{report.status.id === eReportStatusType.Sent && (
-					<ReportPageUpdate reportId={+reportId} table={eTable.MediaReport} />
-				)}
+				<ReportPageUpdate
+					reportStatusId={report.status.id}
+					paternalId={report.organization.paternalId}
+					reportId={+reportId}
+					table={eTable.MediaReport}
+				/>
 			</div>
 		</>
 	);

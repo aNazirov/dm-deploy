@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportDailyCreateParams, IReportDailyGetParams} from "../../../models";
+import {eReportStatusType, IReportDailyCreateParams, IReportGetParams} from "../../../models";
 import {ReportService} from "../../../services";
 import {deleteDailyReportAction, setAllDailyReportsAction, setDailyReportByIdAction} from "./daily-report.slices";
 
@@ -44,7 +44,7 @@ export const changeStatusOfDailyReportThunk = createAsyncThunk(
 
 export const getAllDailyReportsThunk = createAsyncThunk(
 	"dailyReport/getAllThunk",
-	async (payload: IReportDailyGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.daily.get(payload, thunkAPI.signal);
 
 		if (result) {

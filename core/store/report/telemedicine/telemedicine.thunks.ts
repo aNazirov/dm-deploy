@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportTelemedicineCreateParams, IReportTelemedicineGetParams} from "../../../models";
+import {eReportStatusType, IReportGetParams, IReportTelemedicineCreateParams} from "../../../models";
 import {ReportService} from "../../../services";
 import {
 	deleteTelemedicineReportAction,
@@ -48,7 +48,7 @@ export const changeStatusOfTelemedicineReportThunk = createAsyncThunk(
 
 export const getAllTelemedicineReportsThunk = createAsyncThunk(
 	"telemedicineReport/getAllThunk",
-	async (payload: IReportTelemedicineGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.telemedicine.get(payload, thunkAPI.signal);
 
 		if (result) {

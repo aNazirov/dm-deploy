@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportTrainingCreateParams, IReportTrainingGetParams} from "../../../models";
+import {eReportStatusType, IReportGetParams, IReportTrainingCreateParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
 import {
 	deleteTrainingReportAction,
@@ -52,7 +52,7 @@ export const changeStatusOfTrainingReportThunk = createAsyncThunk(
 
 export const getAllTrainingReportsThunk = createAsyncThunk(
 	"trainingReport/getAllThunk",
-	async (payload: IReportTrainingGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.training.get(payload, thunkAPI.signal);
 
 		if (result) {

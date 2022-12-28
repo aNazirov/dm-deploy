@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportMediaPlaceCreateParams, IReportMediaPlaceGetParams} from "../../../models";
+import {eReportStatusType, IReportGetParams, IReportMediaPlaceCreateParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
 import {
 	deleteMediaPlaceReportAction,
@@ -54,7 +54,7 @@ export const changeStatusOfMediaPlaceReportThunk = createAsyncThunk(
 
 export const getAllMediaPlaceReportsThunk = createAsyncThunk(
 	"mediaPlaceReport/getAllThunk",
-	async (payload: IReportMediaPlaceGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.mediaPlace.get(payload, thunkAPI.signal);
 
 		if (result) {

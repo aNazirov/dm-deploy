@@ -7,6 +7,7 @@ export enum eTable {
 	TelemedicineReport = "TelemedicineReport",
 	VisitsOfForeignSpecialistsReport = "VisitsOfForeignSpecialistsReport",
 	MediaReport = "MediaReport",
+	ScienceReport = "ScienceReport",
 }
 
 export enum eTablePermission {

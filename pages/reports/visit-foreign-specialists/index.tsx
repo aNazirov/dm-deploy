@@ -60,21 +60,25 @@ const VisitForeignSpecialistsListPage = () => {
 			<h1 className="h1 text-center">Визит иностранных специалистов (ОЦ)</h1>
 
 			<AppDivider className="my-1.25" />
-			<ReportListPageWrapper table={eTable.VisitsOfForeignSpecialistsReport}>
-				<AppTable linked>
-					<AppTable.THead>
-						<tr>
-							<th>ID</th>
-							<th>Номер</th>
-							<th>Дата</th>
-							<th>Организация</th>
-							<th>Комментарии</th>
-							<th>Статус</th>
-						</tr>
-					</AppTable.THead>
-					<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
-				</AppTable>
 
+			<ReportListPageWrapper table={eTable.VisitsOfForeignSpecialistsReport}>
+				{visitForeignSpecialistsReport.list.length > 0 ? (
+					<AppTable linked>
+						<AppTable.THead>
+							<tr>
+								<th>ID</th>
+								<th>Номер</th>
+								<th>Дата</th>
+								<th>Организация</th>
+								<th>Комментарии</th>
+								<th>Статус</th>
+							</tr>
+						</AppTable.THead>
+						<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>
+					</AppTable>
+				) : (
+					"Список отчётов пуст."
+				)}
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
 					<AppPagination />

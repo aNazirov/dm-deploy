@@ -84,67 +84,22 @@ export interface IReportVisitsOfForeignSpecialistsCreateParams {
 }
 
 export interface IReportMediaPlaceCreateParams {
-	mediaParts: Omit<IMediaPart, "id">[];
+	mediaParts: Omit<MediaPartModel, "id">[];
 }
 
-// TODO: join get params
-export interface IReportDailyGetParams {
+export interface IReportGetParams {
 	skip: number;
 	take: number;
 	organizationId?: number;
 	statusId?: eReportStatusType;
-	start?: string;
-	end?: string;
-}
-
-export interface IReportTrainingGetParams {
-	skip: number;
-	take: number;
-	organizationId?: number;
-	statusId?: eReportStatusType;
-	start?: string;
-	end?: string;
-}
-
-export interface IReportFinancialExpensesGetParams {
-	skip: number;
-	take: number;
-	organizationId?: number;
-	statusId?: eReportStatusType;
-	start?: string;
-	end?: string;
-}
-
-export interface IReportTelemedicineGetParams {
-	skip: number;
-	take: number;
-	organizationId?: number;
-	statusId?: number;
-	start?: string;
-	end?: string;
-}
-
-export interface IReportVisitsOfForeignSpecialistsGetParams {
-	skip: number;
-	take: number;
-	organizationId?: number;
-	statusId?: number;
-	start?: string;
-	end?: string;
-}
-
-export interface IReportMediaPlaceGetParams {
-	skip: number;
-	take: number;
-	organizationId?: number;
-	statusId?: number;
-	start?: string;
-	end?: string;
+	start?: Date;
+	end?: Date;
 }
 
 // TODO: when you start config multi-translate, make class and pass title dynamically by current language
 export interface IShortOrganizationInfo {
 	id: number;
+	paternalId: number;
 	title: ITranslate;
 }
 
@@ -401,7 +356,7 @@ export class VisitOfForeignSpecialistModel {
 
 export class MediaPlaceReportModel {
 	id: number;
-	mediaParts: IMediaPart[];
+	mediaParts: MediaPartModel[];
 	status: IStatus;
 	organization: IShortOrganizationInfo;
 	note?: string;
@@ -411,7 +366,7 @@ export class MediaPlaceReportModel {
 
 	constructor(media: MediaPlaceReportModel) {
 		this.id = media.id;
-		this.mediaParts = media.mediaParts;
+		this.mediaParts = media.mediaParts.map((p) => new MediaPartModel(p));
 		this.status = media.status;
 		this.organization = media.organization;
 		this.createdAt = new Date(media.createdAt);
@@ -427,11 +382,19 @@ export class MediaPlaceReportModel {
 	}
 }
 
-export interface IMediaPart {
+// TODO: type of date,endDate and startDate set as Date everywhere
+export class MediaPartModel {
 	id: number;
 	title: string;
 	place: eMediaPlace;
-	// TODO: type string or Date
-	date: string;
+	date: Date;
 	file: IFile;
+
+	constructor(part: MediaPartModel) {
+		this.id = part.id;
+		this.title = part.title;
+		this.place = part.place;
+		this.file = part.file;
+		this.date = new Date(part.date);
+	}
 }

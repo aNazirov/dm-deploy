@@ -160,7 +160,7 @@ const RegionsWorkDonePage = () => {
 				</div>
 			</div>
 
-			<div className="flex-justify-between mt-auto">
+			<div className="flex-justify-between mt-auto pt-2.5">
 				<AppButton useAs="link" href="/" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад

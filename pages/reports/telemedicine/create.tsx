@@ -39,12 +39,14 @@ const TelemedicineCreatePage = () => {
 			],
 		},
 	});
+
 	const {fields, append, remove} = useFieldArray({
 		control,
 		name: "telemedicineParts",
 	});
 
 	const onAppend = () => {
+		// TODO: set undefined
 		append({
 			consultations: 0,
 			councils: 0,
@@ -211,7 +213,7 @@ const TelemedicineCreatePage = () => {
 				</AppCard.Body>
 			</AppCard>
 
-			<div className="flex-justify-between mt-auto">
+			<div className="flex-justify-between mt-auto pt-2.5">
 				<AppButton useAs="link" href="/reports/telemedicine" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад

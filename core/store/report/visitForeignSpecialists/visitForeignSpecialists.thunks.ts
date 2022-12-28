@@ -1,10 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {
-	eReportStatusType,
-	IReportVisitsOfForeignSpecialistsCreateParams,
-	IReportVisitsOfForeignSpecialistsGetParams,
-} from "../../../models";
+import {eReportStatusType, IReportGetParams, IReportVisitsOfForeignSpecialistsCreateParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
 import {
 	deleteVisitForeignSpecialistsReportAction,
@@ -65,7 +61,7 @@ export const changeStatusOfVisitForeignSpecialistsReportThunk = createAsyncThunk
 
 export const getAllVisitForeignSpecialistsReportsThunk = createAsyncThunk(
 	"visitForeignSpecialistsReport/getAllThunk",
-	async (payload: IReportVisitsOfForeignSpecialistsGetParams | undefined, thunkAPI) => {
+	async (payload: IReportGetParams | undefined, thunkAPI) => {
 		const result = await ReportService.visitForeignSpecialists.get(payload, thunkAPI.signal);
 
 		if (result) {
