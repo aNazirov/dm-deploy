@@ -8,6 +8,8 @@ export enum eTable {
 	VisitsOfForeignSpecialistsReport = "VisitsOfForeignSpecialistsReport",
 	MediaReport = "MediaReport",
 	ScienceReport = "ScienceReport",
+	ScientificEventsReport = "ScientificEventsReport",
+	ScientificWorksReport = "ScientificWorksReport",
 }
 
 export enum eTablePermission {

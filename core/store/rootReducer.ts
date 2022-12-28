@@ -11,6 +11,7 @@ import {dailyReportReducer} from "./report/daily/daily-report.slices";
 import {financialExpensesReportReducer} from "./report/financialExpenses/financial-expenses-report.slices";
 import {mediaPlaceReportReducer} from "./report/mediaPlace/mediaPlace.slices";
 import {scienceReportReducer} from "./report/science/science.slices";
+import {scientificEventsReportReducer} from "./report/scientificEvents/scientific-events-report.slices";
 import {telemedicineReportReducer} from "./report/telemedicine/telemedicine.slices";
 import {trainingReportReducer} from "./report/training/training-report.slices";
 import {visitForeignSpecialistsReportReducer} from "./report/visitForeignSpecialists/visitForeignSpecialists.slices";
@@ -24,6 +25,7 @@ const State = {
 	trainingReport: trainingReportReducer,
 	mediaPlaceReport: mediaPlaceReportReducer,
 	telemedicineReport: telemedicineReportReducer,
+	scientificEventsReport: scientificEventsReportReducer,
 	financialExpensesReport: financialExpensesReportReducer,
 	visitForeignSpecialistsReport: visitForeignSpecialistsReportReducer,
 };

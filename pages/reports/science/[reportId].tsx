@@ -3,7 +3,6 @@ import Head from "next/head";
 import {AppButton, AppCard, AppDivider, AppInput, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import styles from "../../../styles/reports.module.scss";
-import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getScienceReportByIdThunk} from "../../../core/store/report/science/science.thunks";
@@ -125,33 +124,8 @@ const ScienceListInfoPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<div className="flex-col gap-2.5">
-				{renderTables()}
-
-				{/*TODO: change font size of table*/}
-
-				<div className="flex-col gap-0.5">
-					<div className="flex-center gap-0.5 w-max">
-						<label className={styles.cardBodyLabel}>
-							<AppInput className="text-center" type="file" placeholder="Название документа" />
-						</label>
-
-						<AppButton variant="danger" size="square">
-							<TrashIcon width="24px" height="24px" />
-						</AppButton>
-					</div>
-
-					<div className="flex-center gap-0.5 w-max">
-						<label className={styles.cardBodyLabel}>
-							<AppInput className="text-center" type="file" placeholder="Название документа" />
-						</label>
-
-						<AppButton variant="danger" size="square">
-							<TrashIcon width="24px" height="24px" />
-						</AppButton>
-					</div>
-				</div>
-			</div>
+			{/*TODO: change font size of table*/}
+			<div className="flex-col gap-2.5">{renderTables()}</div>
 			{/*TODO: add padding-top to avoid adhesion in small heights of screen*/}
 			<div className="flex-justify-between mt-auto pt-2.5">
 				<AppButton useAs="link" href="/reports/science" size="lg" variant="dark" withIcon>
@@ -163,7 +137,7 @@ const ScienceListInfoPage = () => {
 					reportStatusId={report.status.id}
 					paternalId={report.organization.paternalId}
 					reportId={+reportId}
-					table={eTable.TrainingReport}
+					table={eTable.ScienceReport}
 				/>
 			</div>
 		</>

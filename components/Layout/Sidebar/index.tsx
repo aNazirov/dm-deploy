@@ -231,4 +231,5 @@ const organizationsReportLinks = [
 	{title: "Телемедицина (ОЦ)", url: "/reports/telemedicine", table: eTable.TelemedicineReport},
 	{title: "Медиа отчёт", url: "/reports/media-place", table: eTable.MediaReport},
 	{title: "Научные проекты (ОЦ)", url: "/reports/science", table: eTable.ScienceReport},
+	{title: "Научные защиты (ОЦ)", url: "/reports/scientific-events", table: eTable.ScientificEventsReport},
 ];

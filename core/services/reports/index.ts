@@ -2,6 +2,7 @@ import {dailyReportService} from "./dailyReport.service";
 import {financialExpensesReportService} from "./financialExpensesReport.service";
 import {mediaPlaceReportService} from "./mediaPlaceReport.service";
 import {scienceReportService} from "./scienceReport.service";
+import {scientificEventsReportService} from "./scientificEventsReport.service";
 import {telemedicineReportService} from "./telemedicineReport.service";
 import {trainingReportService} from "./trainingReport.service";
 import {visitForeignSpecialistsReportService} from "./visitForeignSpecialistsReport.service";
@@ -14,4 +15,5 @@ export const ReportService = {
 	visitForeignSpecialists: visitForeignSpecialistsReportService,
 	mediaPlace: mediaPlaceReportService,
 	science: scienceReportService,
+	scientificEvents: scientificEventsReportService,
 };
