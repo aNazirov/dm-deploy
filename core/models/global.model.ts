@@ -1,20 +1,19 @@
 import {ITranslate} from "./user.model";
 
-export class GlobalListItemModel {
-	id: number;
-	title: ITranslate;
-	createdAt: Date;
-	updatedAt: Date;
-
-	constructor(item: GlobalListItemModel) {
-		this.id = item.id;
-		this.title = item.title;
-		this.createdAt = new Date(item.createdAt);
-		this.updatedAt = new Date(item.updatedAt);
-	}
+export interface IAutoCompleteParams {
+	index?: "specialities" | "positions" | "countries";
+	search?: string;
+	// filter: ["specialities=1,2,3", "positions=1,2,3", "countries=2,3,5"]
+	filter?: string[];
+	limit?: number;
+	offset?: number;
 }
 
-export interface IGlobalListItem {
-	title: ITranslate;
-	id: number;
+export interface IAutoCompleteResult {
+	hits: {
+		id: number;
+		title?: ITranslate;
+	}[];
+	count: number;
+	query: string;
 }

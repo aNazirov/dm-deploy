@@ -1,18 +1,29 @@
 import React, {ChangeEvent, useState} from "react";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
+import {
+	AppButton,
+	AppCard,
+	AppCountrySelect,
+	AppDivider,
+	AppInput,
+	AppSpecialitySelect,
+} from "../../../components/Main";
 import styles from "../../../styles/reports.module.scss";
 import cn from "classnames";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
 import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
-import {ReactSelect} from "../../../components/External";
 import {useRouter} from "next/router";
-import {useAppDispatch, useAppSelector} from "../../../core/hooks";
+import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {IReportVisitsOfForeignSpecialistsCreateParams} from "../../../core/models";
+import {
+	IAutoCompleteParams,
+	IAutoCompleteResult,
+	IReportVisitsOfForeignSpecialistsCreateParams,
+} from "../../../core/models";
 import {createVisitForeignSpecialistsReportThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
+import {globalAutocompleteThunk} from "../../../core/store/global/global.thunks";
 
 const fieldOptions = {
 	required: true,
@@ -22,7 +33,6 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
-	const [countries, specialities] = useAppSelector(({global}) => [global.countries, global.specialities]);
 
 	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
@@ -138,22 +148,12 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 					</label>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
-							<div className="w-100">
-								<ReactSelect
-									onChange={onSelect({index, type: "specialityId"})}
-									options={specialities.map((c) => ({label: c.title.ru, value: c.id}))}
-									placeholder="Выберите специальность из ..."
-								/>
-							</div>
+							<AppSpecialitySelect onChange={onSelect({index, type: "specialityId"})} />
 						</div>
 					</label>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
-							<ReactSelect
-								onChange={onSelect({index, type: "countryId"})}
-								options={countries.map((c) => ({label: c.title.ru, value: c.id}))}
-								placeholder="Выберите страну из..."
-							/>
+							<AppCountrySelect onChange={onSelect({index, type: "countryId"})} />
 						</div>
 					</label>
 					<label className={styles.cardBodyLabel}>

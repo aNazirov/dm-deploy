@@ -23,9 +23,7 @@ export const APIUserUrl = {
 };
 
 export const APIGlobalUrl = {
-	countries: "global/countries",
-	specialities: "global/specialities",
-	positions: "global/positions",
+	autoComplete: "global/autocomplete",
 };
 
 const url = process.env.NEXT_PUBLIC_FILE_API_URL;

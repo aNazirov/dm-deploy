@@ -1,5 +1,5 @@
 import {IFile} from "./file.model";
-import {IGlobalListItem} from "./global.model";
+import {IAutoCompleteResult} from "./global.model";
 import {ePlace} from "./table.model";
 import {ISpeciality, ITranslate, IUserShortInfo} from "./user.model";
 
@@ -343,7 +343,7 @@ export class VisitOfForeignSpecialistModel {
 	startDate: string;
 	endDate: string;
 	organization: string;
-	country: IGlobalListItem;
+	country: IAutoCompleteResult["hits"];
 	speciality: ISpeciality;
 	file: IFile;
 
