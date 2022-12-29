@@ -6,29 +6,29 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {getTrainingReportByIdThunk} from "../../../core/store/report/training/training-report.thunks";
-import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
+import {getAppealsReportByIdThunk} from "../../../core/store/report/appeals/appeals-report.thunks";
+import {setAppealsReportByIdAction} from "../../../core/store/report/appeals/appeals-report.slices";
 import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const TrainingReportInfoPage = () => {
+const AppealsReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
-	const report = useAppSelector(({trainingReport}) => trainingReport.current);
+	const report = useAppSelector(({appealsReport}) => appealsReport.current);
 
 	useEffect(() => {
 		if (reportId) {
 			const id = +reportId;
 
 			if (!isNaN(id)) {
-				const promises = [dispatch(getTrainingReportByIdThunk(id))];
+				const promises = [dispatch(getAppealsReportByIdThunk(id))];
 
 				return () => {
 					promises.forEach((p) => p.abort());
-					dispatch(setDailyReportByIdAction(null));
+					dispatch(setAppealsReportByIdAction(null));
 				};
 			}
 		}
@@ -65,21 +65,9 @@ const TrainingReportInfoPage = () => {
 			<AppTable wrapperClassName="mb-1.5">
 				<AppTable.THead extended>
 					<tr>
-						<th rowSpan={2}>Дата</th>
-						<th colSpan={2}>Конференция, симпозиум ва х.к</th>
-						<th colSpan={2}>Учеба/повышение квалификации до 10 дней</th>
-						<th colSpan={2}>Учеба/повышение квалификации от 10 до 30 дней</th>
-						<th colSpan={2}>Учеба/повышение квалификации более 30 дней</th>
-					</tr>
-					<tr>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
-						<th>Местные</th>
-						<th>Mеждународные</th>
+						<th>Дата</th>
+						<th>Жалобы</th>
+						<th>Задачи по другим темам</th>
 					</tr>
 				</AppTable.THead>
 				<AppTable.TBody>
@@ -87,14 +75,8 @@ const TrainingReportInfoPage = () => {
 						<td>
 							<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
 						</td>
-						<td>{report.confNational}</td>
-						<td>{report.confInternational}</td>
-						<td>{report.learnNationalShort}</td>
-						<td>{report.learnInternationalShort}</td>
-						<td>{report.learnNationalMid}</td>
-						<td>{report.learnInternationalMid}</td>
-						<td>{report.learnNationalLong}</td>
-						<td>{report.learnInternationalLong}</td>
+						<td>{report.complaints}</td>
+						<td>{report.questions}</td>
 					</tr>
 				</AppTable.TBody>
 			</AppTable>
@@ -102,7 +84,7 @@ const TrainingReportInfoPage = () => {
 			<div className="flex-col gap-0.5">{renderFileList()}</div>
 
 			<div className="flex-justify-between mt-auto pe-2.5">
-				<AppButton useAs="link" href="/reports/training" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href="/reports/appeals" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
@@ -111,11 +93,11 @@ const TrainingReportInfoPage = () => {
 					reportStatusId={report.status.id}
 					paternalId={report.organization.paternalId}
 					reportId={+reportId}
-					table={eTable.TrainingReport}
+					table={eTable.AppealsReport}
 				/>
 			</div>
 		</div>
 	);
 };
 
-export default TrainingReportInfoPage;
+export default AppealsReportInfoPage;

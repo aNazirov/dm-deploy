@@ -1,5 +1,7 @@
+import {appealsReportService} from "./appealsReport.service";
 import {dailyReportService} from "./dailyReport.service";
 import {financialExpensesReportService} from "./financialExpensesReport.service";
+import {implementationReportService} from "./ImplementationReport.service";
 import {insuranceReportService} from "./insuranceReport.service";
 import {mediaPlaceReportService} from "./mediaPlaceReport.service";
 import {scienceReportService} from "./scienceReport.service";
@@ -20,4 +22,6 @@ export const ReportService = {
 	scientificEvents: scientificEventsReportService,
 	scientificWorks: scientificWorksReportService,
 	insurance: insuranceReportService,
+	implementation: implementationReportService,
+	appeals: appealsReportService,
 };

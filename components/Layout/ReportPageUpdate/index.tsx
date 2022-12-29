@@ -29,9 +29,30 @@ import {
 	deleteVisitForeignSpecialistsReportThunk,
 } from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {useRouter} from "next/router";
-import {deleteScientificWorksReportThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
-import {deleteScientificEventsReportThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
-import {deleteScienceReportThunk} from "../../../core/store/report/science/science.thunks";
+import {
+	changeStatusOfScientificWorksReportThunk,
+	deleteScientificWorksReportThunk,
+} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
+import {
+	changeStatusOfScientificEventsReportThunk,
+	deleteScientificEventsReportThunk,
+} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
+import {
+	changeStatusOfScienceReportThunk,
+	deleteScienceReportThunk,
+} from "../../../core/store/report/science/science.thunks";
+import {
+	changeStatusOfInsuranceReportThunk,
+	deleteInsuranceReportThunk,
+} from "../../../core/store/report/insurance/insurance-report.thunks";
+import {
+	changeStatusOfImplementationReportThunk,
+	deleteImplementationReportThunk,
+} from "../../../core/store/report/implementation/implementation-report.thunks";
+import {
+	changeStatusOfAppealsReportThunk,
+	deleteAppealsReportThunk,
+} from "../../../core/store/report/appeals/appeals-report.thunks";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	reportId: number;
@@ -67,6 +88,24 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 				break;
 			case eTable.VisitsOfForeignSpecialistsReport:
 				dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScientificEventsReport:
+				dispatch(changeStatusOfScientificEventsReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScientificWorksReport:
+				dispatch(changeStatusOfScientificWorksReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScienceReport:
+				dispatch(changeStatusOfScienceReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.InsuranceReport:
+				dispatch(changeStatusOfInsuranceReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ImplementationReport:
+				dispatch(changeStatusOfImplementationReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.AppealsReport:
+				dispatch(changeStatusOfAppealsReportThunk({id: +reportId, statusId: statusTypeId}));
 				break;
 			default:
 				break;
@@ -131,6 +170,24 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 				action = (await dispatch(deleteScienceReportThunk(reportId))) as typeof action;
 				if (action.payload) {
 					url += "/science";
+				}
+				break;
+			case eTable.InsuranceReport:
+				action = (await dispatch(deleteInsuranceReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/insurance";
+				}
+				break;
+			case eTable.ImplementationReport:
+				action = (await dispatch(deleteImplementationReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/implementation";
+				}
+				break;
+			case eTable.AppealsReport:
+				action = (await dispatch(deleteAppealsReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/appeals";
 				}
 				break;
 			default:

@@ -9,6 +9,9 @@ export const APIReportUrl = {
 	trainingReport: "training-report",
 	visitsOfForeignSpecialistsReport: "visits-of-foreign-specialists-report",
 	insuranceReport: "insurance-report",
+	implementationReport: "implementation-report",
+	departureReport: "departure-report",
+	appealsReport: "appeals-report",
 };
 
 export const APIAuthUrl = {

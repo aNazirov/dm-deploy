@@ -147,45 +147,6 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 							<span>Проделанная работа в регионах (детали)</span>
 						</Link>
 					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/appeals")})}
-							href="/reports/appeals"
-						>
-							{isCurrentPath("/reports/appeals") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Обращения физических и юридических лиц</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/appeals-list")})}
-							href="/reports/appeals-list"
-						>
-							{isCurrentPath("/reports/appeals-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Обращения физических и юридических лиц (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/appeals-list-info")})}
-							href="/reports/appeals-list-info"
-						>
-							{isCurrentPath("/reports/appeals-list-info") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Обращения физических и юридических лиц (детали)</span>
-						</Link>
-					</li>
 				</ul>
 			)}
 		</li>
@@ -207,4 +168,6 @@ const organizationsReportLinks = [
 	{title: "Научные защиты (ОЦ)", url: "/reports/scientific-events", table: eTable.ScientificEventsReport},
 	{title: "Научные статьи, патенты и др.", url: "/reports/scientific-works", table: eTable.ScientificWorksReport},
 	{title: "Страховые отчёты", url: "/reports/insurance", table: eTable.InsuranceReport},
+	{title: "Внедрения", url: "/reports/implementation", table: eTable.ImplementationReport},
+	{title: "Обращение физических и юридических лиц", url: "/reports/appeals", table: eTable.AppealsReport},
 ];

@@ -25,4 +25,5 @@ export class FileModel {
 export interface IFile {
 	id: number;
 	url: string;
+	name?: string;
 }

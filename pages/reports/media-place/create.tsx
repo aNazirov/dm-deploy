@@ -95,7 +95,7 @@ const MediaPlaceReportCreatePage = () => {
 	};
 
 	const onFileRemove = (fileName: string) => () => {
-		const index = files.findIndex((f) => f.name === fileName);
+		const index = files.findIndex((f) => f.url === fileName);
 		setFiles((prev) => prev.filter((f, i) => i !== index));
 	};
 
