@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {setInsuranceReportByIdAction} from "../../../core/store/report/insurance/insurance-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const InsuranceListInfoPage = () => {
+const InsuranceReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -101,4 +101,4 @@ const InsuranceListInfoPage = () => {
 	);
 };
 
-export default InsuranceListInfoPage;
+export default InsuranceReportInfoPage;

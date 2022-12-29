@@ -12,7 +12,7 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const MediaPlaceListPageListInfoPage = () => {
+const MediaPlaceReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -105,4 +105,4 @@ const MediaPlaceListPageListInfoPage = () => {
 	);
 };
 
-export default MediaPlaceListPageListInfoPage;
+export default MediaPlaceReportInfoPage;

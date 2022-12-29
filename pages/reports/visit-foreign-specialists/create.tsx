@@ -18,7 +18,7 @@ const fieldOptions = {
 	required: true,
 };
 
-const VisitForeignSpecialistsPage = () => {
+const VisitForeignSpecialistsReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -290,4 +290,4 @@ const VisitForeignSpecialistsPage = () => {
 	);
 };
 
-export default VisitForeignSpecialistsPage;
+export default VisitForeignSpecialistsReportCreatePage;

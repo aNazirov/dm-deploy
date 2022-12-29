@@ -9,7 +9,7 @@ import {getScientificWorksReportByIdThunk} from "../../../core/store/report/scie
 import {setScientificWorksReportByIdAction} from "../../../core/store/report/scientificWorks/scientific-works-report.slices";
 import {eTable} from "../../../core/models";
 
-const ScientificWorksListInfoPage = () => {
+const ScientificWorksReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -103,4 +103,4 @@ const ScientificWorksListInfoPage = () => {
 	);
 };
 
-export default ScientificWorksListInfoPage;
+export default ScientificWorksReportInfoPage;

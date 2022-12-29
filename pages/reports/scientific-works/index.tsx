@@ -9,7 +9,7 @@ import {eTable} from "../../../core/models";
 import {getAllScientificWorksReportsThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
 import {setAllScientificWorksReportsAction} from "../../../core/store/report/scientificWorks/scientific-works-report.slices";
 
-const ScientificWorksListPage = () => {
+const ScientificWorksReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const scientificWorksReport = useAppSelector(({scientificWorksReport}) => scientificWorksReport);
 
@@ -86,4 +86,4 @@ const ScientificWorksListPage = () => {
 	);
 };
 
-export default ScientificWorksListPage;
+export default ScientificWorksReportListPage;

@@ -9,7 +9,7 @@ import Moment from "react-moment";
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const TrainingListPage = () => {
+const TrainingReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const trainingReport = useAppSelector(({trainingReport}) => trainingReport);
 
@@ -86,4 +86,4 @@ const TrainingListPage = () => {
 	);
 };
 
-export default TrainingListPage;
+export default TrainingReportListPage;

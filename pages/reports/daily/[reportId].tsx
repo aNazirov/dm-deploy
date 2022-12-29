@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const DailyListInfoPage = () => {
+const DailyReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -115,4 +115,4 @@ const DailyListInfoPage = () => {
 	);
 };
 
-export default DailyListInfoPage;
+export default DailyReportInfoPage;

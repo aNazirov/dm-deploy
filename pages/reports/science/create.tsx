@@ -13,7 +13,7 @@ import {useFieldArray, useForm} from "react-hook-form";
 import {eScienceType, IReportScienceCreateParams} from "../../../core/models";
 import {createScienceReportThunk} from "../../../core/store/report/science/science.thunks";
 
-const ScienceCreatePage = () => {
+const ScienceReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -388,4 +388,4 @@ const ScienceCreatePage = () => {
 	);
 };
 
-export default ScienceCreatePage;
+export default ScienceReportCreatePage;

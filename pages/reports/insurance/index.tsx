@@ -9,7 +9,7 @@ import {useRouter} from "next/router";
 import {ReportListPageWrapper} from "../../../components/Layout";
 import {eTable} from "../../../core/models";
 
-const InsuranceListPage = () => {
+const InsuranceReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const insuranceReport = useAppSelector(({insuranceReport}) => insuranceReport);
 
@@ -90,4 +90,4 @@ const InsuranceListPage = () => {
 	);
 };
 
-export default InsuranceListPage;
+export default InsuranceReportListPage;

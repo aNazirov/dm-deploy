@@ -86,7 +86,7 @@ a {
 	}
 }
 
-.outline-success-btn{
+.outline-success-btn {
 	background-color: var(--white-color);
 	border: 1px solid var(--main-button-color);
 	box-shadow: none;
@@ -138,7 +138,7 @@ a {
 	}
 }
 
-.print-btn{
+.print-btn {
 	background-color: var(--print-button-color);
 	color: var(--white-color);
 
@@ -159,7 +159,6 @@ a {
 }
 
 .list-item {
-
 	@extend .text-main-regular;
 
 	align-items: center;

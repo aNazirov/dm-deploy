@@ -18,7 +18,7 @@ const fieldOptions = {
 	required: true,
 };
 
-const MediaPlaceCreatePage = () => {
+const MediaPlaceReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -243,7 +243,7 @@ const MediaPlaceCreatePage = () => {
 	);
 };
 
-export default MediaPlaceCreatePage;
+export default MediaPlaceReportCreatePage;
 
 const placeOptions = [
 	{

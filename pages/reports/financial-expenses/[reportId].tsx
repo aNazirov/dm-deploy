@@ -6,10 +6,10 @@ import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getFinancialExpensesReportByIdThunk} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
 import {setFinancialExpenseReportByIdAction} from "../../../core/store/report/financialExpenses/financial-expenses-report.slices";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const CenterFinancialExpensesListInfoPage = () => {
+const CenterFinancialExpensesReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -114,4 +114,4 @@ const CenterFinancialExpensesListInfoPage = () => {
 	);
 };
 
-export default CenterFinancialExpensesListInfoPage;
+export default CenterFinancialExpensesReportInfoPage;

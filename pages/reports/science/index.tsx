@@ -1,9 +1,7 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppBadge, AppButton, AppDivider, AppPagination, AppTable} from "../../../components/Main";
-import styles from "../../../styles/reports.module.scss";
+import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 
-import FilterIcon from "../../../assets/images/icons/filled/filter.svg";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getAllScienceReportsThunk} from "../../../core/store/report/science/science.thunks";
 import {useRouter} from "next/router";
@@ -12,7 +10,7 @@ import Moment from "react-moment";
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const ScienceListPage = () => {
+const ScienceReportListPage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -89,4 +87,4 @@ const ScienceListPage = () => {
 	);
 };
 
-export default ScienceListPage;
+export default ScienceReportListPage;

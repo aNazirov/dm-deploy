@@ -5,7 +5,7 @@ import styles from "../../styles/reports.module.scss";
 
 import FilterIcon from "../../assets/images/icons/filled/filter.svg";
 
-const DailyListPage = () => {
+const RegionsReportListPage = () => {
 	return (
 		<>
 			<Head>
@@ -119,4 +119,4 @@ const DailyListPage = () => {
 	);
 };
 
-export default DailyListPage;
+export default RegionsReportListPage;

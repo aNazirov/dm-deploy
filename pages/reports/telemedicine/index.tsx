@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const TelemedicineListPage = () => {
+const TelemedicineReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const telemedicineReport = useAppSelector(({telemedicineReport}) => telemedicineReport);
 
@@ -86,4 +86,4 @@ const TelemedicineListPage = () => {
 	);
 };
 
-export default TelemedicineListPage;
+export default TelemedicineReportListPage;

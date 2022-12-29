@@ -12,7 +12,7 @@ import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const TrainingListInfoPage = () => {
+const TrainingReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -118,4 +118,4 @@ const TrainingListInfoPage = () => {
 	);
 };
 
-export default TrainingListInfoPage;
+export default TrainingReportInfoPage;

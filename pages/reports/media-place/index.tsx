@@ -9,7 +9,7 @@ import {setAllMediaPlaceReportsAction} from "../../../core/store/report/mediaPla
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const MediaPlaceListPage = () => {
+const MediaPlaceReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const mediaPlaceReport = useAppSelector(({mediaPlaceReport}) => mediaPlaceReport);
 
@@ -85,4 +85,4 @@ const MediaPlaceListPage = () => {
 	);
 };
 
-export default MediaPlaceListPage;
+export default MediaPlaceReportListPage;

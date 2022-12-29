@@ -16,7 +16,7 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const ScientificEventsCreatePage = () => {
+const ScientificEventsReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -291,4 +291,4 @@ const ScientificEventsCreatePage = () => {
 	);
 };
 
-export default ScientificEventsCreatePage;
+export default ScientificEventsReportCreatePage;

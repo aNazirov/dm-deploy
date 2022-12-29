@@ -11,7 +11,7 @@ import Moment from "react-moment";
 import {eScienceType, eTable} from "../../../core/models";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const ScienceListInfoPage = () => {
+const ScienceReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -144,7 +144,7 @@ const ScienceListInfoPage = () => {
 	);
 };
 
-export default ScienceListInfoPage;
+export default ScienceReportInfoPage;
 
 const scienceWorkTypes = {
 	[eScienceType.Joint]: "Совместный",

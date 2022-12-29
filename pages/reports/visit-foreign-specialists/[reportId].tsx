@@ -12,7 +12,7 @@ import {getVisitForeignSpecialistsReportByIdThunk} from "../../../core/store/rep
 import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const VisitForeignSpecialistsListInfoPage = () => {
+const VisitForeignSpecialistsReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -108,4 +108,4 @@ const VisitForeignSpecialistsListInfoPage = () => {
 	);
 };
 
-export default VisitForeignSpecialistsListInfoPage;
+export default VisitForeignSpecialistsReportInfoPage;

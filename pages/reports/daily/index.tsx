@@ -9,7 +9,7 @@ import {useRouter} from "next/router";
 import {ReportListPageWrapper} from "../../../components/Layout";
 import {eTable} from "../../../core/models";
 
-const DailyListPage = () => {
+const DailyReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const dailyReport = useAppSelector(({dailyReport}) => dailyReport);
 
@@ -86,4 +86,4 @@ const DailyListPage = () => {
 	);
 };
 
-export default DailyListPage;
+export default DailyReportListPage;

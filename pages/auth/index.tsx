@@ -5,8 +5,6 @@ import cn from "classnames";
 import LogoImage from "../../assets/images/logo/dm-logo.png";
 import styles from "../../styles/auth.module.scss";
 import {AppButton, AppDropdown, LinksCardDesk, ThemeButton} from "../../components/Main";
-import NotificationImage from "../../assets/images/icons/filled/notification.svg";
-import UserSettingsIcon from "../../assets/images/icons/filled/users/user-settings.svg";
 import Link from "next/link";
 
 const AuthMainPage = () => {

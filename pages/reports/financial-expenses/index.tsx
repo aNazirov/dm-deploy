@@ -9,7 +9,7 @@ import Moment from "react-moment";
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const CenterFinancialExpenses = () => {
+const CenterFinancialExpensesReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const financialReport = useAppSelector(({financialExpensesReport}) => financialExpensesReport);
 
@@ -86,4 +86,4 @@ const CenterFinancialExpenses = () => {
 	);
 };
 
-export default CenterFinancialExpenses;
+export default CenterFinancialExpensesReportListPage;

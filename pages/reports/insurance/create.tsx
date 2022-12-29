@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Head from "next/head";
 import cn from "classnames";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";

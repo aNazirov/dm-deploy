@@ -16,7 +16,7 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const CenterFinancialExpensesPage = () => {
+const CenterFinancialExpensesReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -257,4 +257,4 @@ const CenterFinancialExpensesPage = () => {
 	);
 };
 
-export default CenterFinancialExpensesPage;
+export default CenterFinancialExpensesReportCreatePage;

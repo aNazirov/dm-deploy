@@ -10,7 +10,7 @@ import {setAllVisitForeignSpecialistsReportsAction} from "../../../core/store/re
 import {eTable} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
-const VisitForeignSpecialistsListPage = () => {
+const VisitForeignSpecialistsReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const visitForeignSpecialistsReport = useAppSelector(
 		({visitForeignSpecialistsReport}) => visitForeignSpecialistsReport,
@@ -88,4 +88,4 @@ const VisitForeignSpecialistsListPage = () => {
 	);
 };
 
-export default VisitForeignSpecialistsListPage;
+export default VisitForeignSpecialistsReportListPage;

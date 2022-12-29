@@ -9,7 +9,7 @@ import {eTable} from "../../../core/models";
 import {getAllScientificEventsReportsThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
 import {setAllScientificEventsReportsAction} from "../../../core/store/report/scientificEvents/scientific-events-report.slices";
 
-const ScientificEventsListPage = () => {
+const ScientificEventsReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const scientificEventsReport = useAppSelector(({scientificEventsReport}) => scientificEventsReport);
 
@@ -86,4 +86,4 @@ const ScientificEventsListPage = () => {
 	);
 };
 
-export default ScientificEventsListPage;
+export default ScientificEventsReportListPage;

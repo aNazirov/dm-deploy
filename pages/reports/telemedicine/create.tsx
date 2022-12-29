@@ -20,7 +20,7 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const TelemedicineCreatePage = () => {
+const TelemedicineReportCreatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -227,4 +227,4 @@ const TelemedicineCreatePage = () => {
 	);
 };
 
-export default TelemedicineCreatePage;
+export default TelemedicineReportCreatePage;

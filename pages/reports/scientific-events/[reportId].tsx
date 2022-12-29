@@ -9,7 +9,7 @@ import {getScientificEventsReportByIdThunk} from "../../../core/store/report/sci
 import {setScientificEventsReportByIdAction} from "../../../core/store/report/scientificEvents/scientific-events-report.slices";
 import {eTable} from "../../../core/models";
 
-const ScientificEventsListInfoPage = () => {
+const ScientificEventsReportPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -120,4 +120,4 @@ const ScientificEventsListInfoPage = () => {
 	);
 };
 
-export default ScientificEventsListInfoPage;
+export default ScientificEventsReportPage;

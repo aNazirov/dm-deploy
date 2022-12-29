@@ -9,7 +9,7 @@ import {getTelemedicineReportByIdThunk} from "../../../core/store/report/telemed
 import {setTelemedicineReportByIdAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const TelemedicineListInfoPage = () => {
+const TelemedicineReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
@@ -89,4 +89,4 @@ const TelemedicineListInfoPage = () => {
 	);
 };
 
-export default TelemedicineListInfoPage;
+export default TelemedicineReportInfoPage;
