@@ -6,7 +6,7 @@ const localApi = axios.create({
 	baseURL: `${process.env.NEXT_PUBLIC_API_URL}/`,
 });
 
-api.interceptors.request.use(function (config: AxiosRequestConfig) {
+localApi.interceptors.request.use(function (config: AxiosRequestConfig) {
 	const token = localStorage.getItem("jwt") || localStorage.getItem("guestJwt");
 
 	if (token) {
@@ -18,7 +18,7 @@ api.interceptors.request.use(function (config: AxiosRequestConfig) {
 	return config;
 });
 
-api.interceptors.response.use(
+localApi.interceptors.response.use(
 	(response) => {
 		return response;
 	},
