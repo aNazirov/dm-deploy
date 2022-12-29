@@ -75,4 +75,5 @@ export interface IReportScientificEventsCreateParams {
 	localWithForeignSpecialistsConferencesOnline: number;
 	internationalConferencesOffline: number;
 	internationalConferencesOnline: number;
+	note?: string;
 }

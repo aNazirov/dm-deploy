@@ -186,33 +186,6 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 							<span>Обращения физических и юридических лиц (детали)</span>
 						</Link>
 					</li>
-
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/science-list")})}
-							href="/reports/science-list"
-						>
-							{isCurrentPath("/reports/science-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Наука (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/science-list-info")})}
-							href="/reports/science-list-info"
-						>
-							{isCurrentPath("/reports/science-list-info") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Наука (детали)</span>
-						</Link>
-					</li>
 				</ul>
 			)}
 		</li>
@@ -232,4 +205,6 @@ const organizationsReportLinks = [
 	{title: "Медиа отчёт", url: "/reports/media-place", table: eTable.MediaReport},
 	{title: "Научные проекты (ОЦ)", url: "/reports/science", table: eTable.ScienceReport},
 	{title: "Научные защиты (ОЦ)", url: "/reports/scientific-events", table: eTable.ScientificEventsReport},
+	{title: "Научные статьи, патенты и др.", url: "/reports/scientific-works", table: eTable.ScientificWorksReport},
+	{title: "Страховые отчёты", url: "/reports/insurance", table: eTable.InsuranceReport},
 ];

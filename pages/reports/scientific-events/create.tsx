@@ -88,9 +88,9 @@ const ScientificEventsCreatePage = () => {
 
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
-						<AppCard.Header>Научные конференции (количество)</AppCard.Header>
+						<AppCard.Header>Количество научных конференций</AppCard.Header>
 						<AppCard.Body>
-							<div className={cn("gap-1", styles.labelDeskGrid6)}>
+							<div className={cn("gap-1 mb-0.5", styles.labelDeskGrid6)}>
 								<label className={styles.cardBodyLabel}>
 									<span className="text-main-bold">Местные (оффлайн):</span>
 								</label>

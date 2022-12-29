@@ -6,7 +6,7 @@ import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {getVisitForeignSpecialistsReportByIdThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";

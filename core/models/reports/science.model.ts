@@ -69,4 +69,5 @@ export interface IReportScienceCreateParams {
 		// custom field:
 		fileName?: string;
 	}[];
+	note?: string;
 }

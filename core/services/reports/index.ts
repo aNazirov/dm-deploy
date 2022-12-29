@@ -1,8 +1,10 @@
 import {dailyReportService} from "./dailyReport.service";
 import {financialExpensesReportService} from "./financialExpensesReport.service";
+import {insuranceReportService} from "./insuranceReport.service";
 import {mediaPlaceReportService} from "./mediaPlaceReport.service";
 import {scienceReportService} from "./scienceReport.service";
 import {scientificEventsReportService} from "./scientificEventsReport.service";
+import {scientificWorksReportService} from "./scientificWorksReport.service";
 import {telemedicineReportService} from "./telemedicineReport.service";
 import {trainingReportService} from "./trainingReport.service";
 import {visitForeignSpecialistsReportService} from "./visitForeignSpecialistsReport.service";
@@ -16,4 +18,6 @@ export const ReportService = {
 	mediaPlace: mediaPlaceReportService,
 	science: scienceReportService,
 	scientificEvents: scientificEventsReportService,
+	scientificWorks: scientificWorksReportService,
+	insurance: insuranceReportService,
 };

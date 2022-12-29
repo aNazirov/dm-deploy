@@ -4,7 +4,7 @@ import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import {getTelemedicineReportByIdThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {setTelemedicineReportByIdAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
 import {ReportPageUpdate} from "../../../components/Layout";

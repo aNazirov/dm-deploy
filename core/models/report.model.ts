@@ -67,7 +67,9 @@ export interface IReportFinancialExpensesCreateParams {
 
 export interface IReportTelemedicineCreateParams {
 	telemedicineParts: Omit<TelemedicinePartModel, "id">[];
+	note?: string;
 }
+// TODO: URGENT add what about field id here?
 export interface IReportVisitsOfForeignSpecialistsCreateParamsPart {
 	id?: number;
 	displayName: string;
@@ -77,14 +79,17 @@ export interface IReportVisitsOfForeignSpecialistsCreateParamsPart {
 	countryId: number;
 	specialityId: number;
 	fileId: number;
+	note?: string;
 }
 
 export interface IReportVisitsOfForeignSpecialistsCreateParams {
 	visitsOfForeignSpecialists: IReportVisitsOfForeignSpecialistsCreateParamsPart[];
+	note?: string;
 }
 
 export interface IReportMediaPlaceCreateParams {
 	mediaParts: Omit<MediaPartModel, "id">[];
+	note?: string;
 }
 
 export interface IReportGetParams {

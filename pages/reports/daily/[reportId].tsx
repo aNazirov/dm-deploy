@@ -5,7 +5,7 @@ import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getDailyReportByIdThunk} from "../../../core/store/report/daily/daily-report.thunks";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";

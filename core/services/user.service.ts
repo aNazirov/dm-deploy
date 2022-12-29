@@ -1,4 +1,4 @@
-import api from "../api";
+import {api, APIAuthUrl, APIUserUrl} from "../api";
 import {ILogin, UserModel} from "../models";
 import {store} from "../store";
 import {userLogoutThunk} from "../store/user/user.thunks";
@@ -6,7 +6,7 @@ import {Toast} from "../utils";
 
 export const UserService = {
 	login(params: ILogin, signal?: AbortSignal) {
-		return api.post("auth/login", params, {signal}).then((res) => {
+		return api.post(APIAuthUrl.login, params, {signal}).then((res) => {
 			Toast.success("Вы успешно вошли в свой аккаунт");
 			localStorage.setItem("jwt", res.data.jwt || "");
 			return res.data;
@@ -15,7 +15,7 @@ export const UserService = {
 
 	getByToken(signal?: AbortSignal) {
 		return api
-			.get<UserModel>("user/token", {signal})
+			.get<UserModel>(APIUserUrl.token, {signal})
 			.then((res) => {
 				return {user: new UserModel(res.data)};
 			})

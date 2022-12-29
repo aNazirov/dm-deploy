@@ -29,6 +29,9 @@ import {
 	deleteVisitForeignSpecialistsReportThunk,
 } from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {useRouter} from "next/router";
+import {deleteScientificWorksReportThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
+import {deleteScientificEventsReportThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
+import {deleteScienceReportThunk} from "../../../core/store/report/science/science.thunks";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	reportId: number;
@@ -112,11 +115,29 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 					url += "/visit-foreign-specialists";
 				}
 				break;
+			case eTable.ScientificEventsReport:
+				action = (await dispatch(deleteScientificEventsReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/scientific-events";
+				}
+				break;
+			case eTable.ScientificWorksReport:
+				action = (await dispatch(deleteScientificWorksReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/scientific-works";
+				}
+				break;
+			case eTable.ScienceReport:
+				action = (await dispatch(deleteScienceReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/science";
+				}
+				break;
 			default:
 				break;
 		}
 
-		if (url) {
+		if (url !== "/reports") {
 			void router.push(url);
 		}
 	};

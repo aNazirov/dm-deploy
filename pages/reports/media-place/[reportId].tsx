@@ -4,7 +4,7 @@ import {AppButton, AppCard, AppDivider, AppInput, AppTable} from "../../../compo
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import {getMediaPlaceReportByIdThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
 import {setMediaPlaceReportByIdAction} from "../../../core/store/report/mediaPlace/mediaPlace.slices";
 import Moment from "react-moment";

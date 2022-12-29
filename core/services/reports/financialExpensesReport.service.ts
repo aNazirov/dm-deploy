@@ -1,4 +1,4 @@
-import api from "../../api";
+import {api, APIReportUrl} from "../../api";
 import {
 	eReportStatusType,
 	FinancialExpensesReportModel,
@@ -10,7 +10,9 @@ import {Toast} from "../../utils";
 export const financialExpensesReportService = {
 	create(body: IReportFinancialExpensesCreateParams, signal?: AbortSignal) {
 		return api
-			.post<{financialExpensesReport: FinancialExpensesReportModel}>("financial-expenses-report", body, {signal})
+			.post<{financialExpensesReport: FinancialExpensesReportModel}>(APIReportUrl.financialExpensesReport, body, {
+				signal,
+			})
 			.then((res) => {
 				Toast.success("Успешно создано.");
 				return new FinancialExpensesReportModel(res.data.financialExpensesReport);
@@ -18,7 +20,7 @@ export const financialExpensesReportService = {
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api
-			.get<{data: FinancialExpensesReportModel[]; count: number}>("financial-expenses-report", {
+			.get<{data: FinancialExpensesReportModel[]; count: number}>(APIReportUrl.financialExpensesReport, {
 				params: {params},
 				signal,
 			})
@@ -27,18 +29,22 @@ export const financialExpensesReportService = {
 			});
 	},
 	getById(id: number, signal?: AbortSignal) {
-		return api.get<FinancialExpensesReportModel>(`financial-expenses-report/${id}`, {signal}).then((res) => {
-			return new FinancialExpensesReportModel(res.data);
-		});
+		return api
+			.get<FinancialExpensesReportModel>(`${APIReportUrl.financialExpensesReport}/${id}`, {signal})
+			.then((res) => {
+				return new FinancialExpensesReportModel(res.data);
+			});
 	},
 	update({id, body}: {id: number; body: Partial<IReportFinancialExpensesCreateParams>}, signal?: AbortSignal) {
-		return api.patch<FinancialExpensesReportModel>(`financial-expenses-report/${id}`, body, {signal}).then((res) => {
-			return new FinancialExpensesReportModel(res.data);
-		});
+		return api
+			.patch<FinancialExpensesReportModel>(`${APIReportUrl.financialExpensesReport}/${id}`, body, {signal})
+			.then((res) => {
+				return new FinancialExpensesReportModel(res.data);
+			});
 	},
 	updateStatus({id, statusId}: {id: number; statusId: eReportStatusType}, signal?: AbortSignal) {
 		return api
-			.patch<FinancialExpensesReportModel>(`financial-expenses-report/status/${id}`, {statusId}, {signal})
+			.patch<FinancialExpensesReportModel>(`${APIReportUrl.financialExpensesReport}/status/${id}`, {statusId}, {signal})
 			.then((res) => {
 				if (statusId === eReportStatusType.Approved) {
 					Toast.info("Принято.");
@@ -50,9 +56,11 @@ export const financialExpensesReportService = {
 			});
 	},
 	delete(id: number, signal?: AbortSignal) {
-		return api.delete<{message: string; status: number}>(`financial-expenses-report/${id}`, {signal}).then((res) => {
-			Toast.success(res.data.message);
-			return res.data;
-		});
+		return api
+			.delete<{message: string; status: number}>(`${APIReportUrl.financialExpensesReport}/${id}`, {signal})
+			.then((res) => {
+				Toast.success(res.data.message);
+				return res.data;
+			});
 	},
 };

@@ -8,7 +8,7 @@ import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getTrainingReportByIdThunk} from "../../../core/store/report/training/training-report.thunks";
 import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
-import {eReportStatusType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {ReportPageUpdate} from "../../../components/Layout";
 

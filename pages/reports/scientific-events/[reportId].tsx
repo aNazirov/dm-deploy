@@ -4,7 +4,6 @@ import {AppButton, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import Moment from "react-moment";
 import {ReportPageUpdate} from "../../../components/Layout";
 import {getScientificEventsReportByIdThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
 import {setScientificEventsReportByIdAction} from "../../../core/store/report/scientificEvents/scientific-events-report.slices";
