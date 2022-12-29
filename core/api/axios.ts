@@ -1,8 +1,8 @@
-import axios, {AxiosRequestConfig} from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
-import {Toast} from "../utils";
+import { Toast } from "../utils";
 
-export const api = axios.create({
+const localApi = axios.create({
 	baseURL: `${process.env.NEXT_PUBLIC_API_URL}/`,
 });
 
@@ -31,3 +31,5 @@ api.interceptors.response.use(
 		return Promise.reject(error);
 	},
 );
+
+export const api = localApi;
