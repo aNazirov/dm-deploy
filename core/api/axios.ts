@@ -11,7 +11,9 @@ api.interceptors.request.use(function (config: AxiosRequestConfig) {
 
 	if (token) {
 		if (config.headers) {
-			config.headers["Authorization"] = token ? `Bearer ${token}` : "";
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			config.headers.Authorization = token ? `Bearer ${token}` : "";
 		}
 	}
 
