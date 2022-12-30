@@ -45,7 +45,7 @@ html,
 body {
 	color: var(--main-dark-color);
 	font-family: 'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
-		'Droid Sans', 'Helvetica Neue', sans-serif;
+	'Droid Sans', 'Helvetica Neue', sans-serif;
 	font-size: 100%;
 	margin: 0;
 	padding: 0;
@@ -234,6 +234,10 @@ svg {
 
 .w-max-20 {
 	max-width: 20rem;
+}
+
+.w-10 {
+	width: 10rem
 }
 
 .cursor-pointer {

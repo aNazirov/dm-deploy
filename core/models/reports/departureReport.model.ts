@@ -4,7 +4,6 @@ import {IUserShortInfo} from "../user.model";
 
 export class DepartureReportModel {
 	id: number;
-	departureParts?: DeparturePartModel[];
 	note?: string;
 	user?: IUserShortInfo;
 	status: IStatus;
@@ -12,30 +11,6 @@ export class DepartureReportModel {
 	createdAt: Date;
 	updatedAt: Date;
 
-	constructor(report: DepartureReportModel) {
-		this.id = report.id;
-		this.status = report.status;
-		this.organization = report.organization;
-
-		if (report.note) {
-			this.note = report.note;
-		}
-
-		if (report.user) {
-			this.user = report.user;
-		}
-
-		if (report.departureParts) {
-			this.departureParts = report.departureParts.map((p) => new DeparturePartModel(p));
-		}
-
-		this.createdAt = new Date(report.createdAt);
-		this.updatedAt = new Date(report.updatedAt);
-	}
-}
-
-export class DeparturePartModel {
-	id: number;
 	place: Exclude<ePlace, ePlace.Intenational | ePlace.Other>;
 	departures: number;
 	specialists: number;
@@ -61,26 +36,40 @@ export class DeparturePartModel {
 
 	educatedSpecialists: number;
 
-	constructor(part: DeparturePartModel) {
-		this.id = part.id;
-		this.place = part.place;
-		this.departures = part.departures;
-		this.specialists = part.specialists;
-		this.medicalCheckup = part.medicalCheckup;
-		this.minor = part.minor;
-		this.identifiedPatients = part.identifiedPatients;
-		this.outPatient = part.outPatient;
-		this.inPatient = part.inPatient;
-		this.lessons = part.lessons;
-		this.seminars = part.seminars;
-		this.procedures = part.procedures;
-		this.operations = part.operations;
-		this.manipulations = part.manipulations;
-		this.diagnosticMethodsRegion = part.diagnosticMethodsRegion;
-		this.diagnosticMethodsDistrict = part.diagnosticMethodsDistrict;
-		this.treatmentsRegion = part.treatmentsRegion;
-		this.treatmentsDistrict = part.treatmentsDistrict;
-		this.educatedSpecialists = part.educatedSpecialists;
+	constructor(report: DepartureReportModel) {
+		this.id = report.id;
+		this.status = report.status;
+		this.organization = report.organization;
+
+		if (report.note) {
+			this.note = report.note;
+		}
+
+		if (report.user) {
+			this.user = report.user;
+		}
+
+		this.place = report.place;
+		this.departures = report.departures;
+		this.specialists = report.specialists;
+		this.medicalCheckup = report.medicalCheckup;
+		this.minor = report.minor;
+		this.identifiedPatients = report.identifiedPatients;
+		this.outPatient = report.outPatient;
+		this.inPatient = report.inPatient;
+		this.lessons = report.lessons;
+		this.seminars = report.seminars;
+		this.procedures = report.procedures;
+		this.operations = report.operations;
+		this.manipulations = report.manipulations;
+		this.diagnosticMethodsRegion = report.diagnosticMethodsRegion;
+		this.diagnosticMethodsDistrict = report.diagnosticMethodsDistrict;
+		this.treatmentsRegion = report.treatmentsRegion;
+		this.treatmentsDistrict = report.treatmentsDistrict;
+		this.educatedSpecialists = report.educatedSpecialists;
+
+		this.createdAt = new Date(report.createdAt);
+		this.updatedAt = new Date(report.updatedAt);
 	}
 }
 

@@ -56,8 +56,6 @@ export const ReactSelect = ({
 		/>
 	) : (
 		<Select
-			instanceId={id}
-			classNamePrefix="my"
 			className={cn("text-main-regular", styles.mySelect, {
 				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
 				...(bg ? {[styles[bg]]: bg} : {}),
@@ -67,6 +65,9 @@ export const ReactSelect = ({
 				...reactStyles,
 				indicatorSeparator: () => ({display: "none"}),
 			}}
+			instanceId={id}
+			classNamePrefix="my"
+			options={options}
 			{...props}
 		/>
 	);

@@ -53,6 +53,10 @@ import {
 	changeStatusOfAppealsReportThunk,
 	deleteAppealsReportThunk,
 } from "../../../core/store/report/appeals/appeals-report.thunks";
+import {
+	changeStatusOfDepartureReportThunk,
+	deleteDepartureReportThunk,
+} from "../../../core/store/report/departure/departure-report.thunks";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	reportId: number;
@@ -106,6 +110,9 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 				break;
 			case eTable.AppealsReport:
 				dispatch(changeStatusOfAppealsReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.DepartureReport:
+				dispatch(changeStatusOfDepartureReportThunk({id: +reportId, statusId: statusTypeId}));
 				break;
 			default:
 				break;
@@ -188,6 +195,12 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 				action = (await dispatch(deleteAppealsReportThunk(reportId))) as typeof action;
 				if (action.payload) {
 					url += "/appeals";
+				}
+				break;
+			case eTable.DepartureReport:
+				action = (await dispatch(deleteDepartureReportThunk(reportId))) as typeof action;
+				if (action.payload) {
+					url += "/departure";
 				}
 				break;
 			default:

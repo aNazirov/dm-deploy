@@ -34,8 +34,9 @@ const DepartureReportCreatePage = () => {
 		}
 	};
 
-	const onSelect = () => (option: Record<string, unknown>) => {
-		setValue("place", option.value as Exclude<ePlace, ePlace.Intenational | ePlace.Other>);
+	const onSelect = (option: unknown) => {
+		const field = option as {value: Exclude<ePlace, ePlace.Intenational | ePlace.Other>};
+		setValue("place", field.value);
 	};
 	return (
 		<>
@@ -65,16 +66,17 @@ const DepartureReportCreatePage = () => {
 
 			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
-					<AppCard className="h-100">
+					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Область, куда был осуществлён выезд
 								</span>
 								<ReactSelect
-									className="text-center"
+									className="text-center w-10"
 									onChange={onSelect}
 									options={countryOptions.filter((c) => ![ePlace.Other, ePlace.Intenational].includes(c.value))}
+									placeholder="Выберите ..."
 								/>
 							</label>
 
@@ -82,76 +84,121 @@ const DepartureReportCreatePage = () => {
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Кол-во выездов в регионы
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("departures")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("departures", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во специалистов посетивших регионы
+									Количество выехавших специалистов
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("specialists")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("specialists", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во мастер-классов проведенных в регионе
+									Количество занятий, проведенных в регионе
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("manipulations")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("lessons", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во семинаров проведенных в регионе
+									Количество семинаров, проведенных в регионе
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("seminars")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("seminars", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Кол-во специалистов получившие квалификацию на местах
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("educatedSpecialists")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("educatedSpecialists", fieldOptions)}
+								/>
 							</label>
 						</AppCard.Body>
 					</AppCard>
 				</div>
 
 				<div className={styles.cardWrapper}>
-					<AppCard className="h-100">
+					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Кол-во населения прошедших медосмотр
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("medicalCheckup")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("medicalCheckup", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									В том числе, дети до 18 лет
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("minor")} />
+								<AppInput className="text-center" type="number" placeholder="0" {...register("minor", fieldOptions)} />
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Кол-во выявленных пациетов
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("identifiedPatients")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("identifiedPatients", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									В том числе, кол-во пациентов для амбулаторного лечения
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("outPatient")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("outPatient", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									В том числе, кол-во пациентов для стационарного лечения
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("inPatient")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("inPatient", fieldOptions)}
+								/>
 							</label>
 						</AppCard.Body>
 					</AppCard>
@@ -160,54 +207,106 @@ const DepartureReportCreatePage = () => {
 
 			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
-					<AppCard className="h-100">
+					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во операций проведенных в регионе
+									Количество внедрённых методов диагностики на областном уровне
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("operations")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("diagnosticMethodsRegion", fieldOptions)}
+								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									В том числе, кол-во высокотехнологичных операций
+									Количество внедрённых методов диагностики на районном уровне
 								</span>
-								<AppInput className="text-center" type="number" placeholder="0" {...register("manipulations")} />
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("diagnosticMethodsDistrict", fieldOptions)}
+								/>
 							</label>
 						</AppCard.Body>
 					</AppCard>
 				</div>
 
 				<div className={styles.cardWrapper}>
-					<AppCard className="h-100">
+					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во новых внедрений по диагностике в регионе
+									Количество внедрённых методов лечения на областном уровне
 								</span>
 								<AppInput
 									className="text-center"
 									type="number"
 									placeholder="0"
-									{...register("diagnosticMethodsRegion")}
+									{...register("treatmentsRegion", fieldOptions)}
 								/>
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
-									Кол-во новых внедрений по лечению в регионе
+									Количество внедрённых методов лечения на районном уровне
 								</span>
 								<AppInput
 									className="text-center"
 									type="number"
 									placeholder="0"
-									{...register("diagnosticMethodsDistrict")}
+									{...register("treatmentsDistrict", fieldOptions)}
 								/>
 							</label>
 						</AppCard.Body>
 					</AppCard>
 				</div>
+			</div>
+
+			<div className="flex-justify-center">
+				<AppCard className="h-100 flex-col flex-justify-center">
+					<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
+						<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
+							<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
+								Количество процедур, проведенных в регионе
+							</span>
+							<AppInput
+								className="text-center"
+								type="number"
+								placeholder="0"
+								{...register("procedures", fieldOptions)}
+							/>
+						</label>
+
+						<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
+							<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
+								В том числе, кол-во высокотехнологичных операций
+							</span>
+							<AppInput
+								className="text-center"
+								type="number"
+								placeholder="0"
+								{...register("operations", fieldOptions)}
+							/>
+						</label>
+
+						<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
+							<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
+								В том числе, количество высокотехнологичные манипуляций
+							</span>
+							<AppInput
+								className="text-center"
+								type="number"
+								placeholder="0"
+								{...register("manipulations", fieldOptions)}
+							/>
+						</label>
+					</AppCard.Body>
+				</AppCard>
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">

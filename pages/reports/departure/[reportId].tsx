@@ -4,29 +4,29 @@ import {AppButton, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {getImplementationReportByIdThunk} from "../../../core/store/report/implementation/implementation-report.thunks";
+import {getDepartureReportByIdThunk} from "../../../core/store/report/departure/departure-report.thunks";
 import {eTable} from "../../../core/models";
 import Moment from "react-moment";
-import {setImplementationReportByIdAction} from "../../../core/store/report/implementation/implementation-report.slices";
+import {setDepartureReportByIdAction} from "../../../core/store/report/departure/departure-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
 
-const ImplementationReportInfoPage = () => {
+const DepartureReportInfoPage = () => {
 	const router = useRouter();
 	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
-	const report = useAppSelector(({implementationReport}) => implementationReport.current);
+	const report = useAppSelector(({departureReport}) => departureReport.current);
 
 	useEffect(() => {
 		if (reportId) {
 			const id = +reportId;
 
 			if (!isNaN(id)) {
-				const promises = [dispatch(getImplementationReportByIdThunk(id))];
+				const promises = [dispatch(getDepartureReportByIdThunk(id))];
 
 				return () => {
 					promises.forEach((p) => p.abort());
-					dispatch(setImplementationReportByIdAction(null));
+					dispatch(setDepartureReportByIdAction(null));
 				};
 			}
 		}
@@ -34,20 +34,6 @@ const ImplementationReportInfoPage = () => {
 
 	if (!report) return null;
 
-	const renderTableBodyRows = () => {
-		return report.implementationParts?.map((part) => (
-			<tr key={part.id}>
-				<td>
-					<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
-				</td>
-				<td>{part.place}</td>
-				<td>{part.diagnosticMethodsRegion}</td>
-				<td>{part.diagnosticMethodsDistrict}</td>
-				<td>{part.treatmentsRegion}</td>
-				<td>{part.treatmentsDistrict}</td>
-			</tr>
-		));
-	};
 	return (
 		<div className="pe-0 flex-col h-100">
 			<Head>
@@ -62,23 +48,56 @@ const ImplementationReportInfoPage = () => {
 			<AppTable>
 				<AppTable.THead extended>
 					<tr>
-						<th rowSpan={2}>Дата</th>
-						<th rowSpan={2}>Место внедрения</th>
-						<th colSpan={2}>Методы диагностики</th>
-						<th colSpan={2}>Методы лечения</th>
-					</tr>
-					<tr>
-						<th>На уровень области</th>
-						<th>На уровень района</th>
-						<th>На уровень области</th>
-						<th>На уровень района</th>
+						<th>Дата</th>
+						<th>Название области куда был осуществлён выезд</th>
+						<th>Количество выездов в регион</th>
+						<th>Количество выехавших специалистов</th>
+						<th>Количество населения, прошедших медицинский осмотр</th>
+						<th>В том числе, дети до 18 лет</th>
+						<th>Количество выявленных больных</th>
+						<th>В том числе, количество больных которым рекомендовано амбулаторное лечение</th>
+						<th>В том числе, количество больных которым рекомендовано стационарное лечение</th>
+						<th>Количество занятий, проведенных в регионе</th>
+						<th>Количество семинаров, проведенных в регионе</th>
+						<th>Количество процедур, проведенных в регионе</th>
+						<th>В том числе, высокотехнологичные операции</th>
+						<th>В том числе, высокотехнологичные манипуляции</th>
+						<th>Количество внедрённых методов диагностики на областном уровне</th>
+						<th>Количество внедрённых методов диагностики на районном уровне</th>
+						<th>Количество внедрённых методов лечения на областном уровне</th>
+						<th>Количество внедрённых методов лечения на областном уровне</th>
+						<th>Количество специалистов прошедших обучение на местах</th>
 					</tr>
 				</AppTable.THead>
-				<AppTable.TBody>{renderTableBodyRows()}</AppTable.TBody>
+				<AppTable.TBody>
+					<tr>
+						<td>
+							<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
+						</td>
+						<td>{report.place}</td>
+						<td>{report.departures}</td>
+						<td>{report.specialists}</td>
+						<td>{report.medicalCheckup}</td>
+						<td>{report.minor}</td>
+						<td>{report.identifiedPatients}</td>
+						<td>{report.outPatient}</td>
+						<td>{report.inPatient}</td>
+						<td>{report.lessons}</td>
+						<td>{report.seminars}</td>
+						<td>{report.procedures}</td>
+						<td>{report.operations}</td>
+						<td>{report.manipulations}</td>
+						<td>{report.diagnosticMethodsRegion}</td>
+						<td>{report.diagnosticMethodsDistrict}</td>
+						<td>{report.treatmentsRegion}</td>
+						<td>{report.treatmentsDistrict}</td>
+						<td>{report.educatedSpecialists}</td>
+					</tr>
+				</AppTable.TBody>
 			</AppTable>
 
 			<div className="flex-justify-between mt-auto pe-2.5">
-				<AppButton useAs="link" href="/reports/implementation" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href="/reports/departure" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
@@ -87,11 +106,11 @@ const ImplementationReportInfoPage = () => {
 					reportStatusId={report.status.id}
 					paternalId={report.organization.paternalId}
 					reportId={+reportId}
-					table={eTable.ImplementationReport}
+					table={eTable.DepartureReport}
 				/>
 			</div>
 		</div>
 	);
 };
 
-export default ImplementationReportInfoPage;
+export default DepartureReportInfoPage;
