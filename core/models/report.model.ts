@@ -343,7 +343,7 @@ export class VisitOfForeignSpecialistModel {
 	startDate: string;
 	endDate: string;
 	organization: string;
-	country: IAutoCompleteResult["hits"];
+	country: {id: number; title: ITranslate};
 	speciality: ISpeciality;
 	file: IFile;
 

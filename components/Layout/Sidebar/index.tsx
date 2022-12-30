@@ -105,50 +105,7 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 				<span>{title}</span>
 				<ChevronDownIcon width="18px" height="18px" className={cn("main-btn-text-color ms-auto", styles.chevronIcon)} />
 			</Link>
-			{isOpened && (
-				<ul className={styles.asideSubList}>
-					{renderList()}
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done")})}
-							href="/reports/regions-work-done"
-						>
-							{isCurrentPath("/reports/regions-work-done") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Проделанная работа в регионах (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done-list")})}
-							href="/reports/regions-work-done-list"
-						>
-							{isCurrentPath("/reports/regions-work-done-list") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Проделанная работа в регионах (ОЦ)</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							className={cn("list-item rounded-md", {active: isCurrentPath("/reports/regions-work-done-list-info")})}
-							href="/reports/regions-work-done-list-info"
-						>
-							{isCurrentPath("/reports/regions-work-done-list-info") ? (
-								<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							) : (
-								<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-							)}
-							<span>Проделанная работа в регионах (детали)</span>
-						</Link>
-					</li>
-				</ul>
-			)}
+			{isOpened && <ul className={styles.asideSubList}>{renderList()}</ul>}
 		</li>
 	);
 };
@@ -170,4 +127,5 @@ const organizationsReportLinks = [
 	{title: "Страховые отчёты", url: "/reports/insurance", table: eTable.InsuranceReport},
 	{title: "Внедрения", url: "/reports/implementation", table: eTable.ImplementationReport},
 	{title: "Обращение физических и юридических лиц", url: "/reports/appeals", table: eTable.AppealsReport},
+	{title: "Проделанная работа в регионах (ОЦ)", url: "/reports/departure", table: eTable.DepartureReport},
 ];

@@ -9,6 +9,7 @@ import {
 import {globalReducer} from "./global/global.slices";
 import {appealsReportReducer} from "./report/appeals/appeals-report.slices";
 import {dailyReportReducer} from "./report/daily/daily-report.slices";
+import {departureReportReducer} from "./report/departure/departure-report.slices";
 import {financialExpensesReportReducer} from "./report/financialExpenses/financial-expenses-report.slices";
 import {implementationReportReducer} from "./report/implementation/implementation-report.slices";
 import {insuranceReportReducer} from "./report/insurance/insurance-report.slices";
@@ -28,6 +29,7 @@ const State = {
 	appealsReport: appealsReportReducer,
 	scienceReport: scienceReportReducer,
 	trainingReport: trainingReportReducer,
+	departureReport: departureReportReducer,
 	insuranceReport: insuranceReportReducer,
 	mediaPlaceReport: mediaPlaceReportReducer,
 	telemedicineReport: telemedicineReportReducer,

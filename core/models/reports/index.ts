@@ -1,4 +1,5 @@
 export * from "./appealsReport.model";
+export * from "./departureReport.model";
 export * from "./implementationReport.model";
 export * from "./insuranceReport.model";
 export * from "./science.model";

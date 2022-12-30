@@ -1,24 +1,24 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 
-import { Toast } from "../utils";
+import {Toast} from "../utils";
 
-const localApi = axios.create({
+export const api = axios.create({
 	baseURL: `${process.env.NEXT_PUBLIC_API_URL}/`,
 });
 
-localApi.interceptors.request.use(function (config: AxiosRequestConfig) {
+api.interceptors.request.use(function (config: AxiosRequestConfig) {
 	const token = localStorage.getItem("jwt") || localStorage.getItem("guestJwt");
 
 	if (token) {
 		if (config.headers) {
-			config.headers.Authorization = token ? `Bearer ${token}` : "";
+			config.headers["Authorization"] = token ? `Bearer ${token}` : "";
 		}
 	}
 
 	return config;
 });
 
-localApi.interceptors.response.use(
+api.interceptors.response.use(
 	(response) => {
 		return response;
 	},
@@ -31,5 +31,3 @@ localApi.interceptors.response.use(
 		return Promise.reject(error);
 	},
 );
-
-export const api = localApi;
