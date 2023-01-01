@@ -11,7 +11,7 @@ import {useForm} from "react-hook-form";
 import {ePlace, IReportDepartureCreateParams} from "../../../core/models";
 import {createDepartureReportThunk} from "../../../core/store/report/departure/departure-report.thunks";
 import {ReactSelect} from "../../../components/External";
-import {countryOptions} from "../../../core/utils/countries";
+import {countryOptions} from "../../../core/models/appendix/countries";
 
 const fieldOptions = {
 	required: true,

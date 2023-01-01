@@ -11,7 +11,7 @@ import {useFieldArray, useForm} from "react-hook-form";
 import {ePlace, IReportImplementationCreateParams} from "../../../core/models";
 import {createImplementationReportThunk} from "../../../core/store/report/implementation/implementation-report.thunks";
 import {ReactSelect} from "../../../components/External";
-import {countryOptions} from "../../../core/utils/countries";
+import {countryOptions} from "../../../core/models/appendix/countries";
 import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 

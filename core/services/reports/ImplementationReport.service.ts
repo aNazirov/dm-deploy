@@ -10,7 +10,7 @@ import {Toast} from "../../utils";
 export const implementationReportService = {
 	create(body: IReportImplementationCreateParams, signal?: AbortSignal) {
 		return api
-			.post<{implementationReport: ImplementationReportModel}>(APIReportUrl.implementationReport, body, {signal})
+			.post<{implementationReport: ImplementationReportModel}>(APIReportUrl.implementation, body, {signal})
 			.then((res) => {
 				Toast.success("Успешно создано.");
 				return new ImplementationReportModel(res.data.implementationReport);
@@ -18,7 +18,7 @@ export const implementationReportService = {
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api
-			.get<{data: ImplementationReportModel[]; count: number}>(APIReportUrl.implementationReport, {
+			.get<{data: ImplementationReportModel[]; count: number}>(APIReportUrl.implementation, {
 				params: {params},
 				signal,
 			})
@@ -27,20 +27,18 @@ export const implementationReportService = {
 			});
 	},
 	getById(id: number, signal?: AbortSignal) {
-		return api.get<ImplementationReportModel>(`${APIReportUrl.implementationReport}/${id}`, {signal}).then((res) => {
+		return api.get<ImplementationReportModel>(`${APIReportUrl.implementation}/${id}`, {signal}).then((res) => {
 			return new ImplementationReportModel(res.data);
 		});
 	},
 	update({id, body}: {id: number; body: Partial<IReportImplementationCreateParams>}, signal?: AbortSignal) {
-		return api
-			.patch<ImplementationReportModel>(`${APIReportUrl.implementationReport}/${id}`, body, {signal})
-			.then((res) => {
-				return new ImplementationReportModel(res.data);
-			});
+		return api.patch<ImplementationReportModel>(`${APIReportUrl.implementation}/${id}`, body, {signal}).then((res) => {
+			return new ImplementationReportModel(res.data);
+		});
 	},
 	updateStatus({id, statusId}: {id: number; statusId: eReportStatusType}, signal?: AbortSignal) {
 		return api
-			.patch<ImplementationReportModel>(`${APIReportUrl.implementationReport}/status/${id}`, {statusId}, {signal})
+			.patch<ImplementationReportModel>(`${APIReportUrl.implementation}/status/${id}`, {statusId}, {signal})
 			.then((res) => {
 				if (statusId === eReportStatusType.Approved) {
 					Toast.info("Принято.");
@@ -53,7 +51,7 @@ export const implementationReportService = {
 	},
 	delete(id: number, signal?: AbortSignal) {
 		return api
-			.delete<{message: string; status: number}>(`${APIReportUrl.implementationReport}/${id}`, {signal})
+			.delete<{message: string; status: number}>(`${APIReportUrl.implementation}/${id}`, {signal})
 			.then((res) => {
 				Toast.success(res.data.message);
 				return res.data;

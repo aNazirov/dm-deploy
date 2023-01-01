@@ -45,13 +45,19 @@ export const ReactSelect = ({
 
 	return isAsync ? (
 		<AsyncSelect
-			classNamePrefix="my"
-			loadOptions={loadOptions}
-			defaultOptions={options}
+			className={cn("text-main-regular", styles.mySelect, {
+				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
+				...(bg ? {[styles[bg]]: bg} : {}),
+				[`${className}`]: className,
+			})}
 			styles={{
 				...reactStyles,
 				indicatorSeparator: () => ({display: "none"}),
 			}}
+			instanceId={id}
+			classNamePrefix="my"
+			loadOptions={loadOptions}
+			defaultOptions={options}
 			{...props}
 		/>
 	) : (

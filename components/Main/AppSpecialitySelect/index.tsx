@@ -3,13 +3,13 @@ import {ReactSelect} from "../../External";
 import {IAutoCompleteParams, IAutoCompleteResult} from "../../../core/models";
 import {globalAutocompleteThunk} from "../../../core/store/global/global.thunks";
 import {useAppDispatch} from "../../../core/hooks";
-import {GroupBase, OptionsOrGroups} from "react-select";
+import {GroupBase, OptionsOrGroups, Props} from "react-select";
 
-interface AppSpecialitySelectProps {
+interface AppSpecialitySelectProps extends Props {
 	onChange: (option: unknown) => void;
 }
 
-export const AppSpecialitySelect = ({onChange}: AppSpecialitySelectProps) => {
+export const AppSpecialitySelect = ({onChange, ...props}: AppSpecialitySelectProps) => {
 	const dispatch = useAppDispatch();
 	const [options, setOptions] = useState<OptionsOrGroups<unknown, GroupBase<unknown>>>([]);
 
@@ -43,7 +43,8 @@ export const AppSpecialitySelect = ({onChange}: AppSpecialitySelectProps) => {
 			onChange={onChange}
 			options={options}
 			searchOptions={searchOptions("specialities")}
-			placeholder="Выбрать"
+			placeholder="Специальность"
+			{...props}
 		/>
 	);
 };

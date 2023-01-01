@@ -3,13 +3,13 @@ import {ReactSelect} from "../../External";
 import {IAutoCompleteParams, IAutoCompleteResult} from "../../../core/models";
 import {globalAutocompleteThunk} from "../../../core/store/global/global.thunks";
 import {useAppDispatch} from "../../../core/hooks";
-import {GroupBase, OptionsOrGroups} from "react-select";
+import {GroupBase, OptionsOrGroups, Props} from "react-select";
 
-interface AppCountrySelectProps {
+interface AppCountrySelectProps extends Props {
 	onChange: (option: unknown) => void;
 }
 
-export const AppCountrySelect = ({onChange}: AppCountrySelectProps) => {
+export const AppCountrySelect = ({onChange, ...props}: AppCountrySelectProps) => {
 	const dispatch = useAppDispatch();
 	const [options, setOptions] = useState<OptionsOrGroups<unknown, GroupBase<unknown>>>([]);
 
@@ -43,7 +43,8 @@ export const AppCountrySelect = ({onChange}: AppCountrySelectProps) => {
 			onChange={onChange}
 			options={options}
 			searchOptions={searchOptions("countries")}
-			placeholder="Выбрать"
+			placeholder="Страна"
+			{...props}
 		/>
 	);
 };

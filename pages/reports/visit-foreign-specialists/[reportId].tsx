@@ -11,6 +11,7 @@ import Moment from "react-moment";
 import {getVisitForeignSpecialistsReportByIdThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {FileService} from "../../../core/services";
 
 const VisitForeignSpecialistsReportInfoPage = () => {
 	const router = useRouter();
@@ -36,14 +37,24 @@ const VisitForeignSpecialistsReportInfoPage = () => {
 
 	if (!report) return null;
 
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			FileService.download(url, name);
+		};
+
 	const renderFileList = () => {
 		return report.visitsOfForeignSpecialists?.map((v) => (
-			<div className="flex-center gap-0.5 w-max" key={v.file.id}>
-				<label className={styles.cardBodyLabel}>
-					<a href={v.file.url} download>
-						<AppInput className="text-center" type="file" placeholder={`${v.file.url}`} />
-					</a>
-				</label>
+			<div className="d-flex gap-0.5 w-max" key={v.file.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(v.file.url, v.file.name)}
+					className="text-center"
+					type="button"
+				>
+					{v.file.name}
+				</AppButton>
 				<AppButton variant="danger" size="square">
 					<TrashIcon width="24px" height="24px" />
 				</AppButton>

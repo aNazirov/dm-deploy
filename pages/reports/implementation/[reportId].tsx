@@ -9,6 +9,7 @@ import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {setImplementationReportByIdAction} from "../../../core/store/report/implementation/implementation-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {countryOption} from "../../../core/models/appendix/countries";
 
 const ImplementationReportInfoPage = () => {
 	const router = useRouter();
@@ -40,7 +41,7 @@ const ImplementationReportInfoPage = () => {
 				<td>
 					<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
 				</td>
-				<td>{part.place}</td>
+				<td>{countryOption[part.place]}</td>
 				<td>{part.diagnosticMethodsRegion}</td>
 				<td>{part.diagnosticMethodsDistrict}</td>
 				<td>{part.treatmentsRegion}</td>

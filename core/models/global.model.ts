@@ -1,9 +1,9 @@
 import {ITranslate} from "./user.model";
 
 export interface IAutoCompleteParams {
-	index?: "specialities" | "positions" | "countries";
+	index?: "specialities" | "positions" | "countries" | "organizations";
 	search?: string;
-	// filter: ["specialities=1,2,3", "positions=1,2,3", "countries=2,3,5"]
+	// filter: ["specialities=1,2,3", "positions=1,2,3", "countries=2,3,5", "paternalId=1"]
 	filter?: string[];
 	limit?: number;
 	offset?: number;

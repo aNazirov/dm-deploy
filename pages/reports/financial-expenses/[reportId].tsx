@@ -98,7 +98,7 @@ const CenterFinancialExpensesReportInfoPage = () => {
 
 			{/*TODO: add padding-top to avoid adhesion in small heights of screen*/}
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/financial-expenses/daily" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href="/reports/financial-expenses" size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>

@@ -9,6 +9,7 @@ import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {setDepartureReportByIdAction} from "../../../core/store/report/departure/departure-report.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {countryOption} from "../../../core/models/appendix/countries";
 
 const DepartureReportInfoPage = () => {
 	const router = useRouter();
@@ -74,7 +75,7 @@ const DepartureReportInfoPage = () => {
 						<td>
 							<Moment format="DD.MM.YYYY">{report.createdAt}</Moment>
 						</td>
-						<td>{report.place}</td>
+						<td>{countryOption[report.place]}</td>
 						<td>{report.departures}</td>
 						<td>{report.specialists}</td>
 						<td>{report.medicalCheckup}</td>

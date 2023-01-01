@@ -63,12 +63,12 @@ const TelemedicineReportListPage = () => {
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
 							<tr>
-								<th>ID</th>
-								<th>Номер</th>
-								<th>Дата</th>
-								<th>Организация</th>
-								<th>Комментарии</th>
-								<th>Статус</th>
+								<th>Область</th>
+								<th>Кол-во консультаций</th>
+								<th>Кол-во консилиумов:</th>
+								<th>Кол-во показательных операций</th>
+								<th>Кол-во семинаров, (мacтep.к)</th>
+								<th>Кол-во симпозиумов, (к)</th>
 							</tr>
 						</AppTable.THead>
 						<AppTable.TBody>{renderTableBodyRow()}</AppTable.TBody>

@@ -11,6 +11,7 @@ import Moment from "react-moment";
 import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {FileService} from "../../../core/services";
 
 const MediaPlaceReportInfoPage = () => {
 	const router = useRouter();
@@ -35,14 +36,25 @@ const MediaPlaceReportInfoPage = () => {
 	}, [reportId]);
 
 	if (!report) return null;
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			FileService.download(url, name);
+		};
+
 	const renderFileList = () => {
 		return report.mediaParts?.map((f) => (
-			<div className="flex-center gap-0.5 w-max" key={f.id}>
-				<label className={styles.cardBodyLabel}>
-					<a href={f.file.url} download>
-						<AppInput className="text-center" type="file" placeholder={`${f.file.url}`} />
-					</a>
-				</label>
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.file.url, f.file.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.file.name}
+				</AppButton>
 				<AppButton variant="danger" size="square">
 					<TrashIcon width="24px" height="24px" />
 				</AppButton>
@@ -77,9 +89,9 @@ const MediaPlaceReportInfoPage = () => {
 				<AppTable wrapperClassName="p-0">
 					<AppTable.THead extended>
 						<tr>
-							<th>Тема:</th>
-							<th>Место публикации:</th>
-							<th>Дата:</th>
+							<th>Тема</th>
+							<th>Место публикации</th>
+							<th>Дата</th>
 						</tr>
 					</AppTable.THead>
 					<AppTable.TBody>{renderTableBodyRows()}</AppTable.TBody>

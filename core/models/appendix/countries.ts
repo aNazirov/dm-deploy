@@ -1,4 +1,4 @@
-import {ePlace} from "../models";
+import {ePlace} from "../index";
 
 export const countryOptions = [
 	{value: ePlace.Intenational, label: "Международный"},
@@ -18,3 +18,22 @@ export const countryOptions = [
 	{value: ePlace.Jizzah, label: "Джиззах"},
 	{value: ePlace.Other, label: "Другое"},
 ];
+
+export const countryOption = {
+	[ePlace.Intenational]: "Международный",
+	[ePlace.Karakalpak]: "Каракалпакстан",
+	[ePlace.TashkentCity]: "город Ташкент",
+	[ePlace.Tashkent]: "Ташкент",
+	[ePlace.Fergana]: "Фергана",
+	[ePlace.Andijan]: "Андижан",
+	[ePlace.Namangan]: "Наманган",
+	[ePlace.Qashqadarya]: "Кашкадарья",
+	[ePlace.Surhandarya]: "Сурхандарья",
+	[ePlace.Samarkand]: "Самарканд",
+	[ePlace.Sirdarya]: "Сырдарья",
+	[ePlace.Buhara]: "Бухара",
+	[ePlace.Harezm]: "Хорезм",
+	[ePlace.Navai]: "Навои",
+	[ePlace.Jizzah]: "Джиззах",
+	[ePlace.Other]: "Другое",
+};

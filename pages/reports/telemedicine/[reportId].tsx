@@ -8,6 +8,7 @@ import {eTable} from "../../../core/models";
 import {getTelemedicineReportByIdThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {setTelemedicineReportByIdAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {countryOption} from "../../../core/models/appendix/countries";
 
 const TelemedicineReportInfoPage = () => {
 	const router = useRouter();
@@ -35,7 +36,7 @@ const TelemedicineReportInfoPage = () => {
 	const renderTableBodyRows = () => {
 		return report.telemedicineParts?.map((part) => (
 			<tr key={part.id}>
-				<td>{part.place}</td>
+				<td>{countryOption[part.place]}</td>
 				<td>{part.consultations}</td>
 				<td>{part.councils}</td>
 				<td>{part.demonstrationOperations}</td>

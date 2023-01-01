@@ -11,7 +11,7 @@ export const visitForeignSpecialistsReportService = {
 	create: (body: IReportVisitsOfForeignSpecialistsCreateParams, signal?: AbortSignal) => {
 		return api
 			.post<{visitsOfForeignSpecialistsReport: VisitsOfForeignSpecialistsModel}>(
-				APIReportUrl.visitsOfForeignSpecialistsReport,
+				APIReportUrl.visitsOfForeignSpecialists,
 				body,
 				{signal},
 			)
@@ -19,7 +19,7 @@ export const visitForeignSpecialistsReportService = {
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api
-			.get<{data: VisitsOfForeignSpecialistsModel[]; count: number}>(APIReportUrl.visitsOfForeignSpecialistsReport, {
+			.get<{data: VisitsOfForeignSpecialistsModel[]; count: number}>(APIReportUrl.visitsOfForeignSpecialists, {
 				params: {params},
 				signal,
 			})
@@ -29,14 +29,14 @@ export const visitForeignSpecialistsReportService = {
 	},
 	getById(id: number, signal?: AbortSignal) {
 		return api
-			.get<VisitsOfForeignSpecialistsModel>(`${APIReportUrl.visitsOfForeignSpecialistsReport}/${id}`, {signal})
+			.get<VisitsOfForeignSpecialistsModel>(`${APIReportUrl.visitsOfForeignSpecialists}/${id}`, {signal})
 			.then((res) => {
 				return new VisitsOfForeignSpecialistsModel(res.data);
 			});
 	},
 	update({id, body}: {id: number; body: Partial<IReportVisitsOfForeignSpecialistsCreateParams>}, signal?: AbortSignal) {
 		return api
-			.patch<VisitsOfForeignSpecialistsModel>(`${APIReportUrl.visitsOfForeignSpecialistsReport}/${id}`, body, {signal})
+			.patch<VisitsOfForeignSpecialistsModel>(`${APIReportUrl.visitsOfForeignSpecialists}/${id}`, body, {signal})
 			.then((res) => {
 				return new VisitsOfForeignSpecialistsModel(res.data);
 			});
@@ -44,7 +44,7 @@ export const visitForeignSpecialistsReportService = {
 	updateStatus({id, statusId}: {id: number; statusId: eReportStatusType}, signal?: AbortSignal) {
 		return api
 			.patch<VisitsOfForeignSpecialistsModel>(
-				`${APIReportUrl.visitsOfForeignSpecialistsReport}/status/${id}`,
+				`${APIReportUrl.visitsOfForeignSpecialists}/status/${id}`,
 				{statusId},
 				{signal},
 			)
@@ -60,7 +60,7 @@ export const visitForeignSpecialistsReportService = {
 	},
 	delete(id: number, signal?: AbortSignal) {
 		return api
-			.delete<{message: string; status: number}>(`${APIReportUrl.visitsOfForeignSpecialistsReport}/${id}`, {signal})
+			.delete<{message: string; status: number}>(`${APIReportUrl.visitsOfForeignSpecialists}/${id}`, {signal})
 			.then((res) => {
 				Toast.success(res.data.message);
 				return res.data;

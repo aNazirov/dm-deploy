@@ -11,6 +11,7 @@ import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-r
 import {eTable} from "../../../core/models";
 import Moment from "react-moment";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {FileService} from "../../../core/services";
 
 const TrainingReportInfoPage = () => {
 	const router = useRouter();
@@ -36,14 +37,24 @@ const TrainingReportInfoPage = () => {
 
 	if (!report) return null;
 
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			FileService.download(url, name);
+		};
+
 	const renderFileList = () => {
 		return report.files?.map((f) => (
-			<div className="flex-center gap-0.5 w-max" key={f.id}>
-				<label className={styles.cardBodyLabel}>
-					<a href={f.url} download>
-						<AppInput className="text-center" type="file" placeholder={`${f.name}`} />
-					</a>
-				</label>
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
 				<AppButton variant="danger" size="square">
 					<TrashIcon width="24px" height="24px" />
 				</AppButton>
@@ -99,7 +110,7 @@ const TrainingReportInfoPage = () => {
 				</AppTable.TBody>
 			</AppTable>
 
-			<div className="flex-col gap-0.5">{renderFileList()}</div>
+			<div className="flex-col gap-0.5 mb-2.5">{renderFileList()}</div>
 
 			<div className="flex-justify-between mt-auto pe-2.5">
 				<AppButton useAs="link" href="/reports/training" size="lg" variant="dark" withIcon>

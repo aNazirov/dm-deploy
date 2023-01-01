@@ -13,7 +13,7 @@ import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
 import {ePlace, IReportTelemedicineCreateParams} from "../../../core/models";
 import {createTelemedicineReportThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
-import {countryOptions} from "../../../core/utils/countries";
+import {countryOptions} from "../../../core/models/appendix/countries";
 
 const fieldOptions = {
 	required: true,

@@ -54,7 +54,10 @@ const InsuranceReportInfoPage = () => {
 						<th colSpan={2}>Рассмотренные и одобренные акты ГФМС</th>
 						<th colSpan={2}>Рассмотренные и неодобренные акты ГФМС</th>
 						<th>Расмотренные, одобренные акты и отправленные счет-фактуры</th>
+						<th>Финансирования со стороны ГФМС</th>
+						<th>Количество пациентов получивших лечение на основе льготного напрваления</th>
 						<th>Итоговый годовой контракт</th>
+						<th>Остаток относительно суммы контракта</th>
 					</tr>
 					<tr>
 						<th>Количество</th>
@@ -65,6 +68,11 @@ const InsuranceReportInfoPage = () => {
 						<th>Сумма</th>
 						<th>Сумма</th>
 						<th>Сумма</th>
+						<th>Сумма</th>
+						<th>Сумма</th>
+						<th>Сумма</th>
+						<th>Сумма</th>
+						{/* TODO: URGENT SHOW ALSO GENERATED FIELDS	*/}
 					</tr>
 				</AppTable.THead>
 				<AppTable.TBody>
@@ -79,7 +87,10 @@ const InsuranceReportInfoPage = () => {
 						<td>{report.rejectedActs}</td>
 						<td>{report.amountOfRejectedActs}</td>
 						<td>{report.amountOfSentApprovedInvoices}</td>
+						<td>{report.fundedAmount}</td>
+						<td>{report.patients}</td>
 						<td>{report.annualAmount}</td>
+						<td>{report.residualAmount}</td>
 					</tr>
 				</AppTable.TBody>
 			</AppTable>

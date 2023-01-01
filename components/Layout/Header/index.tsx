@@ -8,27 +8,22 @@ import NotificationImage from "../../../assets/images/icons/filled/notification.
 import UserSettingsIcon from "../../../assets/images/icons/filled/users/user-settings.svg";
 import {AppButton, AppDropdown, ThemeButton} from "../../Main";
 
-import {useAppDispatch} from "../../../core/hooks";
+import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {autoLoginThunk, userLogoutThunk} from "../../../core/store/user/user.thunks";
 import {setUserAction} from "../../../core/store/user/user.slices";
-// import {globalAutocompleteThunk} from "../../../core/store/global/global.thunks";
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Header = ({className}: HeaderProps) => {
 	const dispatch = useAppDispatch();
+	const user = useAppSelector(({user}) => user.user);
 
 	useEffect(() => {
-		const promises = [
-			dispatch(autoLoginThunk()),
-			// dispatch(globalAutocompleteThunk("countries")),
-		];
+		const promises = [dispatch(autoLoginThunk())];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setUserAction(null));
-			// dispatch(setGlobalListAction({listType: "specialities", data: []}));
-			// dispatch(setGlobalListAction({listType: "countries", data: []}));
 		};
 	}, []);
 
@@ -55,13 +50,11 @@ export const Header = ({className}: HeaderProps) => {
 				<div>
 					<p className="mb-0.625">
 						<span className="text-main-bold me-0.75">Организация :</span>
-						<span className="text-main-regular">
-							Болалар гематологияси онкологияси ва клиник иминология маркази (171)
-						</span>
+						<span className="text-main-regular">{user?.organization?.title.ru}</span>
 					</p>
 					<p>
 						<span className="text-main-bold me-0.75">Имя пользователя :</span>
-						<span className="text-main-regular">Принимающий</span>
+						<span className="text-main-regular">{user?.displayName?.ru}</span>
 					</p>
 				</div>
 			</div>

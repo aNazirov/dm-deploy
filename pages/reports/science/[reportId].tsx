@@ -8,8 +8,11 @@ import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {getScienceReportByIdThunk} from "../../../core/store/report/science/science.thunks";
 import {setScienceReportByIdAction} from "../../../core/store/report/science/science.slices";
 import Moment from "react-moment";
-import {eScienceType, eTable} from "../../../core/models";
+import {eTable} from "../../../core/models";
 import {ReportPageUpdate} from "../../../components/Layout";
+import {scienceWorkType} from "../../../core/models/appendix/scienceTypes";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
+import {FileService} from "../../../core/services";
 
 const ScienceReportInfoPage = () => {
 	const router = useRouter();
@@ -35,6 +38,12 @@ const ScienceReportInfoPage = () => {
 
 	if (!report) return null;
 
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			FileService.download(url, name);
+		};
+
 	const renderTables = () => {
 		let lastJoinedPartId: number;
 		return [...report.scienceParts]
@@ -54,7 +63,7 @@ const ScienceReportInfoPage = () => {
 							<AppTable wrapperClassName="p-0">
 								<AppTable.THead extended>
 									<tr>
-										<th colSpan={5}>{scienceWorkTypes[part.type]}</th>
+										<th colSpan={5}>{scienceWorkType[part.type]}</th>
 									</tr>
 									<tr>
 										<th rowSpan={2}>Название проекта</th>
@@ -79,9 +88,20 @@ const ScienceReportInfoPage = () => {
 										</td>
 										<td>
 											<label className={styles.cardBodyLabel}>
-												<a href={part.file.url} download>
-													<AppInput className="text-center " type="file" placeholder={`${part.file.url}`} />
-												</a>
+												<div className="d-flex gap-0.5 w-max" key={part.id}>
+													<AppButton
+														variant="print"
+														size="lg"
+														onClick={downloadFile(part.file.url, part.file.name)}
+														className="text-center"
+														type="button"
+													>
+														{part.file.name}
+													</AppButton>
+													<AppButton variant="danger" size="square">
+														<TrashIcon width="24px" height="24px" />
+													</AppButton>
+												</div>
 											</label>
 										</td>
 									</tr>
@@ -145,11 +165,3 @@ const ScienceReportInfoPage = () => {
 };
 
 export default ScienceReportInfoPage;
-
-const scienceWorkTypes = {
-	[eScienceType.Joint]: "Совместный",
-	[eScienceType.Foreign]: "Зарубежный",
-	[eScienceType.Practice]: "Практический",
-	[eScienceType.Fundamental]: "Фундаментальный",
-	[eScienceType.Innovational]: "Инновационный",
-};

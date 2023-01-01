@@ -10,7 +10,7 @@ import {Toast} from "../../utils";
 export const scientificWorksReportService = {
 	create(body: IReportCreateScientificWorksParams, signal?: AbortSignal) {
 		return api
-			.post<{scientificWorksReport: ScientificWorksReportModel}>(APIReportUrl.scientificWorksReport, body, {signal})
+			.post<{scientificWorksReport: ScientificWorksReportModel}>(APIReportUrl.scientificWorks, body, {signal})
 			.then((res) => {
 				Toast.success("Успешно создано.");
 				return new ScientificWorksReportModel(res.data.scientificWorksReport);
@@ -18,7 +18,7 @@ export const scientificWorksReportService = {
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api
-			.get<{data: ScientificWorksReportModel[]; count: number}>(APIReportUrl.scientificWorksReport, {
+			.get<{data: ScientificWorksReportModel[]; count: number}>(APIReportUrl.scientificWorks, {
 				params: {params},
 				signal,
 			})
@@ -27,20 +27,20 @@ export const scientificWorksReportService = {
 			});
 	},
 	getById(id: number, signal?: AbortSignal) {
-		return api.get<ScientificWorksReportModel>(`${APIReportUrl.scientificWorksReport}/${id}`, {signal}).then((res) => {
+		return api.get<ScientificWorksReportModel>(`${APIReportUrl.scientificWorks}/${id}`, {signal}).then((res) => {
 			return new ScientificWorksReportModel(res.data);
 		});
 	},
 	update({id, body}: {id: number; body: Partial<IReportCreateScientificWorksParams>}, signal?: AbortSignal) {
 		return api
-			.patch<ScientificWorksReportModel>(`${APIReportUrl.scientificWorksReport}/${id}`, body, {signal})
+			.patch<ScientificWorksReportModel>(`${APIReportUrl.scientificWorks}/${id}`, body, {signal})
 			.then((res) => {
 				return new ScientificWorksReportModel(res.data);
 			});
 	},
 	updateStatus({id, statusId}: {id: number; statusId: eReportStatusType}, signal?: AbortSignal) {
 		return api
-			.patch<ScientificWorksReportModel>(`${APIReportUrl.scientificWorksReport}/status/${id}`, {statusId}, {signal})
+			.patch<ScientificWorksReportModel>(`${APIReportUrl.scientificWorks}/status/${id}`, {statusId}, {signal})
 			.then((res) => {
 				if (statusId === eReportStatusType.Approved) {
 					Toast.info("Принято.");
@@ -53,7 +53,7 @@ export const scientificWorksReportService = {
 	},
 	delete(id: number, signal?: AbortSignal) {
 		return api
-			.delete<{message: string; status: number}>(`${APIReportUrl.scientificWorksReport}/${id}`, {signal})
+			.delete<{message: string; status: number}>(`${APIReportUrl.scientificWorks}/${id}`, {signal})
 			.then((res) => {
 				Toast.success(res.data.message);
 				return res.data;

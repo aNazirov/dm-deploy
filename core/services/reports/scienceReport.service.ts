@@ -6,12 +6,12 @@ import {Toast} from "../../utils";
 export const scienceReportService = {
 	create: (body: IReportScienceCreateParams, signal?: AbortSignal) => {
 		return api
-			.post<{scienceReport: ScienceReportModel}>(APIReportUrl.scienceReport, body, {signal})
+			.post<{scienceReport: ScienceReportModel}>(APIReportUrl.science, body, {signal})
 			.then((res) => new ScienceReportModel(res.data.scienceReport));
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api
-			.get<{data: ScienceReportModel[]; count: number}>(APIReportUrl.scienceReport, {
+			.get<{data: ScienceReportModel[]; count: number}>(APIReportUrl.science, {
 				params: {params},
 				signal,
 			})
@@ -20,34 +20,30 @@ export const scienceReportService = {
 			});
 	},
 	getById(id: number, signal?: AbortSignal) {
-		return api.get<ScienceReportModel>(`${APIReportUrl.scienceReport}/${id}`, {signal}).then((res) => {
+		return api.get<ScienceReportModel>(`${APIReportUrl.science}/${id}`, {signal}).then((res) => {
 			return new ScienceReportModel(res.data);
 		});
 	},
 	update({id, body}: {id: number; body: Partial<IReportScienceCreateParams>}, signal?: AbortSignal) {
-		return api.patch<ScienceReportModel>(`${APIReportUrl.scienceReport}/${id}`, body, {signal}).then((res) => {
+		return api.patch<ScienceReportModel>(`${APIReportUrl.science}/${id}`, body, {signal}).then((res) => {
 			return new ScienceReportModel(res.data);
 		});
 	},
 	updateStatus({id, statusId}: {id: number; statusId: eReportStatusType}, signal?: AbortSignal) {
-		return api
-			.patch<ScienceReportModel>(`${APIReportUrl.scienceReport}/status/${id}`, {statusId}, {signal})
-			.then((res) => {
-				if (statusId === eReportStatusType.Approved) {
-					Toast.info("Принято.");
-				} else if (statusId === eReportStatusType.Rejected) {
-					Toast.info("Возвращено на модерацию.");
-				}
+		return api.patch<ScienceReportModel>(`${APIReportUrl.science}/status/${id}`, {statusId}, {signal}).then((res) => {
+			if (statusId === eReportStatusType.Approved) {
+				Toast.info("Принято.");
+			} else if (statusId === eReportStatusType.Rejected) {
+				Toast.info("Возвращено на модерацию.");
+			}
 
-				return new ScienceReportModel(res.data);
-			});
+			return new ScienceReportModel(res.data);
+		});
 	},
 	delete(id: number, signal?: AbortSignal) {
-		return api
-			.delete<{message: string; status: number}>(`${APIReportUrl.scienceReport}/${id}`, {signal})
-			.then((res) => {
-				Toast.success(res.data.message);
-				return res.data;
-			});
+		return api.delete<{message: string; status: number}>(`${APIReportUrl.science}/${id}`, {signal}).then((res) => {
+			Toast.success(res.data.message);
+			return res.data;
+		});
 	},
 };

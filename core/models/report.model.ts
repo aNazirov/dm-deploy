@@ -361,7 +361,7 @@ export class VisitOfForeignSpecialistModel {
 
 export class MediaPlaceReportModel {
 	id: number;
-	mediaParts: MediaPartModel[];
+	mediaParts?: MediaPartModel[];
 	status: IStatus;
 	organization: IShortOrganizationInfo;
 	note?: string;
@@ -371,11 +371,14 @@ export class MediaPlaceReportModel {
 
 	constructor(media: MediaPlaceReportModel) {
 		this.id = media.id;
-		this.mediaParts = media.mediaParts.map((p) => new MediaPartModel(p));
 		this.status = media.status;
 		this.organization = media.organization;
 		this.createdAt = new Date(media.createdAt);
 		this.updatedAt = new Date(media.updatedAt);
+
+		if (media.mediaParts) {
+			this.mediaParts = media.mediaParts.map((p) => new MediaPartModel(p));
+		}
 
 		if (media.note) {
 			this.note = media.note;
