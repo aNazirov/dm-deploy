@@ -31,19 +31,8 @@ const ScientificEventsSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const dates = new Set(result.data.map((r) => moment(r.createdAt).format("yyyy-MM-DD")));
-						return {
-							count: result.count,
-							data: prev.data
-								.filter((old) => !dates.has(moment(old.createdAt).format("yyyy-MM-DD")))
-								.concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);
@@ -70,13 +59,9 @@ const ScientificEventsSetOfReportsPage = () => {
 				<td>{r._sum.protectionDSc}</td>
 				<td>{r._sum.protectionPhD}</td>
 				<td>{r._sum.countDoctoralStudentsDSc}</td>
-				<td>{/*{r._sum.doctoralStudentsDSc}*/}</td>
 				<td>{r._sum.countDoctoralStudentsPhD}</td>
-				<td>{/*{r._sum.doctoralStudentsPhD}*/}</td>
 				<td>{r._sum.countFreeApplicantsDSc}</td>
-				<td>{/*{r._sum.freeApplicantsDSc}*/}</td>
 				<td>{r._sum.countFreeApplicantsPhD}</td>
-				<td>{/*{r._sum.freeApplicantsPhD}*/}</td>
 				<td>{r._sum.localConferencesOffline}</td>
 				<td>{r._sum.localConferencesOnline}</td>
 				<td>{r._sum.localWithForeignSpecialistsConferencesOffline}</td>
@@ -108,25 +93,19 @@ const ScientificEventsSetOfReportsPage = () => {
 						<tr>
 							<th rowSpan={3}>Дата</th>
 							<th colSpan={2}>Защиты</th>
-							<th colSpan={4}>Докторанты</th>
-							<th colSpan={4}>Свободные соискатели</th>
+							<th colSpan={2}>Докторанты</th>
+							<th colSpan={2}>Свободные соискатели</th>
 							<th colSpan={8}>Научные коференции (количество)</th>
 						</tr>
 						<tr>
 							<th colSpan={2}>Количество</th>
 							<th colSpan={2}>Количество</th>
-							<th colSpan={2}>Шифр</th>
 							<th colSpan={2}>Количество</th>
-							<th colSpan={2}>Шифр</th>
 							<th colSpan={2}>Местные</th>
 							<th colSpan={2}>Местные с участием международных специалистов</th>
 							<th colSpan={2}>Международные</th>
 						</tr>
 						<tr>
-							<th>DSc</th>
-							<th>PhD</th>
-							<th>DSc</th>
-							<th>PhD</th>
 							<th>DSc</th>
 							<th>PhD</th>
 							<th>DSc</th>

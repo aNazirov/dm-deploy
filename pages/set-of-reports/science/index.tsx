@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Head from "next/head";
-import {AppDivider, AppInput, AppPagination, AppSetOfReportsFilter, AppTable} from "../../../components/Main";
+import {AppDivider, AppPagination, AppSetOfReportsFilter, AppTable} from "../../../components/Main";
 import {useAppDispatch} from "../../../core/hooks";
 import {getSetOfReportsThunks} from "../../../core/store/setOfReports/setOfReports.thunks";
 import {ISetOfReportsScience, ISetOfReportsParams} from "../../../core/models";
 import moment from "moment/moment";
 import Moment from "react-moment";
-import {scienceWorkType} from "../../../core/models/appendix/scienceTypes";
-import styles from "../../../styles/reports.module.scss";
 
 const ScienceSetOfReportsPage = () => {
 	const dispatch = useAppDispatch();
@@ -33,17 +31,8 @@ const ScienceSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const ids = new Set(result.data.map((r) => r.id));
-						return {
-							count: result.count,
-							data: prev.data.filter((old) => !ids.has(old.id)).concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);

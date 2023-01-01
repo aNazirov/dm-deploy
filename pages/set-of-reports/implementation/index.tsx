@@ -31,17 +31,8 @@ const ImplementationSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const places = new Set(result.data.map((r) => r.place));
-						return {
-							count: result.count,
-							data: prev.data.filter((old) => !places.has(old.place)).concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);

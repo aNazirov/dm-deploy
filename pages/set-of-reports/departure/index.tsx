@@ -6,6 +6,7 @@ import {getSetOfReportsThunks} from "../../../core/store/setOfReports/setOfRepor
 import {ISetOfReportsDeparture, ISetOfReportsParams} from "../../../core/models";
 import moment from "moment/moment";
 import Moment from "react-moment";
+import {countryOption} from "../../../core/models/appendix/countries";
 
 const DepartureSetOfReportsPage = () => {
 	const dispatch = useAppDispatch();
@@ -31,19 +32,8 @@ const DepartureSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const dates = new Set(result.data.map((r) => moment(r.createdAt).format("yyyy-MM-DD")));
-						return {
-							count: result.count,
-							data: prev.data
-								.filter((old) => !dates.has(moment(old.createdAt).format("yyyy-MM-DD")))
-								.concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);
@@ -67,6 +57,7 @@ const DepartureSetOfReportsPage = () => {
 				<td>
 					<Moment format="DD.MM.YYYY">{r.createdAt}</Moment>
 				</td>
+				<td>{countryOption[r.place]}</td>
 				<td>{r._sum.departures}</td>
 				<td>{r._sum.specialists}</td>
 				<td>{r._sum.medicalCheckup}</td>

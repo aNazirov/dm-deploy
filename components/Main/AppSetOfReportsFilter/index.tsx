@@ -36,7 +36,11 @@ export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl}: AppSetOfRepor
 				field.map((f) => f.value),
 			);
 		} else {
-			setValue(name, field.value);
+			if (name === "organizations") {
+				setValue(name, [field.value]);
+			} else {
+				setValue(name, field.value);
+			}
 		}
 	};
 
@@ -45,7 +49,7 @@ export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl}: AppSetOfRepor
 	};
 
 	const onExport = () => {
-		const res = setOfReportsService.export({url: exportUrl, params: getValues()});
+		void setOfReportsService.export({url: exportUrl, params: getValues()});
 	};
 
 	return (
@@ -58,7 +62,11 @@ export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl}: AppSetOfRepor
 			<div className="d-flex flex-wrap gap-0.75">
 				<AppInput type="date" {...register("start")} />
 				<AppInput type="date" {...register("end")} />
-				<AppOrganizationSelect className="min-w-10" isMulti onChange={onSelect("organizations")} />
+				<AppOrganizationSelect
+					className="min-w-10"
+					isMulti={!["financialExpenses", "insurance"].includes(exportUrl)}
+					onChange={onSelect("organizations")}
+				/>
 				<AppSpecialitySelect className="min-w-10" onChange={onSelect("specialityId")} />
 				<AppCountrySelect className="min-w-10" onChange={onSelect("countryId")} />
 				<ReactSelect

@@ -31,17 +31,8 @@ const VisitsOfForeignSpecialistsSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const ids = new Set(result.data.map((r) => r.id));
-						return {
-							count: result.count,
-							data: prev.data.filter((old) => !ids.has(old.id)).concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);

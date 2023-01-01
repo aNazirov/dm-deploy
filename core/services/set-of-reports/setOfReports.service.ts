@@ -6,7 +6,7 @@ export const setOfReportsService = {
 		return api.get(APISetOfReportsUrl[url], {params: {params: JSON.stringify(params)}}).then((res) => res.data);
 	},
 	export({url, params}: {url: keyof typeof APISetOfReportsUrl; params: ISetOfReportsParams}) {
-		return api.post(APISetOfReportsExportUrl[url], {params}, {responseType: "blob"}).then((res) => {
+		return api.post(APISetOfReportsExportUrl[url], params, {responseType: "blob"}).then((res) => {
 			const url = window.URL.createObjectURL(new Blob([res.data]));
 
 			const link = document.createElement("a");

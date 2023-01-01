@@ -31,19 +31,8 @@ const FinancialExpensesSetOfReportsPage = () => {
 			setResults((prev) => {
 				const result = action.payload as typeof results;
 				if (result) {
-					if (prev?.data.length) {
-						const dates = new Set(result.data.map((r) => moment(r.createdAt).format("yyyy-MM-DD")));
-						return {
-							count: result.count,
-							data: prev.data
-								.filter((old) => !dates.has(moment(old.createdAt).format("yyyy-MM-DD")))
-								.concat(result.data),
-						};
-					} else {
-						return result;
-					}
+					return {count: result.count, data: result.data};
 				}
-
 				return prev;
 			}),
 		);
