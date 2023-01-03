@@ -4,12 +4,23 @@ import {FileModel} from "../models";
 export const FileService = {
 	post(formData: FormData) {
 		return api
-			.post<FileModel[]>(APIFileUrl.uploadMany, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
+			.post<FileModel[]>(
+				APIFileUrl.uploadMany,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 				},
-			})
+				{
+					pending: false,
+					success: false,
+				},
+			)
 			.then((result) => result.data.map((f) => new FileModel(f)));
+	},
+	delete(id: number) {
+		return api.delete(`${APIFileUrl.delete}/${id}`).then((res) => res.data);
 	},
 	download(fileURL: string, name: string) {
 		api.get(fileURL, {responseType: "blob"}).then((response) => {

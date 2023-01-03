@@ -6,6 +6,7 @@ import {
 	StateFromReducersMapObject,
 } from "@reduxjs/toolkit";
 
+import {fileReducer} from "./file/file.slices";
 import {globalReducer} from "./global/global.slices";
 import {appealsReportReducer} from "./report/appeals/appeals-report.slices";
 import {dailyReportReducer} from "./report/daily/daily-report.slices";
@@ -24,6 +25,7 @@ import {setOfReportsReducer} from "./setOfReports/setOfReports.slices";
 import {userReducer} from "./user/user.slices";
 
 const State = {
+	file: fileReducer,
 	user: userReducer,
 	global: globalReducer,
 	dailyReport: dailyReportReducer,

@@ -4,12 +4,9 @@ import {Toast} from "../../utils";
 
 export const dailyReportService = {
 	create(body: IReportDailyCreateParams, signal?: AbortSignal) {
-		return api
-			.post<{dailyReport: DailyReportModel}>(APIReportUrl.daily, {...body, createdAt: new Date()}, {signal})
-			.then((res) => {
-				Toast.success("Успешно создано.");
-				return new DailyReportModel(res.data.dailyReport);
-			});
+		return api.post<{dailyReport: DailyReportModel}>(APIReportUrl.daily, body, {signal}).then((res) => {
+			return new DailyReportModel(res.data.dailyReport);
+		});
 	},
 	get(params: IReportGetParams = {take: 20, skip: 0}, signal?: AbortSignal) {
 		return api

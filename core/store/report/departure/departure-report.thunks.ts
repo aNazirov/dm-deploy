@@ -21,6 +21,19 @@ export const createDepartureReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateDepartureReportThunk = createAsyncThunk(
+	"departureReport/updateThunk",
+	async (payload: {id: number; body: Partial<IReportDepartureCreateParams>}, thunkAPI) => {
+		const result = await ReportService.departure.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setDepartureReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getDepartureReportByIdThunk = createAsyncThunk(
 	"departureReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +41,7 @@ export const getDepartureReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setDepartureReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

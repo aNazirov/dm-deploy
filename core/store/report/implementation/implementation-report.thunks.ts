@@ -21,6 +21,24 @@ export const createImplementationReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateImplementationReportThunk = createAsyncThunk(
+	"implementationReport/updateThunk",
+	async (
+		payload: {id: number; body: Partial<IReportImplementationCreateParams>; deletingPartsIds?: number[]},
+		thunkAPI,
+	) => {
+		payload.deletingPartsIds?.forEach((id) => ReportService.implementation.deletePart(id, thunkAPI.signal));
+
+		const result = await ReportService.implementation.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setImplementationReportByIdAction(result));
+			return result;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getImplementationReportByIdThunk = createAsyncThunk(
 	"implementationReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +46,7 @@ export const getImplementationReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setImplementationReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

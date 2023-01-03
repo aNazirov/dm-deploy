@@ -1,5 +1,4 @@
 import {IFile} from "./file.model";
-import {IAutoCompleteResult} from "./global.model";
 import {ePlace} from "./table.model";
 import {ISpeciality, ITranslate, IUserShortInfo} from "./user.model";
 
@@ -33,6 +32,7 @@ export interface IReportDailyCreateParams {
 	gfms: number;
 	otherReceipts: number;
 	note?: string;
+	createdAt: Date;
 }
 
 export interface IReportTrainingCreateParams {

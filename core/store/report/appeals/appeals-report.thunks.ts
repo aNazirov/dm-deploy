@@ -1,7 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportAppealsCreateParams, IReportGetParams} from "../../../models";
+import {eReportStatusType, FileModel, IReportAppealsCreateParams, IReportGetParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
+import {deleteFileThunk} from "../../file/file.thunks";
 import {
 	deleteAppealsReportAction,
 	setAllAppealsReportsAction,
@@ -25,6 +26,37 @@ export const createAppealsReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateAppealsReportThunk = createAsyncThunk(
+	"appealsReport/updateThunk",
+	async (
+		payload: {
+			id: number;
+			body: Partial<IReportAppealsCreateParams>;
+			deletingFilesIds?: number[];
+			formData?: FormData;
+		},
+		thunkAPI,
+	) => {
+		payload.deletingFilesIds?.forEach((id) => thunkAPI.dispatch(deleteFileThunk(id)));
+		const files: FileModel[] = [];
+
+		if (payload.formData) {
+			files.push(...(await FileService.post(payload.formData)));
+		}
+
+		const result = await ReportService.appeals.update(
+			{...payload, body: {...payload.body, files: files.map((f) => f.id)}},
+			thunkAPI.signal,
+		);
+
+		if (result) {
+			thunkAPI.dispatch(setAppealsReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getAppealsReportByIdThunk = createAsyncThunk(
 	"appealsReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -32,6 +64,7 @@ export const getAppealsReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setAppealsReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

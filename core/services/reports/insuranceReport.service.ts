@@ -5,7 +5,6 @@ import {Toast} from "../../utils";
 export const insuranceReportService = {
 	create(body: IReportInsuranceCreateParams, signal?: AbortSignal) {
 		return api.post<{insuranceReport: InsuranceReportModel}>(APIReportUrl.insurance, body, {signal}).then((res) => {
-			Toast.success("Успешно создано.");
 			return new InsuranceReportModel(res.data.insuranceReport);
 		});
 	},

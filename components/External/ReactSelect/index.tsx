@@ -1,4 +1,4 @@
-import React, {useId} from "react";
+import React, {RefCallback, useId} from "react";
 import Select, {GroupBase, OptionsOrGroups, Props} from "react-select";
 import cn from "classnames";
 import styles from "./styles.module.scss";
@@ -13,16 +13,10 @@ interface ReactSelectProps extends Props {
 	searchOptions?: (params: string) => Promise<IAutoCompleteResult["hits"] | void>;
 }
 
-export const ReactSelect = ({
-	bg,
-	dimension,
-	options,
-	className,
-	styles: reactStyles,
-	searchOptions,
-	isAsync,
-	...props
-}: ReactSelectProps) => {
+const MySelect = (
+	{bg, dimension, options, className, styles: reactStyles, searchOptions, isAsync, ...props}: ReactSelectProps,
+	ref: any,
+) => {
 	const id = useId();
 
 	const loadOptions = (
@@ -58,6 +52,7 @@ export const ReactSelect = ({
 			classNamePrefix="my"
 			loadOptions={loadOptions}
 			defaultOptions={options}
+			ref={ref}
 			{...props}
 		/>
 	) : (
@@ -74,7 +69,9 @@ export const ReactSelect = ({
 			instanceId={id}
 			classNamePrefix="my"
 			options={options}
+			ref={ref}
 			{...props}
 		/>
 	);
 };
+export const ReactSelect = React.forwardRef(MySelect);

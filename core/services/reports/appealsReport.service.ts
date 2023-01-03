@@ -5,7 +5,6 @@ import {Toast} from "../../utils";
 export const appealsReportService = {
 	create(body: IReportAppealsCreateParams, signal?: AbortSignal) {
 		return api.post<{appealsReport: AppealsReportModel}>(APIReportUrl.appeals, body, {signal}).then((res) => {
-			Toast.success("Успешно создано.");
 			return new AppealsReportModel(res.data.appealsReport);
 		});
 	},

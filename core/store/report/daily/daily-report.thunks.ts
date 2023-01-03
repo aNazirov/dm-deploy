@@ -17,6 +17,19 @@ export const createDailyReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateDailyReportThunk = createAsyncThunk(
+	"dailyReport/updateThunk",
+	async (payload: {id: number; body: Partial<IReportDailyCreateParams>}, thunkAPI) => {
+		const result = await ReportService.daily.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setDailyReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getDailyReportByIdThunk = createAsyncThunk(
 	"dailyReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -24,6 +37,7 @@ export const getDailyReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setDailyReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

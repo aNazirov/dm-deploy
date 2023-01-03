@@ -12,7 +12,6 @@ export const implementationReportService = {
 		return api
 			.post<{implementationReport: ImplementationReportModel}>(APIReportUrl.implementation, body, {signal})
 			.then((res) => {
-				Toast.success("Успешно создано.");
 				return new ImplementationReportModel(res.data.implementationReport);
 			});
 	},
@@ -56,5 +55,10 @@ export const implementationReportService = {
 				Toast.success(res.data.message);
 				return res.data;
 			});
+	},
+	deletePart(id: number, signal?: AbortSignal) {
+		return api
+			.delete(`${APIReportUrl.implementation}/part/${id}`, {signal}, {pending: false, success: false})
+			.then((res) => res.data);
 	},
 };

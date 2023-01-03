@@ -24,6 +24,7 @@ export const mediaPlaceReportService = {
 		});
 	},
 	update({id, body}: {id: number; body: Partial<IReportMediaPlaceCreateParams>}, signal?: AbortSignal) {
+		console.log("reached");
 		return api.patch<MediaPlaceReportModel>(`${APIReportUrl.media}/${id}`, body, {signal}).then((res) => {
 			return new MediaPlaceReportModel(res.data);
 		});

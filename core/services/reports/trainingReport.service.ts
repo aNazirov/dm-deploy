@@ -5,7 +5,6 @@ import {Toast} from "../../utils";
 export const trainingReportService = {
 	create(body: IReportTrainingCreateParams, signal?: AbortSignal) {
 		return api.post<{trainingReport: TrainingReportModel}>(APIReportUrl.training, body, {signal}).then((res) => {
-			Toast.success("Успешно создано.");
 			return new TrainingReportModel(res.data.trainingReport);
 		});
 	},

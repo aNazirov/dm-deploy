@@ -65,4 +65,5 @@ const url = process.env.NEXT_PUBLIC_FILE_API_URL;
 
 export const APIFileUrl = {
 	uploadMany: `${url}/file/upload-many`,
+	delete: `${url}/file`,
 };

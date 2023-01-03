@@ -21,6 +21,19 @@ export const createInsuranceReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateInsuranceReportThunk = createAsyncThunk(
+	"insuranceReport/updateThunk",
+	async (payload: {id: number; body: Partial<IReportInsuranceCreateParams>}, thunkAPI) => {
+		const result = await ReportService.insurance.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setInsuranceReportByIdAction(result));
+			return result;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getInsuranceReportByIdThunk = createAsyncThunk(
 	"insuranceReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +41,7 @@ export const getInsuranceReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setInsuranceReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

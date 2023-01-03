@@ -7,7 +7,6 @@ import {Toast} from "../utils";
 export const UserService = {
 	login(params: ILogin, signal?: AbortSignal) {
 		return api.post(APIAuthUrl.login, params, {signal}).then((res) => {
-			Toast.success("Вы успешно вошли в свой аккаунт");
 			localStorage.setItem("jwt", res.data.jwt || "");
 			return res.data;
 		});

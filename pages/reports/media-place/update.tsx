@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Head from "next/head";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
 import styles from "../../../styles/reports.module.scss";
@@ -11,23 +11,60 @@ import {ReactSelect} from "../../../components/External";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {eMediaPlace, IFile, IReportMediaPlaceCreateParams} from "../../../core/models";
-import {createMediaPlaceReportThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
+import {eMediaPlace, IFile, IReportMediaPlaceCreateParams, MediaPlaceReportModel} from "../../../core/models";
+import {
+	getMediaPlaceReportByIdThunk,
+	updateMediaPlaceReportThunk,
+} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
+import {setMediaPlaceReportByIdAction} from "../../../core/store/report/mediaPlace/mediaPlace.slices";
+import {downloadFileThunk} from "../../../core/store/file/file.thunks";
+import moment from "moment";
 import {placeOptions} from "../../../core/models/appendix/places";
 
 const fieldOptions = {
 	required: true,
 };
 
-const MediaPlaceReportCreatePage = () => {
+const MediaPlaceReportUpdatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
 
+	const reportId = router.query["reportId"] as string;
+
+	useEffect(() => {
+		if (reportId) {
+			const promise = dispatch(getMediaPlaceReportByIdThunk(+reportId));
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as MediaPlaceReportModel;
+					console.log(fields.mediaParts);
+					reset({
+						mediaParts: fields.mediaParts?.map((p) => ({
+							...p,
+							date: moment(p.date).format("yyyy-MM-DD") as unknown as Date,
+						})),
+					});
+
+					if (fields.mediaParts) {
+						setExistingFiles(fields.mediaParts?.map((p) => p.file));
+					}
+				}
+			});
+
+			return () => {
+				promise.abort();
+				dispatch(setMediaPlaceReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
+
 	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
+	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
+	const [deletingFilesIds, setDeletingFilesIds] = useState<number[]>([]);
 
-	const {register, control, handleSubmit, setValue} = useForm<IReportMediaPlaceCreateParams>({
+	const {register, control, handleSubmit, setValue, reset, getValues} = useForm<IReportMediaPlaceCreateParams>({
 		defaultValues: {
 			mediaParts: [
 				{
@@ -62,14 +99,16 @@ const MediaPlaceReportCreatePage = () => {
 	};
 
 	const onSubmit = async (fieldsArr: IReportMediaPlaceCreateParams) => {
-		if (fieldsArr.mediaParts.length === files.length) {
+		if (fieldsArr.mediaParts.length === files.length + (existingFiles?.length ?? 0)) {
 			setErrText("");
 
 			const formData = new FormData();
 
 			files.forEach((f) => formData.append("files", f));
 
-			const action = await dispatch(createMediaPlaceReportThunk({payload: fieldsArr, formData}));
+			const action = await dispatch(
+				updateMediaPlaceReportThunk({payload: {id: +reportId, deletingFilesIds, body: fieldsArr}, formData}),
+			);
 			const id = action.payload as number;
 
 			if (id) {
@@ -98,6 +137,39 @@ const MediaPlaceReportCreatePage = () => {
 	const onFileRemove = (fileName: string) => () => {
 		const index = files.findIndex((f) => f.name === fileName);
 		setFiles((prev) => prev.filter((f, i) => i !== index));
+	};
+
+	const onFileDelete = (id: number) => async () => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+
+		if (!deletingFilesIds.includes(id)) {
+			setDeletingFilesIds((prev) => [...prev, id]);
+		}
+	};
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			dispatch(downloadFileThunk({url, name}));
+		};
+
+	const renderReceivedFiles = () => {
+		return existingFiles?.map((f) => (
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
+				<AppButton onClick={onFileDelete(f.id)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
 	};
 
 	const renderFiles = () => {
@@ -130,7 +202,12 @@ const MediaPlaceReportCreatePage = () => {
 					</label>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
-							<ReactSelect onChange={onSelect(index)} options={placeOptions} placeholder="Выберите площадку" />
+							<ReactSelect
+								onChange={onSelect(index)}
+								defaultValue={placeOptions.filter((option) => option.value === getValues().mediaParts[index].place)}
+								options={placeOptions}
+								placeholder="Выберите площадку"
+							/>
 						</div>
 					</label>
 					<label className={styles.cardBodyLabel}>
@@ -222,7 +299,7 @@ const MediaPlaceReportCreatePage = () => {
 							</label>
 
 							<AppDivider className="my-0.75" />
-
+							{renderReceivedFiles()}
 							{renderFiles()}
 							{errText}
 						</AppCard.Body>
@@ -231,17 +308,17 @@ const MediaPlaceReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/media-place" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/media-place/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
 
-export default MediaPlaceReportCreatePage;
+export default MediaPlaceReportUpdatePage;

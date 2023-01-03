@@ -12,7 +12,6 @@ export const scientificEventsReportService = {
 		return api
 			.post<{scientificEventsReport: ScientificEventsReportModel}>(APIReportUrl.scientificEvents, body, {signal})
 			.then((res) => {
-				Toast.success("Успешно создано.");
 				return new ScientificEventsReportModel(res.data.scientificEventsReport);
 			});
 	},

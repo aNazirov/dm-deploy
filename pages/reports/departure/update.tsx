@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Head from "next/head";
 import cn from "classnames";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
@@ -8,25 +8,48 @@ import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useForm} from "react-hook-form";
-import {ePlace, IReportDepartureCreateParams} from "../../../core/models";
-import {createDepartureReportThunk} from "../../../core/store/report/departure/departure-report.thunks";
+import {DepartureReportModel, ePlace, IReportDepartureCreateParams} from "../../../core/models";
+import {
+	getDepartureReportByIdThunk,
+	updateDepartureReportThunk,
+} from "../../../core/store/report/departure/departure-report.thunks";
 import {ReactSelect} from "../../../components/External";
 import {countryOptions} from "../../../core/models/appendix/countries";
+import {setDepartureReportByIdAction} from "../../../core/store/report/departure/departure-report.slices";
 
 const fieldOptions = {
 	required: true,
 	valueAsNumber: true,
 };
 
-const DepartureReportCreatePage = () => {
+const DepartureReportUpdatePage = () => {
 	const router = useRouter();
+
+	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
 
-	const {register, handleSubmit, setValue} = useForm<IReportDepartureCreateParams>();
+	const {register, handleSubmit, reset, setValue, getValues} = useForm<IReportDepartureCreateParams>();
+
+	useEffect(() => {
+		if (reportId) {
+			const promise = dispatch(getDepartureReportByIdThunk(+reportId));
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as DepartureReportModel;
+					reset(fields);
+				}
+			});
+
+			return () => {
+				promise.abort();
+				dispatch(setDepartureReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
 
 	const onSubmit = async (fields: IReportDepartureCreateParams) => {
-		const action = await dispatch(createDepartureReportThunk(fields));
+		const action = await dispatch(updateDepartureReportThunk({id: +reportId, body: fields}));
 		const id = action.payload as number;
 
 		if (id) {
@@ -63,7 +86,6 @@ const DepartureReportCreatePage = () => {
 					</AppButton>
 				</label>
 			</div>
-
 			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100 flex-col flex-justify-center">
@@ -72,12 +94,16 @@ const DepartureReportCreatePage = () => {
 								<span className={cn("rounded text-main-bold flex-fill", styles.cardRowLabel)}>
 									Область, куда был осуществлён выезд
 								</span>
-								<ReactSelect
-									className="text-center w-10"
-									onChange={onSelect}
-									options={countryOptions.filter((c) => ![ePlace.Other, ePlace.Intenational].includes(c.value))}
-									placeholder="Выберите ..."
-								/>
+
+								{getValues().place !== undefined && (
+									<ReactSelect
+										className="text-center w-10"
+										onChange={onSelect}
+										defaultValue={countryOptions.filter((option) => option.value === getValues().place)}
+										options={countryOptions.filter((c) => ![ePlace.Other, ePlace.Intenational].includes(c.value))}
+										placeholder="Выберите ..."
+									/>
+								)}
 							</label>
 
 							<label className={cn("flex-justify-between gap-1", styles.cardRow)}>
@@ -310,16 +336,16 @@ const DepartureReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/departure" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/departure/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
-export default DepartureReportCreatePage;
+export default DepartureReportUpdatePage;

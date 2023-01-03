@@ -21,6 +21,19 @@ export const createFinancialExpensesReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateFinancialExpensesReportThunk = createAsyncThunk(
+	"financialExpensesReport/updateThunk",
+	async (payload: {id: number; body: Partial<IReportFinancialExpensesCreateParams>}, thunkAPI) => {
+		const result = await ReportService.financialExpenses.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setFinancialExpenseReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getFinancialExpensesReportByIdThunk = createAsyncThunk(
 	"financialExpensesReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +41,7 @@ export const getFinancialExpensesReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setFinancialExpenseReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

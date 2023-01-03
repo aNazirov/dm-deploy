@@ -8,48 +8,81 @@ import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useForm} from "react-hook-form";
-import {IReportFinancialExpensesCreateParams} from "../../../core/models";
-import {createFinancialExpensesReportThunk} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
+import {FinancialExpensesReportModel, IReportFinancialExpensesCreateParams} from "../../../core/models";
+import {
+	getFinancialExpensesReportByIdThunk,
+	updateFinancialExpensesReportThunk,
+} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
 
 const fieldOptions = {
 	required: true,
 	valueAsNumber: true,
 };
 
-const CenterFinancialExpensesReportCreatePage = () => {
+const CenterFinancialExpensesReportUpdatePage = () => {
 	const router = useRouter();
 
+	const reportId = router.query["reportId"] as string;
+
 	const dispatch = useAppDispatch();
-	const {register, handleSubmit, watch, setValue, getValues} =
+	const {register, handleSubmit, watch, reset, setValue, getValues} =
 		useForm<Omit<IReportFinancialExpensesCreateParams, "note">>();
 
 	useEffect(() => {
-		const subscription = watch((data, {name}) => {
-			if (name !== "total") {
-				const {total: _, ...values} = getValues();
-				const numberValues: number[] = Object.values(values);
+		if (reportId) {
+			const promise = dispatch(getFinancialExpensesReportByIdThunk(+reportId));
 
-				if (numberValues.length) {
-					const sum = numberValues.reduce((accumulator, currentValue) => {
-						if (!isNaN(currentValue)) {
-							return accumulator + currentValue;
-						} else {
-							return accumulator;
-						}
-					}, 0);
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as FinancialExpensesReportModel;
+					reset({
+						total: fields.total,
+						businessTrips: fields.businessTrips,
+						communalPayments: fields.communalPayments,
+						education: fields.education,
+						innovations: fields.innovations,
+						otherExpenses: fields.otherExpenses,
+						inventory: fields.inventory,
+						materials: fields.materials,
+						outsource: fields.outsource,
+						repairs: fields.repairs,
+						salaries: fields.salaries,
+						socialPayments: fields.socialPayments,
+						sponsorships: fields.sponsorships,
+					});
 
-					setValue("total", sum);
+					setValue("total", fields.total);
 				}
-			}
-		});
+			});
 
-		return () => {
-			subscription.unsubscribe();
-		};
-	}, []);
+			const subscription = watch((data, {name}) => {
+				if (name !== "total") {
+					const {total: _, ...values} = getValues();
+					const numberValues: number[] = Object.values(values);
+
+					if (numberValues.length) {
+						const sum = numberValues.reduce((accumulator, currentValue) => {
+							if (!isNaN(currentValue)) {
+								return accumulator + currentValue;
+							} else {
+								return accumulator;
+							}
+						}, 0);
+
+						setValue("total", sum);
+					}
+				}
+			});
+
+			return () => {
+				promise.abort();
+				subscription.unsubscribe();
+			};
+		}
+	}, [reportId]);
 
 	const onSubmit = async (fields: IReportFinancialExpensesCreateParams) => {
-		const action = await dispatch(createFinancialExpensesReportThunk(fields));
+		const action = await dispatch(updateFinancialExpensesReportThunk({id: +reportId, body: fields}));
 		const id = action.payload as number;
 
 		if (id) {
@@ -244,17 +277,17 @@ const CenterFinancialExpensesReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/financial-expenses" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/financial-expenses/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
 
-export default CenterFinancialExpensesReportCreatePage;
+export default CenterFinancialExpensesReportUpdatePage;

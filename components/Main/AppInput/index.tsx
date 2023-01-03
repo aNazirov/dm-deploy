@@ -1,4 +1,4 @@
-import React, {DetailedHTMLProps, ForwardedRef, InputHTMLAttributes} from "react";
+import React, {ChangeEvent, DetailedHTMLProps, ForwardedRef, InputHTMLAttributes} from "react";
 import cn from "classnames";
 import styles from "./styles.module.scss";
 import UploadIcon from "../../../assets/images/icons/filled/arrows/upload.svg";
@@ -9,6 +9,18 @@ interface AppInputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputE
 	dimension?: "sm" | "lg";
 }
 const Input = ({Icon, className, bg, dimension, ...props}: AppInputProps, ref: ForwardedRef<HTMLInputElement>) => {
+	const preventNegativeValues = (e: React.KeyboardEvent<HTMLInputElement>) =>
+		["e", "E", "+", "-"].includes(e.key) && e.preventDefault();
+
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		props.onChange?.(e);
+		const num = +e.target.value;
+
+		if (isNaN(num) || num < 0) {
+			e.target.value = "0";
+		}
+	};
+
 	return (
 		<div className={styles.inputWrapper}>
 			{Icon && (
@@ -35,7 +47,9 @@ const Input = ({Icon, className, bg, dimension, ...props}: AppInputProps, ref: F
 					"rounded-end": Icon,
 					rounded: !Icon,
 				})}
+				onKeyDown={props.type === "number" ? preventNegativeValues : undefined}
 				{...props}
+				onChange={onChange}
 				ref={ref}
 			/>
 		</div>

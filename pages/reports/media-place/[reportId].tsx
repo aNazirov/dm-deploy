@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider, AppInput, AppTable} from "../../../components/Main";
+import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -8,8 +8,6 @@ import {eTable} from "../../../core/models";
 import {getMediaPlaceReportByIdThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
 import {setMediaPlaceReportByIdAction} from "../../../core/store/report/mediaPlace/mediaPlace.slices";
 import Moment from "react-moment";
-import styles from "../../../styles/reports.module.scss";
-import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {ReportPageUpdate} from "../../../components/Layout";
 import {FileService} from "../../../core/services";
 
@@ -54,9 +52,6 @@ const MediaPlaceReportInfoPage = () => {
 					type="button"
 				>
 					{f.file.name}
-				</AppButton>
-				<AppButton variant="danger" size="square">
-					<TrashIcon width="24px" height="24px" />
 				</AppButton>
 			</div>
 		));

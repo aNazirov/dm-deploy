@@ -1,20 +1,23 @@
-import React, {DetailedHTMLProps, HTMLAttributes} from "react";
+import React, {DetailedHTMLProps, HTMLAttributes, useEffect, useState} from "react";
 import {eReportStatusType, eTable, eTablePermission} from "../../../core/models";
-import {useAppDispatch, useAppSelector} from "../../../core/hooks";
-import {AppButton} from "../../Main";
+import {useAppDispatch, useAppSelector, useDebounce} from "../../../core/hooks";
+import {AppButton, AppInput} from "../../Main";
 import DeleteIcon from "../../../assets/images/icons/filled/trash.svg";
 import EditIcon from "../../../assets/images/icons/filled/pencil.svg";
 import {
 	changeStatusOfDailyReportThunk,
 	deleteDailyReportThunk,
+	updateDailyReportThunk,
 } from "../../../core/store/report/daily/daily-report.thunks";
 import {
 	changeStatusOfFinancialExpensesReportThunk,
 	deleteFinancialExpensesReportThunk,
+	updateFinancialExpensesReportThunk,
 } from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
 import {
 	changeStatusOfMediaPlaceReportThunk,
 	deleteMediaPlaceReportThunk,
+	updateMediaPlaceReportThunk,
 } from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
 import {
 	changeStatusOfTelemedicineReportThunk,
@@ -44,25 +47,29 @@ import {
 import {
 	changeStatusOfInsuranceReportThunk,
 	deleteInsuranceReportThunk,
+	updateInsuranceReportThunk,
 } from "../../../core/store/report/insurance/insurance-report.thunks";
 import {
 	changeStatusOfImplementationReportThunk,
 	deleteImplementationReportThunk,
+	updateImplementationReportThunk,
 } from "../../../core/store/report/implementation/implementation-report.thunks";
 import {
 	changeStatusOfAppealsReportThunk,
 	deleteAppealsReportThunk,
+	updateAppealsReportThunk,
 } from "../../../core/store/report/appeals/appeals-report.thunks";
 import {
 	changeStatusOfDepartureReportThunk,
 	deleteDepartureReportThunk,
+	updateDepartureReportThunk,
 } from "../../../core/store/report/departure/departure-report.thunks";
 
 interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	reportId: number;
 	table: eTable;
 	paternalId: number;
-	reportStatusId: number;
+	reportStatusId: eReportStatusType;
 }
 export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, ...props}: IProps) => {
 	const router = useRouter();
@@ -71,7 +78,68 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 	const user = useAppSelector(({user}) => user.user);
 	const permissions = useAppSelector(({user}) => user.user?.permissions);
 
+	const [comment, setComment] = useState("");
+
+	const debouncedComment = useDebounce(comment, 500);
+
+	useEffect(() => {
+		if (debouncedComment) {
+			switch (table) {
+				case eTable.DailyReport:
+					dispatch(updateDailyReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+
+				case eTable.FinancialExpensesReport:
+					dispatch(updateFinancialExpensesReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.MediaReport:
+					dispatch(updateMediaPlaceReportThunk({payload: {id: +reportId, body: {note: debouncedComment}}}));
+					break;
+				/*case eTable.TelemedicineReport:
+				dispatch(changeStatusOfTelemedicineReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.TrainingReport:
+				dispatch(changeStatusOfTrainingReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.VisitsOfForeignSpecialistsReport:
+				dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScientificEventsReport:
+				dispatch(changeStatusOfScientificEventsReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScientificWorksReport:
+				dispatch(changeStatusOfScientificWorksReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;
+			case eTable.ScienceReport:
+				dispatch(changeStatusOfScienceReportThunk({id: +reportId, statusId: statusTypeId}));
+				break;*/
+				case eTable.InsuranceReport:
+					dispatch(updateInsuranceReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.ImplementationReport:
+					dispatch(updateImplementationReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.AppealsReport:
+					dispatch(updateAppealsReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.DepartureReport:
+					dispatch(updateDepartureReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				default:
+					break;
+			}
+		}
+	}, [debouncedComment]);
+
 	const currentPermission = permissions?.find((p) => p.table === table);
+
+	const onEditing = () => {
+		void router.push({pathname: "update", query: {reportId}});
+	};
+
+	const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setComment(e.target.value);
+	};
 
 	const onUpdateStatus = (statusTypeId: eReportStatusType) => () => {
 		switch (table) {
@@ -214,12 +282,16 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 
 	return (
 		<div className="d-flex gap-1.25" {...props}>
-			{currentPermission?.permissions.includes(eTablePermission.Update) && (
-				<AppButton size="lg" variant="print" withIcon>
-					<EditIcon width="24px" height="24px" />
-					<span>Редактировать</span>
-				</AppButton>
-			)}
+			{currentPermission?.permissions.includes(eTablePermission.Update) &&
+				reportStatusId !== eReportStatusType.Approved && (
+					<>
+						<AppInput type="text" onChange={onCommentChange} placeholder="Комментарий..." value={comment} />
+						<AppButton onClick={onEditing} size="lg" variant="print" withIcon>
+							<EditIcon width="24px" height="24px" />
+							<span>Редактировать</span>
+						</AppButton>
+					</>
+				)}
 
 			{currentPermission?.permissions.includes(eTablePermission.Delete) && (
 				<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>

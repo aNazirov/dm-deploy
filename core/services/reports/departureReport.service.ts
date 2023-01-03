@@ -5,7 +5,6 @@ import {Toast} from "../../utils";
 export const departureReportService = {
 	create(body: IReportDepartureCreateParams, signal?: AbortSignal) {
 		return api.post<{departureReport: DepartureReportModel}>(APIReportUrl.departure, body, {signal}).then((res) => {
-			Toast.success("Успешно создано.");
 			return new DepartureReportModel(res.data.departureReport);
 		});
 	},

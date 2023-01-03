@@ -8,8 +8,9 @@ import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useForm} from "react-hook-form";
-import {IReportDailyCreateParams} from "../../../core/models";
-import {createDailyReportThunk} from "../../../core/store/report/daily/daily-report.thunks";
+import {DailyReportModel, IReportDailyCreateParams} from "../../../core/models";
+import {getDailyReportByIdThunk, updateDailyReportThunk} from "../../../core/store/report/daily/daily-report.thunks";
+import {setDailyReportByIdAction} from "../../../core/store/report/daily/daily-report.slices";
 import moment from "moment";
 
 const fieldOptions = {
@@ -17,31 +18,44 @@ const fieldOptions = {
 	valueAsNumber: true,
 };
 
-const DailyReportCreatePage = () => {
+const DailyReportUpdatePage = () => {
 	const router = useRouter();
+	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
 
-	const {register, handleSubmit, watch, setValue, getValues} = useForm<IReportDailyCreateParams>({
-		defaultValues: {createdAt: moment().format("yyyy-MM-DD") as unknown as Date},
-	});
+	const {register, reset, handleSubmit, watch, setValue, getValues} = useForm<IReportDailyCreateParams>();
 
 	useEffect(() => {
-		const subscription = watch((value, {name}) => {
-			if (name === "occupiedBeds" || name === "freeBeds") {
-				const {freeBeds, occupiedBeds} = getValues();
-				if (!isNaN(freeBeds) && !isNaN(occupiedBeds)) {
-					setValue("totalBeds", freeBeds + occupiedBeds);
+		if (reportId) {
+			const promise = dispatch(getDailyReportByIdThunk(+reportId));
+
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as DailyReportModel;
+
+					reset({...fields, createdAt: moment(fields.createdAt).format("yyyy-MM-DD") as unknown as Date});
 				}
-			}
-		});
-		return () => {
-			subscription.unsubscribe();
-		};
-	}, []);
+			});
+
+			const subscription = watch((value, {name}) => {
+				if (name === "occupiedBeds" || name === "freeBeds") {
+					const {freeBeds, occupiedBeds} = getValues();
+					if (!isNaN(freeBeds) && !isNaN(occupiedBeds)) {
+						setValue("totalBeds", freeBeds + occupiedBeds);
+					}
+				}
+			});
+			return () => {
+				promise.abort();
+				subscription.unsubscribe();
+				dispatch(setDailyReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
 
 	const onSubmit = async (fields: IReportDailyCreateParams) => {
-		const action = await dispatch(createDailyReportThunk(fields));
+		const action = await dispatch(updateDailyReportThunk({body: fields, id: +reportId}));
 		const id = action.payload as number;
 
 		if (id) {
@@ -268,16 +282,16 @@ const DailyReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/daily" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/daily/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
-export default DailyReportCreatePage;
+export default DailyReportUpdatePage;

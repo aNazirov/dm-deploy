@@ -1,0 +1,251 @@
+import Head from "next/head";
+import React, {ChangeEvent, useEffect, useState} from "react";
+import cn from "classnames";
+import {useForm} from "react-hook-form";
+import {useRouter} from "next/router";
+import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
+import styles from "../../../styles/reports.module.scss";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
+import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
+import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
+import {useAppDispatch} from "../../../core/hooks";
+import {AppealsReportModel, IFile, IReportAppealsCreateParams} from "../../../core/models";
+import {
+	getAppealsReportByIdThunk,
+	updateAppealsReportThunk,
+} from "../../../core/store/report/appeals/appeals-report.thunks";
+import {setAppealsReportByIdAction} from "../../../core/store/report/appeals/appeals-report.slices";
+import {downloadFileThunk} from "../../../core/store/file/file.thunks";
+
+const fieldOptions = {
+	required: true,
+	valueAsNumber: true,
+};
+
+const AppealsReportUpdatePage = () => {
+	const router = useRouter();
+
+	const reportId = router.query["reportId"] as string;
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (reportId) {
+			const promise = dispatch(getAppealsReportByIdThunk(+reportId));
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as AppealsReportModel;
+					setValue("questions", fields.questions);
+					setValue("complaints", fields.complaints);
+					setExistingFiles(fields.files);
+				}
+			});
+
+			return () => {
+				promise.abort();
+				dispatch(setAppealsReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
+
+	const [files, setFiles] = useState<File[]>([]);
+	const [errText, setErrText] = useState("");
+	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
+	const [deletingFilesIds, setDeletingFilesIds] = useState<number[]>([]);
+
+	const {register, handleSubmit, getValues, setValue} = useForm<IReportAppealsCreateParams>();
+
+	const onSubmit = async (fields: IReportAppealsCreateParams) => {
+		const numberValues: number[] = Object.values(getValues());
+
+		if (numberValues.length) {
+			const sum = numberValues.reduce((accumulator, currentValue) => {
+				if (!isNaN(currentValue)) {
+					return accumulator + currentValue;
+				} else {
+					return accumulator;
+				}
+			}, 0);
+
+			if (sum === files.length + (existingFiles?.length ?? 0)) {
+				setErrText("");
+				const formData = new FormData();
+				files.forEach((f) => formData.append("files", f));
+
+				const action = await dispatch(
+					updateAppealsReportThunk({
+						id: +reportId,
+						body: fields,
+						deletingFilesIds,
+						formData,
+					}),
+				);
+				const id = action.payload as number;
+
+				if (id) {
+					void router.push(`/reports/appeals/${id}`);
+				}
+			} else {
+				setErrText(`Количество людей должно совпадать с количеством привязанных документов.`);
+			}
+		}
+	};
+
+	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			for (const key in e.target.files) {
+				const file = e.target.files[key];
+
+				if (file instanceof File) {
+					if (!files.some((f) => f.name === file.name)) {
+						setFiles((prev) => [...prev, file]);
+					}
+				}
+			}
+		}
+	};
+
+	const onFileRemove = (fileName: string) => () => {
+		const index = files.findIndex((f) => f.name === fileName);
+		setFiles((prev) => prev.filter((f, i) => i !== index));
+	};
+
+	const onFileDelete = (id: number) => async () => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+
+		if (!deletingFilesIds.includes(id)) {
+			setDeletingFilesIds((prev) => [...prev, id]);
+		}
+	};
+
+	const renderFiles = () => {
+		return files.map((file) => (
+			<div className="flex-center gap-0.5" key={file.name}>
+				<label className={styles.cardBodyLabel}>
+					<AppInput className="text-center" type="file" disabled readOnly placeholder={file.name} />
+				</label>
+
+				<AppButton onClick={onFileRemove(file.name)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
+	};
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			dispatch(downloadFileThunk({url, name}));
+		};
+
+	const renderReceivedFiles = () => {
+		return existingFiles?.map((f) => (
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
+				<AppButton onClick={onFileDelete(f.id)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
+	};
+
+	return (
+		<>
+			<Head>
+				<title>Обращение физических и юридических лиц</title>
+				<meta name="description" content="Generated by create next app" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+
+			<h1 className="h1 text-center">Обращение физических и юридических лиц</h1>
+
+			<AppDivider className="my-1.25" />
+
+			<div className={styles.filters}>
+				<label className={styles.filterLabel}>
+					<span className="text-main-bold">Дата</span>
+
+					<AppInput type="date" />
+				</label>
+
+				<label className={styles.filterLabel}>
+					<span className="text-main-bold">Номер:</span>
+					<AppButton variant="main" size="square">
+						80
+					</AppButton>
+				</label>
+			</div>
+			<div className={cn(styles.cardDesk, styles.cardDeskGrid4)}>
+				<div className={styles.cardWrapper}>
+					<AppCard className="h-100">
+						<AppCard.Header>Подтверждающий документ</AppCard.Header>
+						<AppCard.Body className={cn(styles.cardBody, styles.fileCardBody)}>
+							<label className={styles.cardBodyLabel}>
+								<AppInput
+									onChange={onFileChange}
+									className="text-center"
+									type="file"
+									placeholder="Прикрепить файл"
+									multiple
+								/>
+							</label>
+
+							<AppDivider className="my-0.75" />
+							{renderReceivedFiles()}
+							{renderFiles()}
+							{errText}
+						</AppCard.Body>
+					</AppCard>
+				</div>
+
+				<div className={cn(styles.cardWrapper, styles.columnFillFrom2)}>
+					<AppCard>
+						<AppCard.Header>Обращения</AppCard.Header>
+						<AppCard.Body className={cn(styles.cardBody, styles.grid2)}>
+							<label className={styles.cardBodyLabel}>
+								<span className="text-main-bold">Жалобы:</span>
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("complaints", fieldOptions)}
+								/>
+							</label>
+
+							<label className={styles.cardBodyLabel}>
+								<span className="text-main-bold">Задачи по другим темам:</span>
+								<AppInput
+									className="text-center"
+									type="number"
+									placeholder="0"
+									{...register("questions", fieldOptions)}
+								/>
+							</label>
+						</AppCard.Body>
+					</AppCard>
+				</div>
+			</div>
+
+			<div className="flex-justify-between mt-auto pt-2.5">
+				<AppButton useAs="link" href={`/reports/appeals/${reportId}`} size="lg" variant="dark" withIcon>
+					<ChevronIcon width="24px" height="24px" />
+					Назад
+				</AppButton>
+				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
+					<SuccessIcon width="24px" height="24px" />
+					<span>Сохранить</span>
+				</AppButton>
+			</div>
+		</>
+	);
+};
+
+export default AppealsReportUpdatePage;

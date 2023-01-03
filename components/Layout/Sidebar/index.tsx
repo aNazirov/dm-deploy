@@ -26,8 +26,15 @@ export const Sidebar = ({className}: SidebarProps) => {
 	};
 
 	const filteredReportLinks = reportLinks.filter((link) => {
-		const current = permissions?.find((p) => p.table === link.table);
-		return current?.permissions.includes(eTablePermission.Read);
+		if (link.table === eTable.ScienceMainReport) {
+			const current = permissions?.find((p) =>
+				[eTable.ScienceReport, eTable.ScientificEventsReport, eTable.ScientificWorksReport].includes(p.table),
+			);
+			return current?.permissions.includes(eTablePermission.Read);
+		} else {
+			const current = permissions?.find((p) => p.table === link.table);
+			return current?.permissions.includes(eTablePermission.Read);
+		}
 	});
 
 	const filteredSetOfReportsLinks = setOfReportsLinks.filter((link) => {
@@ -63,7 +70,7 @@ export const Sidebar = ({className}: SidebarProps) => {
 // TODO: move to separate file
 interface CollapsableListProps {
 	title: string;
-	linksList: {title: string; url: string; table: eTable}[];
+	linksList: {title: string; url: string; table: eTable; sub?: {title: string; url: string; table: eTable}[]}[];
 }
 
 // TODO: onClick to collapse btn, hide all opened submenus
@@ -73,6 +80,7 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 
 	// react hooks
 	const [isOpened, setIsOpened] = useState(false);
+	const [isSubOpened, setIsSubOpened] = useState(false);
 
 	const menuRef = useRef<HTMLLIElement>(null);
 
@@ -87,21 +95,59 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 		setIsOpened((prev) => !prev);
 	};
 
+	const onSubToggle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+		e.preventDefault();
+		setIsSubOpened((prev) => !prev);
+	};
+
 	const isCurrentPath = (path: string) => router.pathname.includes(path);
 
 	const renderList = () => {
-		return linksList.map((link, i) => (
-			<li key={i}>
-				<Link className={cn("list-item rounded-md", {active: isCurrentPath(link.url)})} href={link.url}>
-					{isCurrentPath(link.url) ? (
-						<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
-					) : (
-						<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
-					)}
-					<span>{link.title}</span>
-				</Link>
-			</li>
-		));
+		const renderSubList = (list: {title: string; url: string; table: eTable}[]) =>
+			list.map((subLink, j) => (
+				<li key={j}>
+					<Link className={cn("list-item rounded-md", {active: isCurrentPath(subLink.url)})} href={subLink.url}>
+						{isCurrentPath(subLink.url) ? (
+							<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+						) : (
+							<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+						)}
+						<span>{subLink.title}</span>
+					</Link>
+				</li>
+			));
+
+		return linksList.map((link, i) =>
+			link.sub ? (
+				<li key={i}>
+					<Link
+						href="#"
+						onClick={onSubToggle}
+						className={cn("rounded w-100", styles.asideLink, {[styles.active]: isSubOpened})}
+					>
+						<ListIcon width="24px" height="24px" className="main-btn-text-color" />
+						<span>{link.title}</span>
+						<ChevronDownIcon
+							width="18px"
+							height="18px"
+							className={cn("main-btn-text-color ms-auto", styles.chevronIcon)}
+						/>
+					</Link>
+					{isSubOpened && <ul className={styles.asideSubList}>{renderSubList(link.sub)}</ul>}
+				</li>
+			) : (
+				<li key={i}>
+					<Link className={cn("list-item rounded-md", {active: isCurrentPath(link.url)})} href={link.url}>
+						{isCurrentPath(link.url) ? (
+							<FilledCircleIcon width="24px" height="24px" className="main-btn-text-color" />
+						) : (
+							<CircleIcon width="24px" height="24px" className="main-btn-text-color" />
+						)}
+						<span>{link.title}</span>
+					</Link>
+				</li>
+			),
+		);
 	};
 
 	return (
@@ -119,21 +165,28 @@ const CollapsableList = ({title, linksList}: CollapsableListProps) => {
 const reportLinks = [
 	{title: "Ежедневный отчёт", url: "/reports/daily", table: eTable.DailyReport},
 	{title: "Повышение квалификации", url: "/reports/training", table: eTable.TrainingReport},
-	{title: "Финансовые расходы центра (ОЦ)", url: "/reports/financial-expenses", table: eTable.FinancialExpensesReport},
+	{title: "Финансовые расходы центра", url: "/reports/financial-expenses", table: eTable.FinancialExpensesReport},
 	{
-		title: "Визит иностранных специалистов (ОЦ)",
+		title: "Визит иностранных специалистов",
 		url: "/reports/visit-foreign-specialists",
 		table: eTable.VisitsOfForeignSpecialistsReport,
 	},
-	{title: "Телемедицина (ОЦ)", url: "/reports/telemedicine", table: eTable.TelemedicineReport},
+	{title: "Телемедицина", url: "/reports/telemedicine", table: eTable.TelemedicineReport},
 	{title: "Медиа отчёт", url: "/reports/media-place", table: eTable.MediaReport},
-	{title: "Научные проекты (ОЦ)", url: "/reports/science", table: eTable.ScienceReport},
-	{title: "Научные защиты (ОЦ)", url: "/reports/scientific-events", table: eTable.ScientificEventsReport},
-	{title: "Научные статьи, патенты и др.", url: "/reports/scientific-works", table: eTable.ScientificWorksReport},
+	{
+		title: "Наука",
+		url: "",
+		table: eTable.ScienceMainReport,
+		sub: [
+			{title: "Научные проекты", url: "/reports/science", table: eTable.ScienceReport},
+			{title: "Научные защиты", url: "/reports/scientific-events", table: eTable.ScientificEventsReport},
+			{title: "Научные статьи, патенты и др.", url: "/reports/scientific-works", table: eTable.ScientificWorksReport},
+		],
+	},
 	{title: "Страховые отчёты", url: "/reports/insurance", table: eTable.InsuranceReport},
 	{title: "Внедрения", url: "/reports/implementation", table: eTable.ImplementationReport},
 	{title: "Обращение физических и юридических лиц", url: "/reports/appeals", table: eTable.AppealsReport},
-	{title: "Проделанная работа в регионах (ОЦ)", url: "/reports/departure", table: eTable.DepartureReport},
+	{title: "Проделанная работа в регионах", url: "/reports/departure", table: eTable.DepartureReport},
 ];
 
 const setOfReportsLinks = [
@@ -144,19 +197,19 @@ const setOfReportsLinks = [
 	},
 	{title: "Повышение квалификации", url: "/set-of-reports/training", table: eTable.TrainingReport},
 	{
-		title: "Финансовые расходы центра (ОЦ)",
+		title: "Финансовые расходы центра",
 		url: "/set-of-reports/financial-expenses",
 		table: eTable.FinancialExpensesReport,
 	},
 	{
-		title: "Визит иностранных специалистов (ОЦ)",
+		title: "Визит иностранных специалистов",
 		url: "/set-of-reports/visit-foreign-specialists",
 		table: eTable.VisitsOfForeignSpecialistsReport,
 	},
-	{title: "Телемедицина (ОЦ)", url: "/set-of-reports/telemedicine", table: eTable.TelemedicineReport},
+	{title: "Телемедицина", url: "/set-of-reports/telemedicine", table: eTable.TelemedicineReport},
 	{title: "Медиа отчёт", url: "/set-of-reports/media-place", table: eTable.MediaReport},
-	{title: "Научные проекты (ОЦ)", url: "/set-of-reports/science", table: eTable.ScienceReport},
-	{title: "Научные защиты (ОЦ)", url: "/set-of-reports/scientific-events", table: eTable.ScientificEventsReport},
+	{title: "Научные проекты", url: "/set-of-reports/science", table: eTable.ScienceReport},
+	{title: "Научные защиты", url: "/set-of-reports/scientific-events", table: eTable.ScientificEventsReport},
 	{
 		title: "Научные статьи, патенты и др.",
 		url: "/set-of-reports/scientific-works",
@@ -165,5 +218,5 @@ const setOfReportsLinks = [
 	{title: "Страховые отчёты", url: "/set-of-reports/insurance", table: eTable.InsuranceReport},
 	{title: "Внедрения", url: "/set-of-reports/implementation", table: eTable.ImplementationReport},
 	{title: "Обращение физических и юридических лиц", url: "/set-of-reports/appeals", table: eTable.AppealsReport},
-	{title: "Проделанная работа в регионах (ОЦ)", url: "/set-of-reports/departure", table: eTable.DepartureReport},
+	{title: "Проделанная работа в регионах", url: "/set-of-reports/departure", table: eTable.DepartureReport},
 ];

@@ -14,7 +14,6 @@ export const financialExpensesReportService = {
 				signal,
 			})
 			.then((res) => {
-				Toast.success("Успешно создано.");
 				return new FinancialExpensesReportModel(res.data.financialExpensesReport);
 			});
 	},
