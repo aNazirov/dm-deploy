@@ -53,7 +53,7 @@ const TelemedicineReportCreatePage = () => {
 			demonstrationOperations: 0,
 			seminars: 0,
 			symposiums: 0,
-			place: ePlace.Intenational,
+			place: ePlace.International,
 		});
 	};
 
@@ -137,13 +137,14 @@ const TelemedicineReportCreatePage = () => {
 						</div>
 					</label>
 				</div>
-
-				<div className={styles.cardBodyLabel}>
-					{index === fields.length - 1 ? (
+				{/* TODO: make all adding and removing like that*/}
+				<div className={cn("flex-justify-center gap-0.5")}>
+					{index === fields.length - 1 && (
 						<AppButton onClick={onAppend} type="button" variant="dark" size="square" withIcon>
 							<PlusIcon width="24px" height="24px" />
 						</AppButton>
-					) : (
+					)}
+					{fields.length !== 1 && (
 						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
 							<TrashIcon width="24px" height="24px" />
 						</AppButton>

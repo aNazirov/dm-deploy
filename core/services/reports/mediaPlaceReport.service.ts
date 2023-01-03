@@ -24,7 +24,6 @@ export const mediaPlaceReportService = {
 		});
 	},
 	update({id, body}: {id: number; body: Partial<IReportMediaPlaceCreateParams>}, signal?: AbortSignal) {
-		console.log("reached");
 		return api.patch<MediaPlaceReportModel>(`${APIReportUrl.media}/${id}`, body, {signal}).then((res) => {
 			return new MediaPlaceReportModel(res.data);
 		});
@@ -45,5 +44,10 @@ export const mediaPlaceReportService = {
 			Toast.success(res.data.message);
 			return res.data;
 		});
+	},
+	deletePart(id: number, signal?: AbortSignal) {
+		return api
+			.delete(`${APIReportUrl.media}/part/${id}`, {signal}, {pending: false, success: false})
+			.then((res) => res.data);
 	},
 };

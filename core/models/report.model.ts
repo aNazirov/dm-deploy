@@ -66,7 +66,7 @@ export interface IReportFinancialExpensesCreateParams {
 }
 
 export interface IReportTelemedicineCreateParams {
-	telemedicineParts: Omit<TelemedicinePartModel, "id">[];
+	telemedicineParts: TelemedicinePartModel[];
 	note?: string;
 }
 // TODO: URGENT add what about field id here?
@@ -88,7 +88,12 @@ export interface IReportVisitsOfForeignSpecialistsCreateParams {
 }
 
 export interface IReportMediaPlaceCreateParams {
-	mediaParts: Omit<MediaPartModel, "id">[];
+	mediaParts: {
+		title: string;
+		place: eMediaPlace;
+		date: Date;
+		fileId: number;
+	}[];
 	note?: string;
 }
 
@@ -280,7 +285,7 @@ export class TelemedicineReportModel {
 }
 
 export class TelemedicinePartModel {
-	id: number;
+	id?: number;
 	consultations: number;
 	councils: number;
 	demonstrationOperations: number;
@@ -290,7 +295,9 @@ export class TelemedicinePartModel {
 	note?: string;
 
 	constructor(part: TelemedicinePartModel) {
-		this.id = part.id;
+		if (part.id) {
+			this.id = part.id;
+		}
 		this.consultations = part.consultations;
 		this.councils = part.councils;
 		this.demonstrationOperations = part.demonstrationOperations;

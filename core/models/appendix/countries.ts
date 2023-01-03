@@ -1,7 +1,7 @@
 import {ePlace} from "../index";
 
 export const countryOptions = [
-	{value: ePlace.Intenational, label: "Международный"},
+	{value: ePlace.International, label: "Международный"},
 	{value: ePlace.Karakalpak, label: "Каракалпакстан"},
 	{value: ePlace.TashkentCity, label: "город Ташкент"},
 	{value: ePlace.Tashkent, label: "Ташкент"},
@@ -20,7 +20,7 @@ export const countryOptions = [
 ];
 
 export const countryOption = {
-	[ePlace.Intenational]: "Международный",
+	[ePlace.International]: "Международный",
 	[ePlace.Karakalpak]: "Каракалпакстан",
 	[ePlace.TashkentCity]: "город Ташкент",
 	[ePlace.Tashkent]: "Ташкент",

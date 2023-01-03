@@ -11,7 +11,7 @@ export class DepartureReportModel {
 	createdAt: Date;
 	updatedAt: Date;
 
-	place: Exclude<ePlace, ePlace.Intenational | ePlace.Other>;
+	place: Exclude<ePlace, ePlace.International | ePlace.Other>;
 	departures: number;
 	specialists: number;
 	medicalCheckup: number;
@@ -75,7 +75,7 @@ export class DepartureReportModel {
 
 export interface IReportDepartureCreateParams {
 	id?: number;
-	place: Exclude<ePlace, ePlace.Intenational | ePlace.Other>;
+	place: Exclude<ePlace, ePlace.International | ePlace.Other>;
 	departures: number;
 	specialists: number;
 	medicalCheckup: number;

@@ -28,7 +28,7 @@ export enum eTablePermission {
 }
 
 export enum ePlace {
-	Intenational = "Intenational",
+	International = "International",
 	Karakalpak = "Karakalpak",
 	Tashkent = "Tashkent",
 	Sirdarya = "Sirdarya",

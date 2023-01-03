@@ -38,10 +38,11 @@ const MediaPlaceReportUpdatePage = () => {
 			promise.then((res) => {
 				if (res.payload) {
 					const fields = res.payload as MediaPlaceReportModel;
-					console.log(fields.mediaParts);
+
 					reset({
-						mediaParts: fields.mediaParts?.map((p) => ({
+						mediaParts: fields.mediaParts?.map(({file, ...p}) => ({
 							...p,
+							fileId: file.id,
 							date: moment(p.date).format("yyyy-MM-DD") as unknown as Date,
 						})),
 					});
@@ -62,9 +63,12 @@ const MediaPlaceReportUpdatePage = () => {
 	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
 	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
-	const [deletingFilesIds, setDeletingFilesIds] = useState<number[]>([]);
+	const [deletingPartsIds, setDeletingPartsIds] = useState<number[]>([]);
 
-	const {register, control, handleSubmit, setValue, reset, getValues} = useForm<IReportMediaPlaceCreateParams>({
+	const {register, control, handleSubmit, setValue, reset, getValues} = useForm<{
+		mediaParts: {title: string; place: eMediaPlace; date: Date; fileId: number; id?: number}[];
+		note?: string;
+	}>({
 		defaultValues: {
 			mediaParts: [
 				{
@@ -85,12 +89,8 @@ const MediaPlaceReportUpdatePage = () => {
 			place: undefined as unknown as eMediaPlace,
 			title: undefined as unknown as string,
 			date: undefined as unknown as Date,
-			file: undefined as unknown as IFile,
+			fileId: undefined as unknown as number,
 		});
-	};
-
-	const onRemove = (index: number) => () => {
-		remove(index);
 	};
 
 	const onSelect = (index: number) => (option: unknown) => {
@@ -107,7 +107,10 @@ const MediaPlaceReportUpdatePage = () => {
 			files.forEach((f) => formData.append("files", f));
 
 			const action = await dispatch(
-				updateMediaPlaceReportThunk({payload: {id: +reportId, deletingFilesIds, body: fieldsArr}, formData}),
+				updateMediaPlaceReportThunk({
+					payload: {id: +reportId, deletingPartsIds, body: fieldsArr},
+					formData,
+				}),
 			);
 			const id = action.payload as number;
 
@@ -139,12 +142,17 @@ const MediaPlaceReportUpdatePage = () => {
 		setFiles((prev) => prev.filter((f, i) => i !== index));
 	};
 
-	const onFileDelete = (id: number) => async () => {
-		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+	const onRemove = (index: number, partId?: number) => () => {
+		if (partId) {
+			onFileDelete(getValues().mediaParts[index].fileId);
 
-		if (!deletingFilesIds.includes(id)) {
-			setDeletingFilesIds((prev) => [...prev, id]);
+			setDeletingPartsIds((prev) => [...prev, partId]);
 		}
+		remove(index);
+	};
+
+	const onFileDelete = (id: number) => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
 	};
 
 	const downloadFile =
@@ -155,20 +163,16 @@ const MediaPlaceReportUpdatePage = () => {
 
 	const renderReceivedFiles = () => {
 		return existingFiles?.map((f) => (
-			<div className="d-flex gap-0.5 w-max" key={f.id}>
-				<AppButton
-					variant="print"
-					size="lg"
-					onClick={downloadFile(f.url, f.name)}
-					className="text-center"
-					type="button"
-				>
-					{f.name}
-				</AppButton>
-				<AppButton onClick={onFileDelete(f.id)} variant="danger" size="square">
-					<TrashIcon width="24px" height="24px" />
-				</AppButton>
-			</div>
+			<AppButton
+				key={f.id}
+				variant="print"
+				size="lg"
+				onClick={downloadFile(f.url, f.name)}
+				className="text-center"
+				type="button"
+			>
+				{f.name}
+			</AppButton>
 		));
 	};
 
@@ -217,13 +221,20 @@ const MediaPlaceReportUpdatePage = () => {
 					</label>
 				</div>
 
-				<div className={styles.cardBodyLabel}>
-					{index === fields.length - 1 ? (
+				<div className={cn("flex-justify-center gap-0.5")}>
+					{index === fields.length - 1 && (
 						<AppButton onClick={onAppend} type="button" variant="dark" size="square" withIcon>
 							<PlusIcon width="24px" height="24px" />
 						</AppButton>
-					) : (
-						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
+					)}
+					{fields.length !== 1 && (
+						<AppButton
+							onClick={onRemove(index, getValues().mediaParts[index].id)}
+							type="button"
+							variant="danger"
+							size="square"
+							withIcon
+						>
 							<TrashIcon width="24px" height="24px" />
 						</AppButton>
 					)}

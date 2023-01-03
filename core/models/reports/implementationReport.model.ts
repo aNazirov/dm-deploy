@@ -35,7 +35,7 @@ export class ImplementationReportModel {
 
 export class ImplementationPartModel {
 	id: number;
-	place: Exclude<ePlace, ePlace.Intenational>;
+	place: Exclude<ePlace, ePlace.International>;
 	diagnosticMethodsRegion: number;
 	diagnosticMethodsDistrict: number;
 	treatmentsRegion: number;
@@ -53,7 +53,7 @@ export class ImplementationPartModel {
 
 export interface IReportImplementationPartCreateParams {
 	id?: number;
-	place: Exclude<ePlace, ePlace.Intenational>;
+	place: Exclude<ePlace, ePlace.International>;
 	diagnosticMethodsRegion: number;
 	diagnosticMethodsDistrict: number;
 	treatmentsRegion: number;

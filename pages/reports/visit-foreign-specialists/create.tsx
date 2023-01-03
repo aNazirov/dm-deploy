@@ -17,13 +17,8 @@ import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {
-	IAutoCompleteParams,
-	IAutoCompleteResult,
-	IReportVisitsOfForeignSpecialistsCreateParams,
-} from "../../../core/models";
+import {IReportVisitsOfForeignSpecialistsCreateParams} from "../../../core/models";
 import {createVisitForeignSpecialistsReportThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
-import {globalAutocompleteThunk} from "../../../core/store/global/global.thunks";
 
 const fieldOptions = {
 	required: true,

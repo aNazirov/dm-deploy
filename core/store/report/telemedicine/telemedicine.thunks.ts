@@ -21,6 +21,23 @@ export const createTelemedicineReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateTelemedicineReportThunk = createAsyncThunk(
+	"telemedicineReport/updateThunk",
+	async (
+		payload: {id: number; body: Partial<IReportTelemedicineCreateParams>; deletingPartsIds?: number[]},
+		thunkAPI,
+	) => {
+		payload.deletingPartsIds?.forEach((id) => ReportService.telemedicine.deletePart(id, thunkAPI.signal));
+		const result = await ReportService.telemedicine.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setTelemedicineReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getTelemedicineReportByIdThunk = createAsyncThunk(
 	"telemedicineReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +45,7 @@ export const getTelemedicineReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setTelemedicineReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

@@ -1,30 +1,30 @@
 import React, {useEffect, useState} from "react";
 import Head from "next/head";
-import cn from "classnames";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
 import styles from "../../../styles/reports.module.scss";
-import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
+import cn from "classnames";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
+import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
+import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
+import {ReactSelect} from "../../../components/External";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {ePlace, ImplementationReportModel, IReportImplementationCreateParams} from "../../../core/models";
+import {ePlace, IReportTelemedicineCreateParams, TelemedicineReportModel} from "../../../core/models";
 import {
-	getImplementationReportByIdThunk,
-	updateImplementationReportThunk,
-} from "../../../core/store/report/implementation/implementation-report.thunks";
-import {ReactSelect} from "../../../components/External";
+	getTelemedicineReportByIdThunk,
+	updateTelemedicineReportThunk,
+} from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {countryOptions} from "../../../core/models/appendix/countries";
-import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
-import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
-import {setImplementationReportByIdAction} from "../../../core/store/report/implementation/implementation-report.slices";
+import {setTelemedicineReportByIdAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
 
 const fieldOptions = {
 	required: true,
 	valueAsNumber: true,
 };
 
-const ImplementationReportUpdatePage = () => {
+const TelemedicineReportCreatePage = () => {
 	const router = useRouter();
 
 	const reportId = router.query["reportId"] as string;
@@ -35,21 +35,23 @@ const ImplementationReportUpdatePage = () => {
 
 	useEffect(() => {
 		if (reportId) {
-			const promise = dispatch(getImplementationReportByIdThunk(+reportId));
+			const promise = dispatch(getTelemedicineReportByIdThunk(+reportId));
 			promise.then((res) => {
 				if (res.payload) {
-					const fields = res.payload as ImplementationReportModel;
-					if (fields.implementationParts?.length) {
-						reset({implementationParts: fields.implementationParts});
+					const fields = res.payload as TelemedicineReportModel;
+					if (fields.telemedicineParts?.length) {
+						reset({telemedicineParts: fields.telemedicineParts});
 					} else {
 						reset({
-							implementationParts: [
+							telemedicineParts: [
 								{
-									diagnosticMethodsDistrict: undefined,
+									consultations: undefined,
 									place: undefined,
-									diagnosticMethodsRegion: undefined,
-									treatmentsDistrict: undefined,
-									treatmentsRegion: undefined,
+									symposiums: undefined,
+									seminars: undefined,
+									demonstrationOperations: undefined,
+									councils: undefined,
+									note: undefined,
 								},
 							],
 						});
@@ -59,25 +61,40 @@ const ImplementationReportUpdatePage = () => {
 
 			return () => {
 				promise.abort();
-				dispatch(setImplementationReportByIdAction(null));
+				dispatch(setTelemedicineReportByIdAction(null));
 			};
 		}
 	}, [reportId]);
 
-	const {register, control, handleSubmit, getValues, setValue, reset} = useForm<IReportImplementationCreateParams>();
+	const {register, control, handleSubmit, reset, getValues, setValue} = useForm<IReportTelemedicineCreateParams>({
+		defaultValues: {
+			telemedicineParts: [
+				{
+					consultations: undefined,
+					place: undefined,
+					demonstrationOperations: undefined,
+					seminars: undefined,
+					symposiums: undefined,
+					councils: undefined,
+				},
+			],
+		},
+	});
 
 	const {fields, append, remove} = useFieldArray({
 		control,
-		name: "implementationParts",
+		name: "telemedicineParts",
 	});
 
 	const onAppend = () => {
+		// TODO: set undefined
 		append({
-			diagnosticMethodsDistrict: undefined as unknown as number,
-			diagnosticMethodsRegion: undefined as unknown as number,
-			treatmentsDistrict: undefined as unknown as number,
-			treatmentsRegion: undefined as unknown as number,
-			place: undefined as unknown as Exclude<ePlace, ePlace.International>,
+			consultations: 0,
+			councils: 0,
+			demonstrationOperations: 0,
+			seminars: 0,
+			symposiums: 0,
+			place: ePlace.International,
 		});
 	};
 
@@ -89,30 +106,30 @@ const ImplementationReportUpdatePage = () => {
 	};
 
 	const onSelect = (index: number) => (option: unknown) => {
-		const field = option as {label: string; value: Exclude<ePlace, ePlace.International>};
-		setValue(`implementationParts.${index}.place`, field.value);
+		const field = option as {label: string; value: ePlace};
+		setValue(`telemedicineParts.${index}.place`, field.value);
 	};
 
-	const onSubmit = async (fieldsArr: IReportImplementationCreateParams) => {
-		const action = await dispatch(updateImplementationReportThunk({id: +reportId, body: fieldsArr, deletingPartsIds}));
+	const onSubmit = async (fieldsArr: IReportTelemedicineCreateParams) => {
+		const action = await dispatch(updateTelemedicineReportThunk({id: +reportId, deletingPartsIds, body: fieldsArr}));
 
-		const report = action.payload as ImplementationReportModel;
+		const id = action.payload as number;
 
-		if (report) {
-			void router.push(`/reports/implementation/${reportId}`);
+		if (id) {
+			void router.push(`/reports/telemedicine/${id}`);
 		}
 	};
 
 	const renderFieldRows = () => {
 		return fields.map((field, index) => (
 			<div className={cn("gap-1", styles.labelDeskGrid2)} key={field.id}>
-				<div className={cn("gap-1", styles.labelDeskGrid5)}>
+				<div className={cn("gap-1", styles.labelDeskGrid6)}>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
 							<ReactSelect
 								onChange={onSelect(index)}
 								defaultValue={countryOptions.filter(
-									(option) => option.value === getValues().implementationParts[index].place,
+									(option) => option.value === getValues().telemedicineParts[index].place,
 								)}
 								options={countryOptions.filter((_, i) => i !== 0)}
 								placeholder="Выберите учреждение"
@@ -125,7 +142,7 @@ const ImplementationReportUpdatePage = () => {
 								className="text-center"
 								type="number"
 								placeholder="-"
-								{...register(`implementationParts.${index}.diagnosticMethodsRegion`, fieldOptions)}
+								{...register(`telemedicineParts.${index}.consultations`, fieldOptions)}
 							/>
 						</div>
 					</label>
@@ -135,7 +152,7 @@ const ImplementationReportUpdatePage = () => {
 								className="text-center"
 								type="number"
 								placeholder="-"
-								{...register(`implementationParts.${index}.diagnosticMethodsDistrict`, fieldOptions)}
+								{...register(`telemedicineParts.${index}.councils`, fieldOptions)}
 							/>
 						</div>
 					</label>
@@ -145,7 +162,7 @@ const ImplementationReportUpdatePage = () => {
 								className="text-center"
 								type="number"
 								placeholder="-"
-								{...register(`implementationParts.${index}.treatmentsRegion`, fieldOptions)}
+								{...register(`telemedicineParts.${index}.demonstrationOperations`, fieldOptions)}
 							/>
 						</div>
 					</label>
@@ -155,7 +172,18 @@ const ImplementationReportUpdatePage = () => {
 								className="text-center"
 								type="number"
 								placeholder="-"
-								{...register(`implementationParts.${index}.treatmentsDistrict`, fieldOptions)}
+								{...register(`telemedicineParts.${index}.seminars`, fieldOptions)}
+							/>
+						</div>
+					</label>
+
+					<label className={styles.cardBodyLabel}>
+						<div className="w-100">
+							<AppInput
+								className="text-center"
+								type="number"
+								placeholder="-"
+								{...register(`telemedicineParts.${index}.symposiums`, fieldOptions)}
 							/>
 						</div>
 					</label>
@@ -169,7 +197,7 @@ const ImplementationReportUpdatePage = () => {
 					)}
 					{fields.length !== 1 && (
 						<AppButton
-							onClick={onRemove(index, getValues().implementationParts[index].id)}
+							onClick={onRemove(index, getValues().telemedicineParts[index].id)}
 							type="button"
 							variant="danger"
 							size="square"
@@ -186,15 +214,15 @@ const ImplementationReportUpdatePage = () => {
 	return (
 		<>
 			<Head>
-				<title>Внедрения</title>
+				<title>Телемедицина</title>
 				<meta name="description" content="Generated by create next app" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<h1 className="h1 text-center">Внедрения</h1>
+
+			<h1 className="h1 text-center">Телемедицина</h1>
 
 			<AppDivider className="my-1.25" />
 
-			{/*TODO: make a filter component*/}
 			<div className={styles.filters}>
 				<label className={styles.filterLabel}>
 					<span className="text-main-bold">Дата</span>
@@ -213,21 +241,24 @@ const ImplementationReportUpdatePage = () => {
 				<AppCard.Header>Основные данные</AppCard.Header>
 				<AppCard.Body className="flex-col">
 					<div className={cn("gap-1 mb-0.5", styles.labelDeskGrid2)}>
-						<div className={cn("gap-1", styles.labelDeskGrid5)}>
+						<div className={cn("gap-1", styles.labelDeskGrid6)}>
 							<label className={styles.cardBodyLabel}>
-								<span className="text-main-bold">Место внедрения:</span>
+								<span className="text-main-bold">Учреждение с кем была проведена телемедицина:</span>
 							</label>
 							<label className={styles.cardBodyLabel}>
-								<span className="text-main-bold">Методы диагностики (На уровень области):</span>
+								<span className="text-main-bold">Количество консультаций:</span>
 							</label>
 							<label className={styles.cardBodyLabel}>
-								<span className="text-main-bold">Методы диагностики (На уровень района):</span>
+								<span className="text-main-bold">Количество консилиумов:</span>
 							</label>
 							<label className={styles.cardBodyLabel}>
-								<span className="text-main-bold">Методы лечения (На уровень области):</span>
+								<span className="text-main-bold">Количество показательных операций:</span>
 							</label>
 							<label className={styles.cardBodyLabel}>
-								<span className="text-main-bold">Методы лечения (На уровень района):</span>
+								<span className="text-main-bold">Количество семинаров, мастер классов и т.п.:</span>
+							</label>
+							<label className={styles.cardBodyLabel}>
+								<span className="text-main-bold">Количество симпозиумов, конференций и т.п.:</span>
 							</label>
 						</div>
 
@@ -241,7 +272,7 @@ const ImplementationReportUpdatePage = () => {
 			</AppCard>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href={`/reports/implementation/${reportId}`} size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/telemedicine/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
@@ -253,4 +284,5 @@ const ImplementationReportUpdatePage = () => {
 		</>
 	);
 };
-export default ImplementationReportUpdatePage;
+
+export default TelemedicineReportCreatePage;

@@ -22,6 +22,7 @@ import {
 import {
 	changeStatusOfTelemedicineReportThunk,
 	deleteTelemedicineReportThunk,
+	updateTelemedicineReportThunk,
 } from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {
 	changeStatusOfTrainingReportThunk,
@@ -35,14 +36,17 @@ import {useRouter} from "next/router";
 import {
 	changeStatusOfScientificWorksReportThunk,
 	deleteScientificWorksReportThunk,
+	updateScientificWorksReportThunk,
 } from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
 import {
 	changeStatusOfScientificEventsReportThunk,
 	deleteScientificEventsReportThunk,
+	updateScientificEventsReportThunk,
 } from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
 import {
 	changeStatusOfScienceReportThunk,
 	deleteScienceReportThunk,
+	updateScienceReportThunk,
 } from "../../../core/store/report/science/science.thunks";
 import {
 	changeStatusOfInsuranceReportThunk,
@@ -95,24 +99,24 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 				case eTable.MediaReport:
 					dispatch(updateMediaPlaceReportThunk({payload: {id: +reportId, body: {note: debouncedComment}}}));
 					break;
-				/*case eTable.TelemedicineReport:
-				dispatch(changeStatusOfTelemedicineReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;
-			case eTable.TrainingReport:
+				case eTable.TelemedicineReport:
+					dispatch(updateTelemedicineReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				/*case eTable.TrainingReport:
 				dispatch(changeStatusOfTrainingReportThunk({id: +reportId, statusId: statusTypeId}));
 				break;
 			case eTable.VisitsOfForeignSpecialistsReport:
 				dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;
-			case eTable.ScientificEventsReport:
-				dispatch(changeStatusOfScientificEventsReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;
-			case eTable.ScientificWorksReport:
-				dispatch(changeStatusOfScientificWorksReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;
-			case eTable.ScienceReport:
-				dispatch(changeStatusOfScienceReportThunk({id: +reportId, statusId: statusTypeId}));
 				break;*/
+				case eTable.ScientificEventsReport:
+					dispatch(updateScientificEventsReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.ScientificWorksReport:
+					dispatch(updateScientificWorksReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.ScienceReport:
+					dispatch(updateScienceReportThunk({payload: {id: +reportId, body: {note: debouncedComment}}}));
+					break;
 				case eTable.InsuranceReport:
 					dispatch(updateInsuranceReportThunk({id: +reportId, body: {note: debouncedComment}}));
 					break;

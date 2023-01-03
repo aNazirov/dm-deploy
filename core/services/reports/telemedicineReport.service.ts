@@ -52,4 +52,9 @@ export const telemedicineReportService = {
 			return res.data;
 		});
 	},
+	deletePart(id: number, signal?: AbortSignal) {
+		return api
+			.delete(`${APIReportUrl.telemedicine}/part/${id}`, {signal}, {pending: false, success: false})
+			.then((res) => res.data);
+	},
 };

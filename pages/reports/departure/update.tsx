@@ -58,7 +58,7 @@ const DepartureReportUpdatePage = () => {
 	};
 
 	const onSelect = (option: unknown) => {
-		const field = option as {value: Exclude<ePlace, ePlace.Intenational | ePlace.Other>};
+		const field = option as {value: Exclude<ePlace, ePlace.International | ePlace.Other>};
 		setValue("place", field.value);
 	};
 	return (
@@ -100,7 +100,7 @@ const DepartureReportUpdatePage = () => {
 										className="text-center w-10"
 										onChange={onSelect}
 										defaultValue={countryOptions.filter((option) => option.value === getValues().place)}
-										options={countryOptions.filter((c) => ![ePlace.Other, ePlace.Intenational].includes(c.value))}
+										options={countryOptions.filter((c) => ![ePlace.Other, ePlace.International].includes(c.value))}
 										placeholder="Выберите ..."
 									/>
 								)}

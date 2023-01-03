@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider, AppInput, AppTable} from "../../../components/Main";
+import {AppButton, AppCard, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import styles from "../../../styles/reports.module.scss";
 import {useRouter} from "next/router";
@@ -11,7 +11,6 @@ import Moment from "react-moment";
 import {eTable} from "../../../core/models";
 import {ReportPageUpdate} from "../../../components/Layout";
 import {scienceWorkType} from "../../../core/models/appendix/scienceTypes";
-import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {FileService} from "../../../core/services";
 
 const ScienceReportInfoPage = () => {
@@ -87,22 +86,15 @@ const ScienceReportInfoPage = () => {
 											<Moment format="DD.MM.YYYY">{part.endDate}</Moment>
 										</td>
 										<td>
-											<label className={styles.cardBodyLabel}>
-												<div className="d-flex gap-0.5 w-max" key={part.id}>
-													<AppButton
-														variant="print"
-														size="lg"
-														onClick={downloadFile(part.file.url, part.file.name)}
-														className="text-center"
-														type="button"
-													>
-														{part.file.name}
-													</AppButton>
-													<AppButton variant="danger" size="square">
-														<TrashIcon width="24px" height="24px" />
-													</AppButton>
-												</div>
-											</label>
+											<AppButton
+												variant="print"
+												size="lg"
+												onClick={downloadFile(part.file.url, part.file.name)}
+												className="text-center w-100"
+												type="button"
+											>
+												{part.file.name}
+											</AppButton>
 										</td>
 									</tr>
 
@@ -117,11 +109,15 @@ const ScienceReportInfoPage = () => {
 												<Moment format="DD.MM.YYYY">{nextPart.endDate}</Moment>
 											</td>
 											<td>
-												<label className={styles.cardBodyLabel}>
-													<a href={nextPart.file.url} download>
-														<AppInput className="text-center " type="file" placeholder={`${nextPart.file.url}`} />
-													</a>
-												</label>
+												<AppButton
+													variant="print"
+													size="lg"
+													onClick={downloadFile(nextPart.file.url, nextPart.file.name)}
+													className="text-center w-100"
+													type="button"
+												>
+													{part.file.name}
+												</AppButton>
 											</td>
 										</tr>
 									)}

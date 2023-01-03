@@ -21,6 +21,19 @@ export const createScientificWorksReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateScientificWorksReportThunk = createAsyncThunk(
+	"scientificWorksReport/updateThunk",
+	async (payload: {id: number; body: Partial<IReportCreateScientificWorksParams>}, thunkAPI) => {
+		const result = await ReportService.scientificWorks.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setScientificWorksReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getScientificWorksReportByIdThunk = createAsyncThunk(
 	"scientificWorksReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -28,6 +41,7 @@ export const getScientificWorksReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setScientificWorksReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

@@ -50,7 +50,7 @@ const ImplementationReportCreatePage = () => {
 			diagnosticMethodsRegion: undefined as unknown as number,
 			treatmentsDistrict: undefined as unknown as number,
 			treatmentsRegion: undefined as unknown as number,
-			place: undefined as unknown as Exclude<ePlace, ePlace.Intenational>,
+			place: undefined as unknown as Exclude<ePlace, ePlace.International>,
 		});
 	};
 
@@ -59,7 +59,7 @@ const ImplementationReportCreatePage = () => {
 	};
 
 	const onSelect = (index: number) => (option: unknown) => {
-		const field = option as {label: string; value: Exclude<ePlace, ePlace.Intenational>};
+		const field = option as {label: string; value: Exclude<ePlace, ePlace.International>};
 		setValue(`implementationParts.${index}.place`, field.value);
 	};
 

@@ -2,7 +2,6 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {eReportStatusType, FileModel, IReportGetParams, IReportMediaPlaceCreateParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
-import {deleteFileThunk} from "../../file/file.thunks";
 import {
 	deleteMediaPlaceReportAction,
 	setAllMediaPlaceReportsAction,
@@ -39,27 +38,26 @@ export const updateMediaPlaceReportThunk = createAsyncThunk(
 				id: number;
 				body: Partial<IReportMediaPlaceCreateParams>;
 				deletingPartsIds?: number[];
-				deletingFilesIds?: number[];
 			};
 			formData?: FormData;
 		},
 		thunkAPI,
 	) => {
-		const files = payload.body.mediaParts?.filter((p) => p.file).map((p) => p.file) ?? [];
+		const files: FileModel[] = [];
 
-		payload.deletingFilesIds?.forEach((id) => thunkAPI.dispatch(deleteFileThunk(id)));
-		payload.deletingPartsIds?.forEach((id) => ReportService.implementation.deletePart(id, thunkAPI.signal));
+		const newCreatingPartsWithoutFile = payload.body.mediaParts?.filter((p) => !p.fileId) ?? [];
+		const oldPartsWithFileId = payload.body.mediaParts?.filter((p) => p.fileId) ?? [];
+
+		payload.deletingPartsIds?.forEach((id) => ReportService.mediaPlace.deletePart(id, thunkAPI.signal));
 
 		if (formData) {
 			files.push(...(await FileService.post(formData)));
 		}
-		console.log(payload.body.mediaParts);
-		console.log(files);
-		const reportsWithFile = payload.body.mediaParts?.map((v, i) => ({...v, fileId: files[i].id}));
-		console.log(formData);
+
+		const newPartsWithFile = newCreatingPartsWithoutFile.map((v, i) => ({...v, fileId: files[i].id}));
 
 		const result = await ReportService.mediaPlace.update(
-			{id: payload.id, body: {...payload.body, mediaParts: reportsWithFile ?? []}},
+			{id: payload.id, body: {...payload.body, mediaParts: [...newPartsWithFile, ...oldPartsWithFileId]}},
 			thunkAPI.signal,
 		);
 

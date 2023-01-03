@@ -18,12 +18,7 @@ const LoginPage = () => {
 
 	const dispatch = useAppDispatch();
 
-	const {register, handleSubmit} = useForm<ILogin>({
-		defaultValues: {
-			phone: "+998908380334",
-			password: "k5Hx1Tl9e1G$",
-		},
-	});
+	const {register, handleSubmit} = useForm<ILogin>();
 
 	const onSubmit = async (fields: ILogin) => {
 		const action = await dispatch(userLoginThunk(fields));
