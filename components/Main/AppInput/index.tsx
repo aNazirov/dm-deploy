@@ -14,10 +14,13 @@ const Input = ({Icon, className, bg, dimension, ...props}: AppInputProps, ref: F
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		props.onChange?.(e);
-		const num = +e.target.value;
 
-		if (isNaN(num) || num < 0) {
-			e.target.value = "0";
+		if (props.type === "number") {
+			const num = +e.target.value;
+
+			if (isNaN(num) || num < 0) {
+				e.target.value = "0";
+			}
 		}
 	};
 
