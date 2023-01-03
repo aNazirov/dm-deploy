@@ -11,7 +11,7 @@ import {ReactSelect} from "../../../components/External";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {eMediaPlace, IFile, IReportMediaPlaceCreateParams} from "../../../core/models";
+import {eMediaPlace, IReportMediaPlaceCreateParams} from "../../../core/models";
 import {createMediaPlaceReportThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
 import {placeOptions} from "../../../core/models/appendix/places";
 
@@ -48,7 +48,7 @@ const MediaPlaceReportCreatePage = () => {
 			place: undefined as unknown as eMediaPlace,
 			title: undefined as unknown as string,
 			date: undefined as unknown as Date,
-			file: undefined as unknown as IFile,
+			fileId: undefined as unknown as number,
 		});
 	};
 
@@ -140,12 +140,13 @@ const MediaPlaceReportCreatePage = () => {
 					</label>
 				</div>
 
-				<div className={styles.cardBodyLabel}>
-					{index === fields.length - 1 ? (
+				<div className={cn("flex-justify-center gap-0.5")}>
+					{index === fields.length - 1 && (
 						<AppButton onClick={onAppend} type="button" variant="dark" size="square" withIcon>
 							<PlusIcon width="24px" height="24px" />
 						</AppButton>
-					) : (
+					)}
+					{fields.length !== 1 && (
 						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
 							<TrashIcon width="24px" height="24px" />
 						</AppButton>
