@@ -37,7 +37,9 @@ export const UserService = {
 	},
 
 	create(params: IUserCreateParams, signal?: AbortSignal) {
-		return api.post<UserModel>(APIUserUrl.user, params, {signal}).then((res) => new UserModel(res.data));
+		return api
+			.post<UserModel>(APIUserUrl.user, {...params, positionId: 1}, {signal})
+			.then((res) => new UserModel(res.data));
 	},
 
 	update(params: Partial<IUserCreateParams>, signal?: AbortSignal) {
