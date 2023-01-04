@@ -77,7 +77,7 @@ const CreateUserPage = () => {
 		}
 	};
 
-	const onSingleSelect = (key: "specialityId" | "organizationId") => (option: unknown) => {
+	const onSingleSelect = (key: "specialityId" | "organizationId" | "positionId") => (option: unknown) => {
 		const field = option as {label: string; value: string};
 		setValue(key, +field.value);
 	};
@@ -115,7 +115,7 @@ const CreateUserPage = () => {
 		console.log(fields);
 		return fields.map((field, index) => (
 			<div className={cn("gap-1", styles.labelDeskGrid2)} key={field.id}>
-				<div className={cn("gap-1", styles.labelDeskGrid3)}>
+				<div className={cn("gap-1", styles.labelDeskGridDivided2)}>
 					<label>
 						<div className="w-100">
 							<ReactSelect
@@ -139,9 +139,9 @@ const CreateUserPage = () => {
 							/>
 						</div>
 					</label>
-					<label>
+					{/*<label>
 						<div className="w-100">
-							{/*scope only for same level (1,2,3,4)*/}
+							scope only for same level (1,2,3,4)
 							<ReactSelect
 								menuPlacement="auto"
 								onChange={onSelect("scope", index)}
@@ -149,7 +149,7 @@ const CreateUserPage = () => {
 								placeholder="Уровень"
 							/>
 						</div>
-					</label>
+					</label>*/}
 				</div>
 
 				<div className={cn("flex-justify-center gap-0.5")}>
@@ -206,11 +206,12 @@ const CreateUserPage = () => {
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Должность:</span>
-								<AppInput
-									placeholder="Должность"
-									className="w-100"
-									type="text"
-									{...register("positionId", fieldOptions)}
+								<ReactSelect
+									onChange={onSingleSelect("positionId")}
+									options={[
+										{label: "Организация", value: 1},
+										{label: "Пользователь (сотрудник)", value: 2},
+									]}
 								/>
 							</label>
 							<label>
@@ -221,10 +222,10 @@ const CreateUserPage = () => {
 								<span className="text-main-bold mb-0.5 d-inline-block">Номер телефона:</span>
 								<AppInput placeholder="Телефон" className="w-100" type="tel" {...register("phone", fieldOptions)} />
 							</label>
-							<label style={{gridColumn: "2/4"}}>
+							{/*	<label style={{gridColumn: "2/4"}}>
 								<span className="text-main-bold mb-0.5 d-inline-block">Название организации:</span>
 								<AppOrganizationSelect onChange={onSingleSelect("organizationId")} />
-							</label>
+							</label>*/}
 						</div>
 					</AppCard.Body>
 				</AppCard>

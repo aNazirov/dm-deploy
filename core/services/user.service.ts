@@ -38,7 +38,15 @@ export const UserService = {
 
 	create(params: IUserCreateParams, signal?: AbortSignal) {
 		return api
-			.post<UserModel>(APIUserUrl.user, {...params, positionId: 1}, {signal})
+			.post<UserModel>(
+				APIUserUrl.user,
+				{
+					...params,
+					organizationId: 1,
+					permissions: params.permissions.map((p) => ({...p, scope: "Level_4"})),
+				},
+				{signal},
+			)
 			.then((res) => new UserModel(res.data));
 	},
 
