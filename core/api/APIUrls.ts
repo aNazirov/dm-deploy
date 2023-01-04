@@ -54,11 +54,13 @@ export const APIAuthUrl = {
 };
 
 export const APIUserUrl = {
+	user: "user",
 	token: "user/token",
 };
 
 export const APIGlobalUrl = {
 	autoComplete: "global/autocomplete",
+	uncheckedReportsCount: "global/count-of-unchecked-reports",
 };
 
 const url = process.env.NEXT_PUBLIC_FILE_API_URL;

@@ -6,7 +6,7 @@ import {setOfReportsService} from "../../services";
 
 export const getSetOfReportsThunks = createAsyncThunk(
 	"setOfReports/getThunk",
-	async ({params, url}: {params: ISetOfReportsParams; url: keyof typeof APISetOfReportsUrl}, thunkAPI) => {
+	async ({params, url}: {params: ISetOfReportsParams; url: keyof typeof APISetOfReportsUrl}) => {
 		return await setOfReportsService.get({url, params});
 	},
 );

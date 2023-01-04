@@ -24,6 +24,17 @@
 	color: var(--muted-text-color);
 }
 
+.text-danger {
+	color: var(--status-hover-reject-color);
+}
+
+.subtitle {
+	font-weight: 700;
+	font-size: 1.125rem;
+	line-height: 140.9%;
+	letter-spacing: -0.03em;
+}
+
 .h1 {
 	font-size: 1.875rem;
 	font-weight: 700;

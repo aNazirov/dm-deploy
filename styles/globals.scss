@@ -130,6 +130,10 @@ svg {
 	color: var(--main-button-color);
 }
 
+.d-inline-block {
+	display: inline-block;
+}
+
 // flex
 .d-flex {
 	display: flex;
@@ -156,7 +160,7 @@ svg {
 	align-items: center;
 }
 
-.flex-wrap{
+.flex-wrap {
 	flex-wrap: wrap;
 }
 
@@ -217,6 +221,10 @@ svg {
 	text-align: center;
 }
 
+.text-start {
+	text-align: start;
+}
+
 // text format
 .whitespace-no-wrap {
 	white-space: nowrap;
@@ -229,6 +237,10 @@ svg {
 }
 
 // sizes
+.h-auto {
+	height: auto;
+}
+
 .h-100 {
 	height: 100%;
 }

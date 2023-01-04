@@ -17,7 +17,7 @@ import {useAppSelector} from "../../../core/hooks";
 type SidebarProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Sidebar = ({className}: SidebarProps) => {
-	const permissions = useAppSelector(({user}) => user.user?.permissions);
+	const permissions = useAppSelector(({user}) => user.current?.permissions);
 	// react hooks
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -42,6 +42,21 @@ export const Sidebar = ({className}: SidebarProps) => {
 		return current?.permissions.includes(eTablePermission.SetOfReports);
 	});
 
+	const filteredUsersLinks = usersLinks.filter((link) => {
+		const current = permissions?.find((p) => p.table === link.table);
+		return current?.permissions.includes(eTablePermission.Read);
+	});
+
+	const renderUsersLinks = () =>
+		filteredUsersLinks.map((link, i) => (
+			<li key={i}>
+				<Link href={link.url} className={cn("rounded w-100", styles.asideLink)}>
+					<ListIcon width="24px" height="24px" className="main-btn-text-color" />
+					<span>{link.title}</span>
+				</Link>
+			</li>
+		));
+
 	return (
 		<aside className={cn(styles.aside, className, {[styles.collapsed]: isCollapsed})}>
 			<div className={cn("rounded", styles.asideListWrapper)}>
@@ -58,6 +73,7 @@ export const Sidebar = ({className}: SidebarProps) => {
 					{filteredSetOfReportsLinks.length > 0 ? (
 						<CollapsableList linksList={filteredSetOfReportsLinks} title="Свод отчётов" />
 					) : null}
+					{filteredUsersLinks.length > 0 ? renderUsersLinks() : null}
 				</ul>
 			</div>
 			<AppButton onClick={onSidebarCollapse} className={cn("flex-center mt-auto", styles.collapseBtn)}>
@@ -219,4 +235,12 @@ const setOfReportsLinks = [
 	{title: "Внедрения", url: "/set-of-reports/implementation", table: eTable.ImplementationReport},
 	{title: "Обращение физических и юридических лиц", url: "/set-of-reports/appeals", table: eTable.AppealsReport},
 	{title: "Проделанная работа в регионах", url: "/set-of-reports/departure", table: eTable.DepartureReport},
+];
+
+const usersLinks = [
+	{
+		title: "Пользователи",
+		url: "/users",
+		table: eTable.User,
+	},
 ];

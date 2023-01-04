@@ -10,20 +10,20 @@ import {AppButton, AppDropdown, ThemeButton} from "../../Main";
 
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {autoLoginThunk, userLogoutThunk} from "../../../core/store/user/user.thunks";
-import {setUserAction} from "../../../core/store/user/user.slices";
+import {setCurrentUserAction} from "../../../core/store/user/user.slices";
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Header = ({className}: HeaderProps) => {
 	const dispatch = useAppDispatch();
-	const user = useAppSelector(({user}) => user.user);
+	const user = useAppSelector(({user}) => user.current);
 
 	useEffect(() => {
 		const promises = [dispatch(autoLoginThunk())];
 
 		return () => {
 			promises.forEach((p) => p.abort());
-			dispatch(setUserAction(null));
+			dispatch(setCurrentUserAction(null));
 		};
 	}, []);
 

@@ -5,25 +5,32 @@ import ArrowToPrevIcon from "../../../assets/images/icons/filled/arrows/arrow-to
 import ChevronPrevIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import ChevronNextIcon from "../../../assets/images/icons/filled/arrows/chevron-right.svg";
 import ArrowToNextIcon from "../../../assets/images/icons/filled/arrows/arrow-to-next.svg";
+import cn from "classnames";
 
 interface IProps {
 	cb?: (params: {skip: number; take: number}) => void;
 	totalCount?: number;
+	take?: number;
+	skip?: number;
 }
 
-export const AppPagination = ({cb, totalCount = 0}: IProps) => {
-	const [pagination, setPagination] = useState({skip: 0, take: 20});
+export const AppPagination = ({cb, take = 20, skip = 0, totalCount = 0}: IProps) => {
+	const [pagination, setPagination] = useState({skip, take});
 
 	const onTake = (option: unknown) => {
 		const field = option as {label: string; value: number};
-		setPagination((prev) => ({...prev, take: field.value}));
-		cb?.({...pagination, take: field.value});
+		setPagination((prev) => ({...prev, take: field.value, skip: 0}));
+		cb?.({...pagination, take: field.value, skip: 0});
 	};
 
-	const onSkip = (skip: number) => () => {
-		setPagination((prev) => ({...prev, skip}));
-		cb?.({...pagination, skip});
-	};
+	const onSkip =
+		(skip = 0) =>
+		() => {
+			const skipVal = skip < 0 ? 0 : skip;
+
+			setPagination((prev) => ({...prev, skip: skipVal}));
+			cb?.({...pagination, skip: skipVal});
+		};
 
 	return (
 		<div className="flex-justify-between">
@@ -38,19 +45,29 @@ export const AppPagination = ({cb, totalCount = 0}: IProps) => {
 			</div>
 
 			<div className="flex-center gap-0.25">
-				<AppButton size="square" variant="primary-outline">
+				<AppButton onClick={onSkip(0)} size="square" variant="primary-outline">
 					<ArrowToPrevIcon width="16px" height="16px" className="main-btn-text-color" />
 				</AppButton>
-				<AppButton size="square" variant="primary-outline">
+				<AppButton onClick={onSkip(pagination.skip - pagination.take)} size="square" variant="primary-outline">
 					<ChevronPrevIcon width="16px" height="16px" className="main-btn-text-color" />
 				</AppButton>
-				<AppButton onClick={onSkip(1)} className="active" size="square" variant="primary-outline">
-					<span>1</span>
-				</AppButton>
-				<AppButton size="square" variant="primary-outline">
+				{Array.from({length: Math.ceil(totalCount / pagination.take)}).map((b, i) => (
+					<AppButton
+						className={cn({
+							active: Math.ceil(pagination.skip / pagination.take) === i,
+						})}
+						size="square"
+						variant="primary-outline"
+						key={`pagination_${i}`}
+						onClick={onSkip(i * pagination.take)}
+					>
+						<span>{i + 1}</span>
+					</AppButton>
+				))}
+				<AppButton onClick={onSkip(pagination.skip + pagination.take)} size="square" variant="primary-outline">
 					<ChevronNextIcon width="16px" height="16px" className="main-btn-text-color" />
 				</AppButton>
-				<AppButton size="square" variant="primary-outline">
+				<AppButton onClick={onSkip(Math.ceil(totalCount / pagination.take))} size="square" variant="primary-outline">
 					<ArrowToNextIcon width="16px" height="16px" className="main-btn-text-color" />
 				</AppButton>
 			</div>

@@ -119,6 +119,11 @@
 	grid-template-columns: 1fr 5.5rem;
 }
 
+.labelDeskGridDivided2{
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}
+
 .labelDeskGrid3 {
 	align-items: center;
 	display: grid;

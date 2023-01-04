@@ -10,11 +10,22 @@ interface ReactSelectProps extends Props {
 	dimension?: "sm" | "lg";
 	className?: string;
 	isAsync?: boolean;
+	autoHeight?: boolean;
 	searchOptions?: (params: string) => Promise<IAutoCompleteResult["hits"] | void>;
 }
 
 const MySelect = (
-	{bg, dimension, options, className, styles: reactStyles, searchOptions, isAsync, ...props}: ReactSelectProps,
+	{
+		bg,
+		dimension,
+		options,
+		className,
+		styles: reactStyles,
+		searchOptions,
+		isAsync,
+		autoHeight,
+		...props
+	}: ReactSelectProps,
 	ref: any,
 ) => {
 	const id = useId();
@@ -42,6 +53,7 @@ const MySelect = (
 			className={cn("text-main-regular", styles.mySelect, {
 				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
 				...(bg ? {[styles[bg]]: bg} : {}),
+				[styles.autoHeight]: autoHeight,
 				[`${className}`]: className,
 			})}
 			styles={{
@@ -60,6 +72,7 @@ const MySelect = (
 			className={cn("text-main-regular", styles.mySelect, {
 				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
 				...(bg ? {[styles[bg]]: bg} : {}),
+				[styles.autoHeight]: autoHeight,
 				[`${className}`]: className,
 			})}
 			styles={{

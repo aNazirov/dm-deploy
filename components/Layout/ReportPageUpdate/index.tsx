@@ -79,8 +79,8 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportStatusId, .
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
-	const user = useAppSelector(({user}) => user.user);
-	const permissions = useAppSelector(({user}) => user.user?.permissions);
+	const user = useAppSelector(({user}) => user.current);
+	const permissions = useAppSelector(({user}) => user.current?.permissions);
 
 	const [comment, setComment] = useState("");
 

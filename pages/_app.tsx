@@ -35,7 +35,7 @@ const App = ({Component, ...rest}: AppProps) => {
 			) : (
 				<div className={styles.layout}>
 					<Header className={styles.header} />
-					{currentPath.includes("reports") && <Sidebar className={styles.sidebar} />}
+					{(currentPath.includes("reports") || currentPath.includes("users")) && <Sidebar className={styles.sidebar} />}
 					<main className={styles.main}>
 						<Component {...props.pageProps} />
 					</main>

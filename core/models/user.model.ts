@@ -6,6 +6,13 @@ export enum eRoleType {
 	User,
 }
 
+export enum eScope {
+	Level_1 = "Level_1",
+	Level_2 = "Level_2",
+	Level_3 = "Level_3",
+	Level_4 = "Level_4",
+}
+
 export interface IContact {
 	phone: string;
 }
@@ -32,6 +39,7 @@ export class UserModel {
 	organization: {id: number; title: ITranslate};
 	permissions?: PermissionModel[];
 	contact: IContact;
+	birthDate?: Date;
 	// role: RoleModel;
 	speciality: ISpeciality;
 	position: IPosition;
@@ -53,6 +61,10 @@ export class UserModel {
 			this.permissions = user.permissions.map((p) => new PermissionModel(p));
 		}
 
+		if (user.birthDate) {
+			this.birthDate = new Date(user.birthDate);
+		}
+
 		if (user.firstName) this.firstName = user.firstName;
 		if (user.lastName) this.lastName = user.lastName;
 		if (user.secondName) this.secondName = user.secondName;
@@ -72,12 +84,19 @@ export class RoleModel {
 }
 
 export class PermissionModel {
+	id?: number;
 	table: eTable;
 	permissions: eTablePermission[];
+	scope: eScope;
 
 	constructor(permission: PermissionModel) {
 		this.table = permission.table;
 		this.permissions = permission.permissions;
+		this.scope = permission.scope;
+
+		if (permission.id) {
+			this.id = permission.id;
+		}
 	}
 }
 
@@ -89,4 +108,23 @@ export interface ISpeciality {
 export interface IPosition {
 	id: number;
 	title: ITranslate;
+}
+
+export interface IUserCreateParams {
+	firstName: string;
+	lastName: string;
+	secondName: string;
+	phone: string;
+	organizationId?: number;
+	specialityId: number;
+	positionId: number;
+	birthDate: string;
+	password: string;
+	permissions: PermissionModel[];
+}
+
+export interface IUserFilterParams {
+	skip: number;
+	take: number;
+	search?: string;
 }

@@ -1,8 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {ILogin} from "../../models";
+import {ILogin, IUserCreateParams, IUserFilterParams} from "../../models";
 import {UserService} from "../../services";
-import {setUserAction} from "./user.slices";
+import {setAllUsersAction, setCurrentUserAction, setUserToListAction} from "./user.slices";
 
 export const userLoginThunk = createAsyncThunk(
 	"user/loginThunk",
@@ -10,7 +10,7 @@ export const userLoginThunk = createAsyncThunk(
 		const result = await UserService.login(payload, thunkAPI.signal);
 
 		if (result) {
-			thunkAPI.dispatch(setUserAction(result));
+			thunkAPI.dispatch(setCurrentUserAction(result));
 			return result;
 		}
 	},
@@ -32,14 +32,77 @@ export const autoLoginThunk = createAsyncThunk(
 		const token = localStorage.getItem("jwt");
 
 		if (token) {
-			const data = await UserService.getByToken(thunkAPI.signal);
+			const result = await UserService.getByToken(thunkAPI.signal);
 
-			if (data) {
-				thunkAPI.dispatch(setUserAction(data.user));
+			if (result) {
+				thunkAPI.dispatch(setCurrentUserAction(result.user));
 			}
 		}
 	},
 	{
 		dispatchConditionRejection: true,
 	},
+);
+
+export const createUserThunk = createAsyncThunk(
+	"user/createThunk",
+	async (payload: IUserCreateParams, thunkAPI) => {
+		const result = await UserService.create(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setUserToListAction(result));
+		}
+	},
+	{
+		dispatchConditionRejection: true,
+	},
+);
+
+export const updateUserThunk = createAsyncThunk(
+	"user/updateThunk",
+	async (payload: Partial<IUserCreateParams>, thunkAPI) => {
+		const result = await UserService.update(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setUserToListAction(result));
+		}
+	},
+	{
+		dispatchConditionRejection: true,
+	},
+);
+
+export const deleteUserThunk = createAsyncThunk(
+	"user/deleteThunk",
+	async (payload: number, thunkAPI) => {
+		return await UserService.delete(payload, thunkAPI.signal);
+	},
+	{
+		dispatchConditionRejection: true,
+	},
+);
+
+export const getAllUsersThunk = createAsyncThunk(
+	"user/getUsersThunk",
+	async (params: IUserFilterParams | undefined, thunkAPI) => {
+		const result = await UserService.getAll(params, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(setAllUsersAction({list: result.data, count: result.count}));
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
+export const getUsersByIdThunk = createAsyncThunk(
+	"user/getUserByIdThunk",
+	async (payload: number, thunkAPI) => {
+		const result = await UserService.getById(payload, thunkAPI.signal);
+
+		if (result) {
+			// thunkAPI.dispatch(setUserToListAction(result));
+			return result;
+		}
+	},
+	{dispatchConditionRejection: true},
 );

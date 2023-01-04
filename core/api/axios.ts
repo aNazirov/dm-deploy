@@ -43,8 +43,8 @@ class Api {
 		message?: {pending: string | false; success: string | false},
 	): Promise<R> {
 		return Toast.promise(this.instance.delete(url, config), {
-			pending: message?.pending ?? "Start deleting ...",
-			success: message?.success ?? "Deleted",
+			pending: message?.pending ?? "Удаление...",
+			success: message?.success ?? "Удалено.",
 		});
 	}
 }

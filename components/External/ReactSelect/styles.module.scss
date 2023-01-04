@@ -1,8 +1,10 @@
 .mySelect {
-	:global(.my__control) {
-		border: 1px solid var(--table-border-color);
-		border-radius: var(--rounded);
-		height: 2.5rem;
+	&:not(&.autoHeight) {
+		:global(.my__control) {
+			border: 1px solid var(--table-border-color);
+			border-radius: var(--rounded);
+			height: 2.5rem;
+		}
 	}
 
 	&::placeholder {

@@ -12,7 +12,7 @@ interface TablePageWrapperProps extends DetailedHTMLProps<HTMLAttributes<HTMLDiv
 	table: eTable;
 }
 export const ReportListPageWrapper = ({children, table, cb, className, ...props}: TablePageWrapperProps) => {
-	const permissions = useAppSelector(({user}) => user.user?.permissions);
+	const permissions = useAppSelector(({user}) => user.current?.permissions);
 	const currentPermission = permissions?.find((p) => p.table === table);
 
 	const url = useRouter();

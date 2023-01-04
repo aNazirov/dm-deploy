@@ -35,12 +35,7 @@ export const {
 		},
 		setAllDailyReportsAction: (state: IState, action: PayloadAction<{list: DailyReportModel[]; count: number}>) => {
 			state.count = action.payload.count;
-			if (state.list.length) {
-				const ids = new Set(action.payload.list.map((r) => r.id));
-				state.list = state.list.filter((old) => !ids.has(old.id)).concat(action.payload.list);
-			} else {
-				state.list = action.payload.list;
-			}
+			state.list = action.payload.list;
 		},
 		deleteDailyReportAction: (state: IState, action: PayloadAction<number>) => {
 			const index = state.list.findIndex((r) => r.id === action.payload);
