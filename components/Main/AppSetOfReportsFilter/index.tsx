@@ -15,11 +15,24 @@ import {AppCountrySelect} from "../AppCountrySelect";
 import {setOfReportsService} from "../../../core/services";
 import {APISetOfReportsUrl} from "../../../core/api";
 
+// custom enum to hide filters conditionally
+export enum eCustomFilter {
+	start = 1,
+	end,
+	organizations,
+	allOrganizations,
+	places,
+	types,
+	specialityId,
+	countryId,
+}
+
 interface AppSetOfReportsFilterProps {
 	onFilterSubmit: (field: ISetOfReportsParams) => void;
 	exportUrl: keyof typeof APISetOfReportsUrl;
+	disabledFilters: eCustomFilter[];
 }
-export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl}: AppSetOfReportsFilterProps) => {
+export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl, disabledFilters}: AppSetOfReportsFilterProps) => {
 	const {setValue, register, handleSubmit, getValues} = useForm<ISetOfReportsParams>({
 		defaultValues: {
 			start: moment().subtract(1, "months").startOf("month").format("yyyy-MM-DD"),
@@ -60,29 +73,39 @@ export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl}: AppSetOfRepor
 			</label>
 
 			<div className="d-flex flex-wrap gap-0.75">
-				<AppInput type="date" {...register("start")} />
-				<AppInput type="date" {...register("end")} />
-				<AppOrganizationSelect
-					className="min-w-10"
-					isMulti={!["financialExpenses", "insurance"].includes(exportUrl)}
-					onChange={onSelect("organizations")}
-				/>
-				<AppSpecialitySelect className="min-w-10" onChange={onSelect("specialityId")} />
-				<AppCountrySelect className="min-w-10" onChange={onSelect("countryId")} />
-				<ReactSelect
-					className="min-w-10"
-					isMulti
-					options={countryOptions}
-					onChange={onSelect("places")}
-					placeholder="Регион"
-				/>
-				<ReactSelect
-					className="min-w-10"
-					isMulti
-					options={scienceTypes}
-					onChange={onSelect("types")}
-					placeholder="Проект"
-				/>
+				{!disabledFilters.includes(eCustomFilter.start) && <AppInput type="date" {...register("start")} />}
+				{!disabledFilters.includes(eCustomFilter.end) && <AppInput type="date" {...register("end")} />}
+				{!disabledFilters.includes(eCustomFilter.organizations) && (
+					<AppOrganizationSelect
+						className="min-w-10"
+						isMulti={!["financialExpenses", "insurance"].includes(exportUrl)}
+						onChange={onSelect("organizations")}
+					/>
+				)}
+				{!disabledFilters.includes(eCustomFilter.specialityId) && (
+					<AppSpecialitySelect className="min-w-10" onChange={onSelect("specialityId")} />
+				)}
+				{!disabledFilters.includes(eCustomFilter.countryId) && (
+					<AppCountrySelect className="min-w-10" onChange={onSelect("countryId")} />
+				)}
+				{!disabledFilters.includes(eCustomFilter.places) && (
+					<ReactSelect
+						className="min-w-10"
+						isMulti
+						options={countryOptions}
+						onChange={onSelect("places")}
+						placeholder="Регион"
+					/>
+				)}
+				{!disabledFilters.includes(eCustomFilter.types) && (
+					<ReactSelect
+						className="min-w-10"
+						isMulti
+						options={scienceTypes}
+						onChange={onSelect("types")}
+						placeholder="Проект"
+					/>
+				)}
 				<AppButton variant="primary-outline" size="square">
 					<SearchIcon width="24px" height="24px" className="main-btn-text-color" />
 				</AppButton>

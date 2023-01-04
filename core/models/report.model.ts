@@ -133,6 +133,7 @@ export class DailyReportModel {
 	createdAt: Date;
 	updatedAt: Date;
 	note?: string;
+	user?: IUserShortInfo;
 
 	constructor(report: DailyReportModel) {
 		this.id = report.id;
@@ -156,6 +157,9 @@ export class DailyReportModel {
 		this.updatedAt = new Date(report.updatedAt);
 
 		if (report.note) this.note = report.note;
+		if (report.user) {
+			this.user = report.user;
+		}
 	}
 }
 
@@ -175,6 +179,7 @@ export class TrainingReportModel {
 	updatedAt: Date;
 	files?: IFile[];
 	note?: string;
+	user?: IUserShortInfo;
 
 	constructor(report: TrainingReportModel) {
 		this.id = report.id;
@@ -196,6 +201,9 @@ export class TrainingReportModel {
 		}
 		if (report.note) {
 			this.note = report.note;
+		}
+		if (report.user) {
+			this.user = report.user;
 		}
 	}
 }
@@ -221,6 +229,7 @@ export class FinancialExpensesReportModel {
 	createdAt: Date;
 	updatedAt: Date;
 	note?: string;
+	user?: IUserShortInfo;
 
 	constructor(report: FinancialExpensesReportModel) {
 		this.id = report.id;
@@ -245,6 +254,9 @@ export class FinancialExpensesReportModel {
 		this.updatedAt = new Date(report.updatedAt);
 
 		if (report.note) this.note = report.note;
+		if (report.user) {
+			this.user = report.user;
+		}
 	}
 }
 
@@ -347,16 +359,20 @@ export class VisitOfForeignSpecialistModel {
 	country: {id: number; title: ITranslate};
 	speciality: ISpeciality;
 	file: IFile;
+	user?: IUserShortInfo;
 
-	constructor(visit: VisitOfForeignSpecialistModel) {
-		this.id = visit.id;
-		this.displayName = visit.displayName;
-		this.startDate = visit.startDate;
-		this.endDate = visit.endDate;
-		this.organization = visit.organization;
-		this.country = visit.country;
-		this.speciality = visit.speciality;
-		this.file = visit.file;
+	constructor(report: VisitOfForeignSpecialistModel) {
+		this.id = report.id;
+		this.displayName = report.displayName;
+		this.startDate = report.startDate;
+		this.endDate = report.endDate;
+		this.organization = report.organization;
+		this.country = report.country;
+		this.speciality = report.speciality;
+		this.file = report.file;
+		if (report.user) {
+			this.user = report.user;
+		}
 	}
 }
 

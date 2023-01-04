@@ -2,8 +2,8 @@
 	overflow-x: auto;
 
 	&:not(:global .p-0) {
-		padding-bottom: 1rem;
 		margin-right: 2.5rem;
+		padding-bottom: 1rem;
 	}
 }
 

@@ -80,6 +80,7 @@ const TelemedicineReportInfoPage = () => {
 				</AppButton>
 
 				<ReportPageUpdate
+					reportCreatorId={report.user?.id}
 					reportStatusId={report.status.id}
 					paternalId={report.organization.paternalId}
 					reportId={+reportId}

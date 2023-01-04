@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Head from "next/head";
-import {AppDivider, AppPagination, AppSetOfReportsFilter, AppTable} from "../../../components/Main";
+import {AppDivider, AppPagination, AppSetOfReportsFilter, AppTable, eCustomFilter} from "../../../components/Main";
 import {useAppDispatch} from "../../../core/hooks";
 import {getSetOfReportsThunks} from "../../../core/store/setOfReports/setOfReports.thunks";
 import {ISetOfReportsDaily, ISetOfReportsParams} from "../../../core/models";
@@ -86,7 +86,16 @@ const DailySetOfReportsPage = () => {
 			<AppDivider className="my-1.25" />
 
 			<div className="pe-2.5">
-				<AppSetOfReportsFilter exportUrl="daily" onFilterSubmit={onFilterSubmit} />
+				<AppSetOfReportsFilter
+					disabledFilters={[
+						eCustomFilter.countryId,
+						eCustomFilter.places,
+						eCustomFilter.specialityId,
+						eCustomFilter.types,
+					]}
+					exportUrl="daily"
+					onFilterSubmit={onFilterSubmit}
+				/>
 			</div>
 			{(results?.data?.length || -1) > 0 ? (
 				<AppTable wrapperClassName="mb-1.5">
