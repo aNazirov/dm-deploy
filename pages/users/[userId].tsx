@@ -4,12 +4,12 @@ import {useAppDispatch} from "../../core/hooks";
 import {deleteUserThunk, getUsersByIdThunk} from "../../core/store/user/user.thunks";
 import {UserModel} from "../../core/models";
 import Head from "next/head";
-import {AppButton, AppCard, AppDivider} from "../../components/Main";
-import cn from "classnames";
+import {AppButton, AppCard} from "../../components/Main";
 import styles from "../../styles/reports.module.scss";
 import ChevronIcon from "../../assets/images/icons/filled/arrows/chevron-left.svg";
 import TrashIcon from "../../assets/images/icons/filled/trash.svg";
 import Moment from "react-moment";
+import cn from "classnames";
 
 const UserInfoPage = () => {
 	const router = useRouter();
@@ -58,20 +58,20 @@ const UserInfoPage = () => {
 				<AppCard>
 					<AppCard.Header className="text-start">Данные</AppCard.Header>
 					<AppCard.Body>
-						<div className={styles.labelDeskGridDivided2}>
+						<div className={cn("gap-1.25", styles.labelDeskGridDivided2)}>
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Имя:</p>
-								<p>{user.firstName}</p>
+								<p>{user.firstName ?? user.displayName.ru.split(" ")?.[1] ?? ""}</p>
 							</div>
 
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Фамилия:</p>
-								<p>{user.lastName}</p>
+								<p>{user.lastName ?? user.displayName.ru.split(" ")?.[0] ?? ""}</p>
 							</div>
 
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Отчество:</p>
-								<p>{user.secondName}</p>
+								<p>{user.secondName ?? user.displayName.ru.split(" ")?.[2] ?? ""}</p>
 							</div>
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Номер телефона:</p>
