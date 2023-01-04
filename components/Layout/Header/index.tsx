@@ -11,10 +11,13 @@ import {AppButton, AppDropdown, ThemeButton} from "../../Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {autoLoginThunk, userLogoutThunk} from "../../../core/store/user/user.thunks";
 import {setCurrentUserAction} from "../../../core/store/user/user.slices";
+import {useRouter} from "next/router";
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Header = ({className}: HeaderProps) => {
+	const router = useRouter();
+
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(({user}) => user.current);
 
@@ -34,6 +37,8 @@ export const Header = ({className}: HeaderProps) => {
 	const onMenuChange = (option: {title: string; value: string | number}) => {
 		if (option.value === "logout") {
 			dispatch(onLogout);
+		} else if (option.value === "account") {
+			void router.push(`/users/${user?.id}`);
 		}
 	};
 

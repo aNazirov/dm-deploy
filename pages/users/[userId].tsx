@@ -1,6 +1,6 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
-import {useAppDispatch} from "../../core/hooks";
+import {useAppDispatch, useAppSelector} from "../../core/hooks";
 import {deleteUserThunk, getUsersByIdThunk} from "../../core/store/user/user.thunks";
 import {UserModel} from "../../core/models";
 import Head from "next/head";
@@ -14,14 +14,16 @@ import cn from "classnames";
 const UserInfoPage = () => {
 	const router = useRouter();
 
-	const reportId = router.query["userId"] as string;
+	const userId = router.query["userId"] as string;
 
 	const dispatch = useAppDispatch();
+	const me = useAppSelector(({user}) => user.current);
+
 	const [user, setUser] = useState<UserModel>();
 
 	useEffect(() => {
-		if (reportId) {
-			const promise = dispatch(getUsersByIdThunk(+reportId));
+		if (userId) {
+			const promise = dispatch(getUsersByIdThunk(+userId));
 
 			promise.then((res) => {
 				if (res.payload) {
@@ -33,7 +35,7 @@ const UserInfoPage = () => {
 				promise.abort();
 			};
 		}
-	}, [reportId]);
+	}, [userId]);
 
 	if (!user) return null;
 
@@ -105,10 +107,13 @@ const UserInfoPage = () => {
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
-				<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
-					<TrashIcon width="24px" height="24px" />
-					<span>Удалить</span>
-				</AppButton>
+
+				{user.id !== me?.id && (
+					<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
+						<TrashIcon width="24px" height="24px" />
+						<span>Удалить</span>
+					</AppButton>
+				)}
 			</div>
 		</>
 	);
