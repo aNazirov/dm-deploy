@@ -2,6 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 
 import {ILogin, IUserCreateParams, IUserFilterParams} from "../../models";
 import {UserService} from "../../services";
+import {deleteOrganizationAction} from "../organization/organization.slices";
 import {setAllUsersAction, setCurrentUserAction, setUserToListAction} from "./user.slices";
 
 export const userLoginThunk = createAsyncThunk(
@@ -51,6 +52,7 @@ export const createUserThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setUserToListAction(result));
+			return result.id;
 		}
 	},
 	{
@@ -60,11 +62,20 @@ export const createUserThunk = createAsyncThunk(
 
 export const updateUserThunk = createAsyncThunk(
 	"user/updateThunk",
-	async (payload: Partial<IUserCreateParams>, thunkAPI) => {
+	async (
+		{
+			deletingPermissionsIds,
+			...payload
+		}: {id: number; body: Partial<IUserCreateParams>; deletingPermissionsIds?: number[]},
+		thunkAPI,
+	) => {
+		deletingPermissionsIds?.forEach((id) => UserService.deletePermission(id, thunkAPI.signal));
+
 		const result = await UserService.update(payload, thunkAPI.signal);
 
 		if (result) {
 			thunkAPI.dispatch(setUserToListAction(result));
+			return result.id;
 		}
 	},
 	{
@@ -75,7 +86,12 @@ export const updateUserThunk = createAsyncThunk(
 export const deleteUserThunk = createAsyncThunk(
 	"user/deleteThunk",
 	async (payload: number, thunkAPI) => {
-		return await UserService.delete(payload, thunkAPI.signal);
+		const result = await UserService.delete(payload, thunkAPI.signal);
+
+		if (result) {
+			thunkAPI.dispatch(deleteOrganizationAction(payload));
+			return result;
+		}
 	},
 	{
 		dispatchConditionRejection: true,

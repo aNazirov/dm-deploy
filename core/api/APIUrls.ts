@@ -56,6 +56,11 @@ export const APIAuthUrl = {
 export const APIUserUrl = {
 	user: "user",
 	token: "user/token",
+	permission: "user/permission",
+};
+
+export const APIOrganizationUrl = {
+	organization: "organization",
 };
 
 export const APIGlobalUrl = {

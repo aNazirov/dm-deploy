@@ -37,24 +37,20 @@ export const UserService = {
 	},
 
 	create(params: IUserCreateParams, signal?: AbortSignal) {
-		return api
-			.post<UserModel>(
-				APIUserUrl.user,
-				{
-					...params,
-					organizationId: 1,
-					permissions: params.permissions.map((p) => ({...p, scope: "Level_4"})),
-				},
-				{signal},
-			)
-			.then((res) => new UserModel(res.data));
+		return api.post<UserModel>(APIUserUrl.user, params, {signal}).then((res) => new UserModel(res.data));
 	},
 
-	update(params: Partial<IUserCreateParams>, signal?: AbortSignal) {
-		return api.patch<UserModel>(APIUserUrl.user, params, {signal}).then((res) => new UserModel(res.data));
+	update({id, body}: {id: number; body: Partial<IUserCreateParams>}, signal?: AbortSignal) {
+		return api.patch<UserModel>(`${APIUserUrl.user}/${id}`, body, {signal}).then((res) => new UserModel(res.data));
 	},
 
 	delete(id: number, signal?: AbortSignal) {
 		return api.delete(`${APIUserUrl.user}/${id}`, {signal}).then((res) => res.data);
+	},
+
+	deletePermission(id: number, signal?: AbortSignal) {
+		return api
+			.delete(`${APIUserUrl.permission}/${id}`, {signal}, {pending: false, success: false})
+			.then((res) => res.data);
 	},
 };

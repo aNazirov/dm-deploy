@@ -1,5 +1,6 @@
 export * from "./file.model";
 export * from "./global.model";
+export * from "./organization.model";
 export * from "./report.model";
 export * from "./reports";
 export * from "./set-of-reports";

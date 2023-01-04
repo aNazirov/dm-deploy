@@ -84,7 +84,7 @@ export const Header = ({className}: HeaderProps) => {
 					</AppButton>
 				</AppDropdown>
 
-				<AppDropdown header="Принимающий" textAlign="end" position="right" changeCb={onMenuChange} list={menu}>
+				<AppDropdown textAlign="end" position="right" changeCb={onMenuChange} list={menu}>
 					<AppButton size="square" variant="main" type="button">
 						<UserSettingsIcon />
 					</AppButton>

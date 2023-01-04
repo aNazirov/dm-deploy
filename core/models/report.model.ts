@@ -1,4 +1,5 @@
 import {IFile} from "./file.model";
+import {IShortOrganizationInfo} from "./organization.model";
 import {ePlace} from "./table.model";
 import {ISpeciality, ITranslate, IUserShortInfo} from "./user.model";
 
@@ -104,13 +105,6 @@ export interface IReportGetParams {
 	statusId?: eReportStatusType;
 	start?: Date;
 	end?: Date;
-}
-
-// TODO: when you start config multi-translate, make class and pass title dynamically by current language
-export interface IShortOrganizationInfo {
-	id: number;
-	paternalId: number;
-	title: ITranslate;
 }
 
 export interface IStatus {

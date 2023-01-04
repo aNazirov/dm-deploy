@@ -10,6 +10,7 @@ import ChevronIcon from "../../assets/images/icons/filled/arrows/chevron-left.sv
 import TrashIcon from "../../assets/images/icons/filled/trash.svg";
 import Moment from "react-moment";
 import cn from "classnames";
+import EditIcon from "../../assets/images/icons/filled/pencil.svg";
 
 const UserInfoPage = () => {
 	const router = useRouter();
@@ -46,6 +47,10 @@ const UserInfoPage = () => {
 		}
 	};
 
+	const onEditing = () => {
+		void router.push(`update/${userId}`);
+	};
+
 	return (
 		<>
 			<Head>
@@ -63,17 +68,17 @@ const UserInfoPage = () => {
 						<div className={cn("gap-1.25", styles.labelDeskGridDivided2)}>
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Имя:</p>
-								<p>{user.firstName ?? user.displayName.ru.split(" ")?.[1] ?? ""}</p>
+								<p>{user.firstName}</p>
 							</div>
 
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Фамилия:</p>
-								<p>{user.lastName ?? user.displayName.ru.split(" ")?.[0] ?? ""}</p>
+								<p>{user.lastName}</p>
 							</div>
 
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Отчество:</p>
-								<p>{user.secondName ?? user.displayName.ru.split(" ")?.[2] ?? ""}</p>
+								<p>{user.secondName}</p>
 							</div>
 							<div>
 								<p className="text-main-bold mb-0.5 d-inline-block">Номер телефона:</p>
@@ -108,12 +113,18 @@ const UserInfoPage = () => {
 					Назад
 				</AppButton>
 
-				{user.id !== me?.id && (
-					<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
-						<TrashIcon width="24px" height="24px" />
-						<span>Удалить</span>
+				<div className="d-flex gap-1.25">
+					<AppButton onClick={onEditing} size="lg" variant="print" withIcon>
+						<EditIcon width="24px" height="24px" />
+						<span>Редактировать</span>
 					</AppButton>
-				)}
+					{user.id !== me?.id && (
+						<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
+							<TrashIcon width="24px" height="24px" />
+							<span>Удалить</span>
+						</AppButton>
+					)}
+				</div>
 			</div>
 		</>
 	);

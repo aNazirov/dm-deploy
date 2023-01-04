@@ -1,4 +1,5 @@
-import {IShortOrganizationInfo, IStatus} from "../report.model";
+import {IShortOrganizationInfo} from "../organization.model";
+import {IStatus} from "../report.model";
 import {ePlace} from "../table.model";
 import {IUserShortInfo} from "../user.model";
 

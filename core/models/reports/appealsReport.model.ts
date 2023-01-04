@@ -1,5 +1,6 @@
 import {IFile} from "../file.model";
-import {IShortOrganizationInfo, IStatus} from "../report.model";
+import {IShortOrganizationInfo} from "../organization.model";
+import {IStatus} from "../report.model";
 import {IUserShortInfo} from "../user.model";
 
 export class AppealsReportModel {

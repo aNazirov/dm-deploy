@@ -88,7 +88,7 @@ const TrainingSetOfReportsPage = () => {
 					<AppTable.THead extended>
 						<tr>
 							<th rowSpan={2}>Дата</th>
-							<th colSpan={2}>Конференция, симпозиум ва х.к</th>
+							<th colSpan={2}>Конференция, симпозиум и т.п.</th>
 							<th colSpan={2}>Учеба/повышение квалификации до 10 дней</th>
 							<th colSpan={2}>Учеба/повышение квалификации от 10 до 30 дней</th>
 							<th colSpan={2}>Учеба/повышение квалификации более 30 дней</th>

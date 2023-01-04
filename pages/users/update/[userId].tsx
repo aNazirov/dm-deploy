@@ -1,34 +1,71 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {useAppDispatch, useAppSelector} from "../../core/hooks";
+import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {eScope, eTable, eTablePermission, IUserCreateParams} from "../../core/models";
+import {eScope, eTable, eTablePermission, IUserCreateParams, PermissionModel, UserModel} from "../../../core/models";
 import Head from "next/head";
-import {AppButton, AppCard, AppInput, AppSpecialitySelect} from "../../components/Main";
-import styles from "../../styles/reports.module.scss";
+import {AppButton, AppCard, AppInput, AppSpecialitySelect} from "../../../components/Main";
+import styles from "../../../styles/reports.module.scss";
 import cn from "classnames";
-import ChevronIcon from "../../assets/images/icons/filled/arrows/chevron-left.svg";
-import SuccessIcon from "../../assets/images/icons/filled/checked.svg";
-import {AppOrganizationSelect} from "../../components/Main/AppOrganizationSelect";
-import {createUserThunk} from "../../core/store/user/user.thunks";
-import {ReactSelect} from "../../components/External";
-import PlusIcon from "../../assets/images/icons/filled/plus.svg";
-import TrashIcon from "../../assets/images/icons/filled/trash.svg";
-import {tableList, tablePermissionsList} from "../../core/models/appendix/table";
-import {scopeList} from "../../core/models/appendix/scope";
-import {AppPositionSelect} from "../../components/Main/AppPositionSelect";
+import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
+import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
+import {AppOrganizationSelect} from "../../../components/Main/AppOrganizationSelect";
+import {createUserThunk, getUsersByIdThunk, updateUserThunk} from "../../../core/store/user/user.thunks";
+import {ReactSelect} from "../../../components/External";
+import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
+import {tableList, tablePermissionsList} from "../../../core/models/appendix/table";
+import {scopeList} from "../../../core/models/appendix/scope";
+import moment from "moment";
+import {AppPositionSelect} from "../../../components/Main/AppPositionSelect";
 
 const fieldOptions = {required: true};
 
-const CreateUserPage = () => {
+const UserUpdatePage = () => {
 	const router = useRouter();
+
+	const userId = router.query["userId"] as string;
 
 	const dispatch = useAppDispatch();
 	const me = useAppSelector(({user}) => user.current);
 
+	const [user, setUser] = useState<UserModel>();
 	const [options, setOptions] = useState({table: tableList, scope: scopeList, tablePermission: tablePermissionsList});
 	const [paternalId, setPaternalId] = useState<number>();
 	const [organizationId, setOrganizationId] = useState<number>();
+	const [deletingPermissionsIds, setDeletingPermissionsIds] = useState<number[]>([]);
+
+	useEffect(() => {
+		if (userId) {
+			const promise = dispatch(getUsersByIdThunk(+userId));
+
+			promise.then((res) => {
+				const user = res.payload as UserModel;
+				if (user) {
+					setUser(user);
+
+					reset({
+						firstName: user.firstName,
+						lastName: user.lastName,
+						secondName: user.secondName,
+						birthDate: moment(user.birthDate).format("yyyy-MM-DD"),
+						positionId: user.position.id,
+						position: user.position,
+						specialityId: user.speciality.id,
+						speciality: user.speciality,
+						phone: user.contact.phone,
+						organizationId: user.organization.id,
+						organization: user.organization,
+						permissions: user.permissions?.map((p) => ({...p, pId: p.id})),
+					});
+				}
+			});
+
+			return () => {
+				promise.abort();
+			};
+		}
+	}, [userId]);
 
 	useEffect(() => {
 		if (me) {
@@ -50,9 +87,18 @@ const CreateUserPage = () => {
 		watch,
 		setValue,
 		getValues,
+		reset,
 		setError,
 		formState: {errors},
-	} = useForm<IUserCreateParams & {checkPassword: IUserCreateParams["password"]}>({
+	} = useForm<
+		Omit<IUserCreateParams, "permissions"> & {
+			permissions: (PermissionModel & {pId?: number})[];
+			checkPassword: IUserCreateParams["password"];
+			position: UserModel["position"];
+			speciality: UserModel["speciality"];
+			organization: UserModel["organization"];
+		}
+	>({
 		defaultValues: {
 			permissions: [
 				{
@@ -67,6 +113,8 @@ const CreateUserPage = () => {
 		control,
 		name: "permissions",
 	});
+
+	if (!user) return null;
 
 	const onSelect = (type: keyof typeof options, index: number) => (option: unknown) => {
 		if (type === "table") {
@@ -100,16 +148,27 @@ const CreateUserPage = () => {
 		});
 	};
 
-	const onRemove = (index: number) => () => {
+	const onRemove = (index: number, permissionId?: number) => () => {
+		if (permissionId) {
+			setDeletingPermissionsIds((prev) => [...prev, permissionId]);
+		}
 		remove(index);
 	};
 
 	const onSubmit = async ({
 		checkPassword,
+		speciality,
+		position,
+		organization,
 		...fields
-	}: IUserCreateParams & {checkPassword: IUserCreateParams["password"]}) => {
+	}: IUserCreateParams & {
+		checkPassword: IUserCreateParams["password"];
+		position: UserModel["position"];
+		speciality: UserModel["speciality"];
+		organization: UserModel["organization"];
+	}) => {
 		if (checkPassword === fields.password) {
-			const action = await dispatch(createUserThunk(fields));
+			const action = await dispatch(updateUserThunk({id: +userId, body: fields, deletingPermissionsIds}));
 			const id = action.payload as number;
 
 			if (id) {
@@ -128,6 +187,7 @@ const CreateUserPage = () => {
 						<div className="w-100">
 							<ReactSelect
 								menuPlacement="auto"
+								defaultValue={tableList.filter((option) => option.value === getValues().permissions[index].table)}
 								onChange={onSelect("table", index)}
 								options={tableList}
 								placeholder="Выберите..."
@@ -141,6 +201,9 @@ const CreateUserPage = () => {
 								menuPlacement="auto"
 								isMulti
 								autoHeight
+								defaultValue={tablePermissionsList.filter((option) =>
+									getValues().permissions[index].permissions.includes(option.value),
+								)}
 								onChange={onSelect("tablePermission", index)}
 								options={tablePermissionsList}
 								placeholder="Права"
@@ -152,6 +215,7 @@ const CreateUserPage = () => {
 							{/*	scope only for same level (1,2,3,4)*/}
 							<ReactSelect
 								menuPlacement="auto"
+								defaultValue={scopeList.filter((option) => option.value === getValues().permissions[index].scope)}
 								onChange={onSelect("scope", index)}
 								options={scopeList}
 								placeholder="Уровень"
@@ -167,7 +231,7 @@ const CreateUserPage = () => {
 						</AppButton>
 					)}
 					{fields.length !== 1 && (
-						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
+						<AppButton onClick={onRemove(index, field.pId)} type="button" variant="danger" size="square" withIcon>
 							<TrashIcon width="24px" height="24px" />
 						</AppButton>
 					)}
@@ -179,13 +243,13 @@ const CreateUserPage = () => {
 	return (
 		<>
 			<Head>
-				<title>Регистрация пользователя</title>
+				<title>Редактирование пользователя</title>
 				<meta name="description" content="Generated by create next app" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<div className="flex-col gap-1.25">
-				<h1 className="h1">Регистрация пользователя</h1>
+				<h1 className="h1">Редактирование пользователя</h1>
 
 				<AppCard>
 					<AppCard.Header className="text-start">Данные</AppCard.Header>
@@ -214,11 +278,19 @@ const CreateUserPage = () => {
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Должность:</span>
-								<AppPositionSelect onChange={onSingleSelect("positionId")} />
+								{getValues().positionId && (
+									<AppPositionSelect
+										defaultValue={{label: getValues().position.title.ru, value: getValues().position.id}}
+										onChange={onSingleSelect("positionId")}
+									/>
+								)}
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Специальность:</span>
-								<AppSpecialitySelect onChange={onSingleSelect("specialityId")} />
+								<AppSpecialitySelect
+									defaultValue={{label: getValues().speciality.title.ru, value: getValues().speciality.id}}
+									onChange={onSingleSelect("specialityId")}
+								/>
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Номер телефона:</span>
@@ -229,6 +301,7 @@ const CreateUserPage = () => {
 								<AppOrganizationSelect
 									organizationId={organizationId}
 									paternalId={paternalId}
+									defaultValue={{label: getValues().organization.title.ru, value: getValues().organization.id}}
 									onChange={onSingleSelect("organizationId")}
 								/>
 							</label>
@@ -262,17 +335,17 @@ const CreateUserPage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/users" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/users/${userId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Создать</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
 
-export default CreateUserPage;
+export default UserUpdatePage;

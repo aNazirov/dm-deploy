@@ -47,8 +47,23 @@ export const Sidebar = ({className}: SidebarProps) => {
 		return current?.permissions.includes(eTablePermission.Read);
 	});
 
+	const filteredOrganizationsLinks = organizationsLinks.filter((link) => {
+		const current = permissions?.find((p) => p.table === link.table);
+		return current?.permissions.includes(eTablePermission.Read);
+	});
+
 	const renderUsersLinks = () =>
 		filteredUsersLinks.map((link, i) => (
+			<li key={i}>
+				<Link href={link.url} className={cn("rounded w-100", styles.asideLink)}>
+					<ListIcon width="24px" height="24px" className="main-btn-text-color" />
+					<span>{link.title}</span>
+				</Link>
+			</li>
+		));
+
+	const renderOrganizationsLinks = () =>
+		filteredOrganizationsLinks.map((link, i) => (
 			<li key={i}>
 				<Link href={link.url} className={cn("rounded w-100", styles.asideLink)}>
 					<ListIcon width="24px" height="24px" className="main-btn-text-color" />
@@ -74,6 +89,7 @@ export const Sidebar = ({className}: SidebarProps) => {
 						<CollapsableList linksList={filteredSetOfReportsLinks} title="Свод отчётов" />
 					) : null}
 					{filteredUsersLinks.length > 0 ? renderUsersLinks() : null}
+					{filteredOrganizationsLinks.length > 0 ? renderOrganizationsLinks() : null}
 				</ul>
 			</div>
 			<AppButton onClick={onSidebarCollapse} className={cn("flex-center mt-auto", styles.collapseBtn)}>
@@ -242,5 +258,13 @@ const usersLinks = [
 		title: "Пользователи",
 		url: "/users",
 		table: eTable.User,
+	},
+];
+
+const organizationsLinks = [
+	{
+		title: "Организации",
+		url: "/organizations",
+		table: eTable.Organization,
 	},
 ];

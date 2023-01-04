@@ -26,7 +26,7 @@ const RegionsWorkDoneListInfoPage = () => {
 					<AppTable wrapperClassName="p-0">
 						<AppTable.THead extended>
 							<tr>
-								<th>Конференция, симпозиум ва х.к</th>
+								<th>Конференция, симпозиум и т.п.</th>
 								<th>Учеба/повышение квалификации до 10 дней</th>
 								<th>Учеба/повышение квалификации от 10 до 30 дней</th>
 								<th>Учеба/повышение квалификации более 30 дней</th>

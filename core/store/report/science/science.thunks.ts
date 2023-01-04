@@ -68,7 +68,6 @@ export const updateScienceReportThunk = createAsyncThunk(
 		thunkAPI,
 	) => {
 		const files: FileModel[] = [];
-		console.log(payload.body);
 		const newCreatingPartsWithoutFile = payload.body.scienceParts?.filter((p) => !p.fileId) ?? [];
 		const oldPartsWithFileId = payload.body.scienceParts?.filter((p) => p.fileId).map(({file, ...p}) => p) ?? [];
 

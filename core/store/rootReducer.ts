@@ -8,6 +8,7 @@ import {
 
 import {fileReducer} from "./file/file.slices";
 import {globalReducer} from "./global/global.slices";
+import {organizationReducer} from "./organization/organization.slices";
 import {appealsReportReducer} from "./report/appeals/appeals-report.slices";
 import {dailyReportReducer} from "./report/daily/daily-report.slices";
 import {departureReportReducer} from "./report/departure/departure-report.slices";
@@ -29,6 +30,7 @@ const State = {
 	user: userReducer,
 	global: globalReducer,
 	dailyReport: dailyReportReducer,
+	organization: organizationReducer,
 	appealsReport: appealsReportReducer,
 	scienceReport: scienceReportReducer,
 	trainingReport: trainingReportReducer,

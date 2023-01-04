@@ -1,29 +1,24 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {UserModel} from "../../models";
+import {OrganizationModel} from "../../models";
 
 interface IState {
-	current: UserModel | null;
-	list: UserModel[];
+	list: OrganizationModel[];
 	count: number;
 }
 const initialState: IState = {
-	current: null,
 	list: [],
 	count: 0,
 };
 
 export const {
-	reducer: userReducer,
-	actions: {setCurrentUserAction, setUserToListAction, setAllUsersAction},
+	reducer: organizationReducer,
+	actions: {setOrganizationToListAction, setAllOrganizationsAction, deleteOrganizationAction},
 } = createSlice({
-	name: "user",
+	name: "organization",
 	initialState,
 	reducers: {
-		setCurrentUserAction: (state: IState, action: PayloadAction<UserModel | null>) => {
-			state.current = action.payload;
-		},
-		setUserToListAction: (state: IState, action: PayloadAction<UserModel | null>) => {
+		setOrganizationToListAction: (state: IState, action: PayloadAction<OrganizationModel | null>) => {
 			if (action.payload) {
 				const index = state.list.findIndex((l) => l.id === action.payload?.id);
 				if (index === -1) {
@@ -34,11 +29,11 @@ export const {
 			}
 		},
 		// TODO: make all other actions like action below
-		setAllUsersAction: (state: IState, action: PayloadAction<{count: number; list: UserModel[]}>) => {
+		setAllOrganizationsAction: (state: IState, action: PayloadAction<{count: number; list: OrganizationModel[]}>) => {
 			state.count = action.payload.count;
 			state.list = action.payload.list;
 		},
-		deleteUserAction: (state: IState, action: PayloadAction<number>) => {
+		deleteOrganizationAction: (state: IState, action: PayloadAction<number>) => {
 			const index = state.list.findIndex((r) => r.id === action.payload);
 			if (index !== -1) {
 				state.list.splice(index, 1);
