@@ -84,7 +84,6 @@ const UserUpdatePage = () => {
 		register,
 		control,
 		handleSubmit,
-		watch,
 		setValue,
 		getValues,
 		reset,

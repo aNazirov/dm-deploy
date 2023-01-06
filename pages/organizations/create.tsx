@@ -46,15 +46,30 @@ const CreateOrganizationPage = () => {
 						<div className={cn("gap-1.25", styles.labelDeskGrid3)}>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Наименование организации:</span>
-								<AppInput placeholder="Имя" className="w-100" type="text" {...register("title.ru", fieldOptions)} />
+								<AppInput
+									placeholder="Наименование организации"
+									className="w-100"
+									type="text"
+									{...register("title.ru", fieldOptions)}
+								/>
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Name of the organization:</span>
-								<AppInput placeholder="Фамилия" className="w-100" type="text" {...register("title.en", fieldOptions)} />
+								<AppInput
+									placeholder="Name of the organization"
+									className="w-100"
+									type="text"
+									{...register("title.en", fieldOptions)}
+								/>
 							</label>
 							<label>
 								<span className="text-main-bold mb-0.5 d-inline-block">Tashkilot nomi:</span>
-								<AppInput placeholder="Фамилия" className="w-100" type="text" {...register("title.uz", fieldOptions)} />
+								<AppInput
+									placeholder="Tashkilot nomi"
+									className="w-100"
+									type="text"
+									{...register("title.uz", fieldOptions)}
+								/>
 							</label>
 						</div>
 					</AppCard.Body>

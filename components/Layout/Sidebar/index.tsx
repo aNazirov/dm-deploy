@@ -17,7 +17,7 @@ import {useAppSelector} from "../../../core/hooks";
 type SidebarProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
 
 export const Sidebar = ({className}: SidebarProps) => {
-	const permissions = useAppSelector(({user}) => user.current?.permissions);
+	const [permissions, isDarkMode] = useAppSelector(({user, global}) => [user.current?.permissions, global.isDarkMode]);
 	// react hooks
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -74,7 +74,11 @@ export const Sidebar = ({className}: SidebarProps) => {
 
 	return (
 		<aside className={cn(styles.aside, className, {[styles.collapsed]: isCollapsed})}>
-			<div className={cn("rounded", styles.asideListWrapper)}>
+			<div
+				className={cn("rounded", styles.asideListWrapper, {
+					[styles.darkTheme]: isDarkMode,
+				})}
+			>
 				<ul className={styles.asideList}>
 					<li>
 						<Link className={cn("rounded", styles.asideLink)} href="/">

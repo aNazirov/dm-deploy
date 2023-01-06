@@ -207,7 +207,7 @@ const MediaPlaceReportCreatePage = () => {
 				</AppCard.Body>
 			</AppCard>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid4, styles.bgWhite)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid4, styles.bgWhite)}>
 				<div className={cn("pe-2", styles.cardWrapper)}>
 					<AppCard className="h-100">
 						<AppCard.Header>Подтверждающий документ</AppCard.Header>

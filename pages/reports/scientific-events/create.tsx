@@ -58,7 +58,7 @@ const ScientificEventsReportCreatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.percentGrid2)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.percentGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Количество защит</AppCard.Header>
@@ -180,7 +180,7 @@ const ScientificEventsReportCreatePage = () => {
 				</div>
 			</div>
 
-			<div className={cn("mt-2.5", styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("mt-2.5 card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Докторанты</AppCard.Header>

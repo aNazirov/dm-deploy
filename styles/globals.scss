@@ -7,6 +7,7 @@
 :root {
 	// Colors
 	--main-dark-color: #262626;
+	--primary-dark-color: #2B2C2B;
 	--main-button-color: #72b7a1;
 	--main-hover-button-color: #45ae8d;
 	--add-button-color: #424242;
@@ -14,6 +15,7 @@
 	--secondary-hover-button-color: #f5f5f5;
 	--table-border-color: #cae3dd;
 	--table-head-color: #ebf3f1;
+	--table-head-dark-color: #598376;
 	--main-select-color: #72b7a119;
 	--status-submit-color: #51ba75;
 	--status-hover-submit-color: #459d63;
@@ -41,11 +43,79 @@
 	--rounded-lg: 0.875rem;
 }
 
+/* Dark mode */
+.dark-theme {
+	--table-head-color: var(--table-head-dark-color);
+	color-scheme: dark;
+
+	.primary-outline-btn, .outline-success-btn {
+		background-color: var(--add-button-color);
+		border-color: var(--add-button-color);
+
+		&:hover, &.active {
+			background-color: var(--table-head-dark-color);
+		}
+	}
+
+	table {
+		tr, tr > td {
+			border-color: var(--add-button-color) !important;
+		}
+
+		tbody tr {
+			background-color: var(--main-dark-color);
+		}
+	}
+
+	input:not([type=file]) {
+		background-color: transparent;
+		color: var(--white-color);
+
+		&[type=date] {
+			color: var(--muted-text-color);
+		}
+	}
+
+	.my__select {
+		&:hover {
+			.my__control {
+				background-color: var(--table-head-dark-color) !important;
+			}
+		}
+	}
+
+	.my__control, .my__menu {
+		background-color: var(--table-head-dark-color);
+		border-color: var(--add-button-color) !important;
+		color: var(--white-color);
+	}
+
+	.my__placeholder, .my__single-value {
+		color: var(--white-color);
+	}
+
+	.hr {
+		background-color: var(--add-button-color);
+	}
+
+	.card-desk {
+		background-color: transparent !important;
+
+		& > * {
+			background-color: transparent;
+		}
+	}
+
+	.card {
+		background-color: transparent;
+	}
+}
+
 html,
 body {
 	color: var(--main-dark-color);
 	font-family: 'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
-		'Droid Sans', 'Helvetica Neue', sans-serif;
+	'Droid Sans', 'Helvetica Neue', sans-serif;
 	font-size: 100%;
 	margin: 0;
 	padding: 0;
@@ -263,6 +333,10 @@ svg {
 
 .min-w-10 {
 	min-width: 10rem;
+}
+
+.min-h-100 {
+	min-height: 100%;
 }
 
 .cursor-pointer {

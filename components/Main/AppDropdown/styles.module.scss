@@ -52,6 +52,11 @@
 		flex: 1;
 		width: 100%;
 	}
+
+	&.darkTheme{
+		background-color: var(--table-head-dark-color);
+		border-color: var(--table-head-dark-color);
+	}
 }
 
 .listHeader {

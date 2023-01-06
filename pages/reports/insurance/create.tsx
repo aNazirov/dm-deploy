@@ -62,7 +62,7 @@ const InsuranceReportCreatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid3)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid3)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Акты, поданные на рассмотренеие в ГФМС</AppCard.Header>
@@ -140,7 +140,7 @@ const InsuranceReportCreatePage = () => {
 				</div>
 			</div>
 
-			<div className={cn("mt-2.5", styles.cardDesk, styles.percentGrid2)}>
+			<div className={cn("mt-2.5 card-desk", styles.cardDesk, styles.percentGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Итоговый годовой контракт</AppCard.Header>

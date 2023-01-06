@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Head from "next/head";
 import {
 	AppButton,
@@ -17,22 +17,76 @@ import PlusIcon from "../../../assets/images/icons/filled/plus.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch} from "../../../core/hooks";
 import {useFieldArray, useForm} from "react-hook-form";
-import {IReportVisitsOfForeignSpecialistsCreateParams} from "../../../core/models";
-import {createVisitForeignSpecialistsReportThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
+import {
+	IFile,
+	IReportVisitsOfForeignSpecialistsCreateParamsPart,
+	ISpeciality,
+	ITranslate,
+	VisitOfForeignSpecialistModel,
+	VisitsOfForeignSpecialistsModel,
+} from "../../../core/models";
+import {
+	getVisitForeignSpecialistsReportByIdThunk,
+	updateVisitForeignSpecialistsReportThunk,
+} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
+import moment from "moment/moment";
+import {setVisitForeignSpecialistsReportByIdAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
+import {downloadFileThunk} from "../../../core/store/file/file.thunks";
 
 const fieldOptions = {
 	required: true,
 };
 
-const VisitForeignSpecialistsReportCreatePage = () => {
+const VisitForeignSpecialistsReportUpdatePage = () => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
 
+	const reportId = router.query["reportId"] as string;
+
+	useEffect(() => {
+		if (reportId) {
+			const promise = dispatch(getVisitForeignSpecialistsReportByIdThunk(+reportId));
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as VisitsOfForeignSpecialistsModel;
+
+					reset({
+						visitsOfForeignSpecialists: fields.visitsOfForeignSpecialists?.map(({file, ...p}) => ({
+							...p,
+							fileId: file.id,
+							speciality: p.speciality,
+							country: p.country,
+							startDate: moment(p.startDate).format("yyyy-MM-DD"),
+							endDate: moment(p.endDate).format("yyyy-MM-DD"),
+						})),
+					});
+
+					if (fields.visitsOfForeignSpecialists) {
+						setExistingFiles(fields.visitsOfForeignSpecialists?.map((p) => p.file));
+					}
+				}
+			});
+
+			return () => {
+				promise.abort();
+				dispatch(setVisitForeignSpecialistsReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
+
 	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
+	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
+	const [deletingPartsIds, setDeletingPartsIds] = useState<number[]>([]);
 
-	const {register, control, handleSubmit, setValue} = useForm<IReportVisitsOfForeignSpecialistsCreateParams>({
+	const {register, control, handleSubmit, setValue, getValues, reset} = useForm<{
+		visitsOfForeignSpecialists: (IReportVisitsOfForeignSpecialistsCreateParamsPart & {
+			speciality: VisitOfForeignSpecialistModel["speciality"];
+			country: VisitOfForeignSpecialistModel["country"];
+		})[];
+		note?: string;
+	}>({
 		defaultValues: {
 			visitsOfForeignSpecialists: [
 				{
@@ -54,6 +108,8 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 
 	const onAppend = () => {
 		append({
+			country: undefined as unknown as {id: number; title: ITranslate},
+			speciality: undefined as unknown as ISpeciality,
 			countryId: undefined as unknown as number,
 			endDate: undefined as unknown as string,
 			fileId: undefined as unknown as number,
@@ -64,7 +120,16 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 		});
 	};
 
-	const onRemove = (index: number) => () => {
+	const onFileDelete = (id: number) => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+	};
+
+	const onRemove = (index: number, partId?: number) => () => {
+		if (partId) {
+			onFileDelete(getValues().visitsOfForeignSpecialists[index].fileId);
+
+			setDeletingPartsIds((prev) => [...prev, partId]);
+		}
 		remove(index);
 	};
 
@@ -94,15 +159,31 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 		setFiles((prev) => prev.filter((f, i) => i !== index));
 	};
 
-	const onSubmit = async (fieldsArr: IReportVisitsOfForeignSpecialistsCreateParams) => {
-		if (fieldsArr.visitsOfForeignSpecialists.length === files.length) {
+	const onSubmit = async (fieldsArr: {
+		visitsOfForeignSpecialists: (IReportVisitsOfForeignSpecialistsCreateParamsPart & {
+			speciality: VisitOfForeignSpecialistModel["speciality"];
+			country: VisitOfForeignSpecialistModel["country"];
+		})[];
+		note?: string;
+	}) => {
+		if (fieldsArr.visitsOfForeignSpecialists.length === files.length + (existingFiles?.length ?? 0)) {
 			setErrText("");
 
 			const formData = new FormData();
 
 			files.forEach((f) => formData.append("files", f));
+			const body = fieldsArr.visitsOfForeignSpecialists.map(({speciality, country, ...v}) => ({
+				...v,
+				...(speciality ? {specialityId: speciality.id} : {}),
+				...(country ? {countryId: country.id} : {}),
+			}));
 
-			const action = await dispatch(createVisitForeignSpecialistsReportThunk({payload: fieldsArr, formData}));
+			const action = await dispatch(
+				updateVisitForeignSpecialistsReportThunk({
+					payload: {id: +reportId, deletingPartsIds, body: {visitsOfForeignSpecialists: body}},
+					formData,
+				}),
+			);
 			const id = action.payload as number;
 
 			if (id) {
@@ -111,6 +192,27 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 		} else {
 			setErrText(`Количество специалистов должно совпадать с количеством привязанных документов.`);
 		}
+	};
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			dispatch(downloadFileThunk({url, name}));
+		};
+
+	const renderReceivedFiles = () => {
+		return existingFiles?.map((f) => (
+			<AppButton
+				key={f.id}
+				variant="print"
+				size="lg"
+				onClick={downloadFile(f.url, f.name)}
+				className="text-center"
+				type="button"
+			>
+				{f.name}
+			</AppButton>
+		));
 	};
 
 	const renderFiles = () => {
@@ -143,12 +245,24 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 					</label>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
-							<AppSpecialitySelect onChange={onSelect({index, type: "specialityId"})} />
+							<AppSpecialitySelect
+								defaultValue={{
+									label: getValues().visitsOfForeignSpecialists[index].speciality?.title.ru,
+									value: getValues().visitsOfForeignSpecialists[index].speciality?.id,
+								}}
+								onChange={onSelect({index, type: "specialityId"})}
+							/>
 						</div>
 					</label>
 					<label className={styles.cardBodyLabel}>
 						<div className="w-100">
-							<AppCountrySelect onChange={onSelect({index, type: "countryId"})} />
+							<AppCountrySelect
+								defaultValue={{
+									label: getValues().visitsOfForeignSpecialists[index].country?.title.ru,
+									value: getValues().visitsOfForeignSpecialists[index].country?.id,
+								}}
+								onChange={onSelect({index, type: "countryId"})}
+							/>
 						</div>
 					</label>
 					<label className={styles.cardBodyLabel}>
@@ -180,7 +294,13 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 						</AppButton>
 					)}
 					{fields.length !== 1 && (
-						<AppButton onClick={onRemove(index)} type="button" variant="danger" size="square" withIcon>
+						<AppButton
+							onClick={onRemove(index, getValues().visitsOfForeignSpecialists[index].id)}
+							type="button"
+							variant="danger"
+							size="square"
+							withIcon
+						>
 							<TrashIcon width="24px" height="24px" />
 						</AppButton>
 					)}
@@ -265,6 +385,7 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 							</label>
 
 							<AppDivider className="my-0.75" />
+							{renderReceivedFiles()}
 							{renderFiles()}
 							{errText}
 						</AppCard.Body>
@@ -273,17 +394,23 @@ const VisitForeignSpecialistsReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/visit-foreign-specialists" size="lg" variant="dark" withIcon>
+				<AppButton
+					useAs="link"
+					href={`/reports/visit-foreign-specialists/${reportId}`}
+					size="lg"
+					variant="dark"
+					withIcon
+				>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
 
-export default VisitForeignSpecialistsReportCreatePage;
+export default VisitForeignSpecialistsReportUpdatePage;

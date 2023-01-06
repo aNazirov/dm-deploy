@@ -1,15 +1,18 @@
 import React, {DetailedHTMLProps, HTMLAttributes} from "react";
 import styles from "./styles.module.scss";
 import cn from "classnames";
+import {useAppSelector} from "../../../core/hooks";
 
 interface TableProps extends DetailedHTMLProps<HTMLAttributes<HTMLTableElement>, HTMLTableElement> {
 	wrapperClassName?: string;
 	linked?: boolean;
 }
+
 interface TableHeadSectionProps
 	extends DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement> {
 	extended?: boolean;
 }
+
 type TableSectionProps = DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
 
 export const AppTable = ({children, linked, wrapperClassName, className, ...props}: TableProps) => {
@@ -22,11 +25,18 @@ export const AppTable = ({children, linked, wrapperClassName, className, ...prop
 	);
 };
 
-const THead = ({children, extended, className, ...props}: TableHeadSectionProps) => (
-	<thead className={cn("text-main-bold", styles.thead, className, {[styles.extended]: extended})} {...props}>
-		{children}
-	</thead>
-);
+const THead = ({children, extended, className, ...props}: TableHeadSectionProps) => {
+	return (
+		<thead
+			className={cn("text-main-bold", styles.thead, className, {
+				[styles.extended]: extended,
+			})}
+			{...props}
+		>
+			{children}
+		</thead>
+	);
+};
 const TBody = ({children, className, ...props}: TableSectionProps) => (
 	<tbody className={cn("text-main-regular", styles.tbody, className)} {...props}>
 		{children}

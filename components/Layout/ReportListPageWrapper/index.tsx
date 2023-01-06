@@ -103,6 +103,14 @@ export const ReportListPageWrapper = ({children, table, cb, className, ...props}
 						>
 							Все
 						</AppButton>
+						<AppButton
+							onClick={onStatusChange(eReportStatusType.Sent)}
+							className={cn({active: filters.statusId === eReportStatusType.Sent})}
+							variant="primary-outline"
+							size="lg"
+						>
+							Отправлен
+						</AppButton>
 
 						<AppButton
 							onClick={onStatusChange(eReportStatusType.Approved)}

@@ -16,6 +16,11 @@
 		grid-column: 1 / span 12;
 		padding-left: 2.5rem;
 	}
+
+	&.darkTheme {
+		background-color: var(--main-dark-color);
+		color: var(--white-color);
+	}
 }
 
 .sidebar {

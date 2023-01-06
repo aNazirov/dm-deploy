@@ -66,4 +66,9 @@ export const visitForeignSpecialistsReportService = {
 				return res.data;
 			});
 	},
+	deletePart(id: number, signal?: AbortSignal) {
+		return api
+			.delete(`${APIReportUrl.visitsOfForeignSpecialists}/part/${id}`, {signal}, {pending: false, success: false})
+			.then((res) => res.data);
+	},
 };

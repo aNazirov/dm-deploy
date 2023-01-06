@@ -1,6 +1,12 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportGetParams, IReportVisitsOfForeignSpecialistsCreateParams} from "../../../models";
+import {
+	eReportStatusType,
+	FileModel,
+	IReportGetParams,
+	IReportVisitsOfForeignSpecialistsCreateParams,
+	IReportVisitsOfForeignSpecialistsCreateParamsPart,
+} from "../../../models";
 import {FileService, ReportService} from "../../../services";
 import {
 	deleteVisitForeignSpecialistsReportAction,
@@ -34,6 +40,50 @@ export const createVisitForeignSpecialistsReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateVisitForeignSpecialistsReportThunk = createAsyncThunk(
+	"visitForeignSpecialistsReport/updateThunk",
+	async (
+		{
+			payload,
+			formData,
+		}: {
+			payload: {
+				id: number;
+				body: {visitsOfForeignSpecialists?: IReportVisitsOfForeignSpecialistsCreateParamsPart[]; note?: string};
+				deletingPartsIds?: number[];
+			};
+			formData?: FormData;
+		},
+		thunkAPI,
+	) => {
+		const files: FileModel[] = [];
+		const newCreatingPartsWithoutFile = payload.body.visitsOfForeignSpecialists?.filter((p) => !p.fileId) ?? [];
+		const oldPartsWithFileId = payload.body.visitsOfForeignSpecialists?.filter((p) => p.fileId) ?? [];
+
+		payload.deletingPartsIds?.forEach((id) => ReportService.visitForeignSpecialists.deletePart(id, thunkAPI.signal));
+
+		if (formData) {
+			files.push(...(await FileService.post(formData)));
+		}
+
+		const newPartsWithFile = newCreatingPartsWithoutFile.map((v, i) => ({...v, fileId: files[i].id}));
+
+		const result = await ReportService.visitForeignSpecialists.update(
+			{
+				id: payload.id,
+				body: {...payload.body, visitsOfForeignSpecialists: [...newPartsWithFile, ...oldPartsWithFileId]},
+			},
+			thunkAPI.signal,
+		);
+
+		if (result) {
+			thunkAPI.dispatch(setVisitForeignSpecialistsReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getVisitForeignSpecialistsReportByIdThunk = createAsyncThunk(
 	"visitForeignSpecialistsReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -41,6 +91,7 @@ export const getVisitForeignSpecialistsReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setVisitForeignSpecialistsReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

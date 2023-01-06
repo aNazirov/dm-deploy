@@ -183,7 +183,7 @@ const AppealsReportUpdatePage = () => {
 					</AppButton>
 				</label>
 			</div>
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid4)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid4)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Подтверждающий документ</AppCard.Header>

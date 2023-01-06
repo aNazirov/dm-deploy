@@ -81,7 +81,7 @@ const ScientificWorksReportUpdatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk)}>
+			<div className={cn("card-desk", styles.cardDesk)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Количество статей</AppCard.Header>
@@ -176,7 +176,7 @@ const ScientificWorksReportUpdatePage = () => {
 				</div>
 			</div>
 
-			<div className={cn("mt-2.5", styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("mt-2.5 card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Количество лекций</AppCard.Header>

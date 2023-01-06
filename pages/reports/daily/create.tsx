@@ -75,7 +75,7 @@ const DailyReportCreatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid3)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid3)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Количество коек</AppCard.Header>
@@ -183,7 +183,7 @@ const DailyReportCreatePage = () => {
 				<h2 className={cn("h3", styles.topBottomBorder)}>Поступившие деньги</h2>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid4)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid4)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Поликлиника</AppCard.Header>

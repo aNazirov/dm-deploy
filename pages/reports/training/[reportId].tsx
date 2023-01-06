@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import Head from "next/head";
-import {AppButton, AppDivider, AppInput, AppTable} from "../../../components/Main";
+import {AppButton, AppDivider, AppTable} from "../../../components/Main";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
-import styles from "../../../styles/reports.module.scss";
 import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import {useRouter} from "next/router";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -54,9 +53,6 @@ const TrainingReportInfoPage = () => {
 					type="button"
 				>
 					{f.name}
-				</AppButton>
-				<AppButton variant="danger" size="square">
-					<TrashIcon width="24px" height="24px" />
 				</AppButton>
 			</div>
 		));

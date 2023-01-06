@@ -116,7 +116,7 @@ const CenterFinancialExpensesReportUpdatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>

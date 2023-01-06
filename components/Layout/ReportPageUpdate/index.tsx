@@ -27,10 +27,12 @@ import {
 import {
 	changeStatusOfTrainingReportThunk,
 	deleteTrainingReportThunk,
+	updateTrainingReportThunk,
 } from "../../../core/store/report/training/training-report.thunks";
 import {
 	changeStatusOfVisitForeignSpecialistsReportThunk,
 	deleteVisitForeignSpecialistsReportThunk,
+	updateVisitForeignSpecialistsReportThunk,
 } from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {useRouter} from "next/router";
 import {
@@ -103,12 +105,14 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportCreatorId, 
 				case eTable.TelemedicineReport:
 					dispatch(updateTelemedicineReportThunk({id: +reportId, body: {note: debouncedComment}}));
 					break;
-				/*case eTable.TrainingReport:
-				dispatch(changeStatusOfTrainingReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;
-			case eTable.VisitsOfForeignSpecialistsReport:
-				dispatch(changeStatusOfVisitForeignSpecialistsReportThunk({id: +reportId, statusId: statusTypeId}));
-				break;*/
+				case eTable.TrainingReport:
+					dispatch(updateTrainingReportThunk({id: +reportId, body: {note: debouncedComment}}));
+					break;
+				case eTable.VisitsOfForeignSpecialistsReport:
+					dispatch(
+						updateVisitForeignSpecialistsReportThunk({payload: {id: +reportId, body: {note: debouncedComment}}}),
+					);
+					break;
 				case eTable.ScientificEventsReport:
 					dispatch(updateScientificEventsReportThunk({id: +reportId, body: {note: debouncedComment}}));
 					break;

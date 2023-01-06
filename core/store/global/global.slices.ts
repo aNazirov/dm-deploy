@@ -16,6 +16,7 @@ export const {
 	name: "global",
 	reducers: {
 		setIsDarkMode: (state, action: PayloadAction<IState["isDarkMode"]>) => {
+			localStorage.setItem("theme", action.payload ? "dark" : "light");
 			state.isDarkMode = action.payload;
 		},
 	},

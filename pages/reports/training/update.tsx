@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import cn from "classnames";
 import {useForm} from "react-hook-form";
 import {useRouter} from "next/router";
@@ -9,23 +9,61 @@ import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 import ChevronIcon from "../../../assets/images/icons/filled/arrows/chevron-left.svg";
 import SuccessIcon from "../../../assets/images/icons/filled/checked.svg";
 import {useAppDispatch} from "../../../core/hooks";
-import {IReportTrainingCreateParams} from "../../../core/models";
-import {createTrainingReportThunk} from "../../../core/store/report/training/training-report.thunks";
+import {IFile, IReportTrainingCreateParams, TrainingReportModel} from "../../../core/models";
+import {
+	getTrainingReportByIdThunk,
+	updateTrainingReportThunk,
+} from "../../../core/store/report/training/training-report.thunks";
+import {setTrainingReportByIdAction} from "../../../core/store/report/training/training-report.slices";
+import {downloadFileThunk} from "../../../core/store/file/file.thunks";
 
 const fieldOptions = {
 	required: true,
 	valueAsNumber: true,
 };
 
-const TrainingReportCreatePage = () => {
+const TrainingReportUpdatePage = () => {
 	const router = useRouter();
+
+	const reportId = router.query["reportId"] as string;
 
 	const dispatch = useAppDispatch();
 
-	const {register, handleSubmit, getValues} = useForm<IReportTrainingCreateParams>();
+	const {register, handleSubmit, getValues, reset} = useForm<IReportTrainingCreateParams>();
+
+	useEffect(() => {
+		if (reportId) {
+			const promise = dispatch(getTrainingReportByIdThunk(+reportId));
+			promise.then((res) => {
+				if (res.payload) {
+					const fields = res.payload as TrainingReportModel;
+					reset({
+						confInternational: fields.confInternational,
+						confNational: fields.confNational,
+						learnInternationalLong: fields.learnInternationalLong,
+						learnInternationalMid: fields.learnInternationalMid,
+						learnInternationalShort: fields.learnInternationalShort,
+						learnNationalLong: fields.learnNationalLong,
+						learnNationalMid: fields.learnNationalMid,
+						learnNationalShort: fields.learnNationalShort,
+					});
+					if (fields.files) {
+						setExistingFiles(fields.files);
+					}
+				}
+			});
+
+			return () => {
+				promise.abort();
+				dispatch(setTrainingReportByIdAction(null));
+			};
+		}
+	}, [reportId]);
 
 	const [files, setFiles] = useState<File[]>([]);
 	const [errText, setErrText] = useState("");
+	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
+	const [deletingFilesIds, setDeletingFilesIds] = useState<number[]>([]);
 
 	const onSubmit = async (fields: IReportTrainingCreateParams) => {
 		const numberValues: number[] = Object.values(getValues());
@@ -39,12 +77,19 @@ const TrainingReportCreatePage = () => {
 				}
 			}, 0);
 
-			if (sum === files.length) {
+			if (sum === files.length + (existingFiles?.length ?? 0)) {
 				setErrText("");
 				const formData = new FormData();
 				files.forEach((f) => formData.append("files", f));
 
-				const action = await dispatch(createTrainingReportThunk({payload: fields, formData}));
+				const action = await dispatch(
+					updateTrainingReportThunk({
+						body: fields,
+						id: +reportId,
+						formData,
+						deletingFilesIds,
+					}),
+				);
 				const id = action.payload as number;
 
 				if (id) {
@@ -75,6 +120,14 @@ const TrainingReportCreatePage = () => {
 		setFiles((prev) => prev.filter((f, i) => i !== index));
 	};
 
+	const onFileDelete = (id: number) => async () => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+
+		if (!deletingFilesIds.includes(id)) {
+			setDeletingFilesIds((prev) => [...prev, id]);
+		}
+	};
+
 	const renderFiles = () => {
 		return files.map((file) => (
 			<div className="flex-center gap-0.5" key={file.name}>
@@ -83,6 +136,31 @@ const TrainingReportCreatePage = () => {
 				</label>
 
 				<AppButton onClick={onFileRemove(file.name)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
+	};
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			dispatch(downloadFileThunk({url, name}));
+		};
+
+	const renderReceivedFiles = () => {
+		return existingFiles?.map((f) => (
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
+				<AppButton onClick={onFileDelete(f.id)} variant="danger" size="square">
 					<TrashIcon width="24px" height="24px" />
 				</AppButton>
 			</div>
@@ -243,6 +321,7 @@ const TrainingReportCreatePage = () => {
 
 							<AppDivider className="my-0.75" />
 
+							{renderReceivedFiles()}
 							{renderFiles()}
 							{errText}
 						</AppCard.Body>
@@ -251,17 +330,17 @@ const TrainingReportCreatePage = () => {
 			</div>
 
 			<div className="flex-justify-between mt-auto pt-2.5">
-				<AppButton useAs="link" href="/reports/training" size="lg" variant="dark" withIcon>
+				<AppButton useAs="link" href={`/reports/training/${reportId}`} size="lg" variant="dark" withIcon>
 					<ChevronIcon width="24px" height="24px" />
 					Назад
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Сохранить</span>
 				</AppButton>
 			</div>
 		</>
 	);
 };
 
-export default TrainingReportCreatePage;
+export default TrainingReportUpdatePage;

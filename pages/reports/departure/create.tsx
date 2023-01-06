@@ -64,7 +64,7 @@ const DepartureReportCreatePage = () => {
 				</label>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>
@@ -205,7 +205,7 @@ const DepartureReportCreatePage = () => {
 				</div>
 			</div>
 
-			<div className={cn(styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100 flex-col flex-justify-center">
 						<AppCard.Body className={cn("gap-0.5", styles.cardRows)}>

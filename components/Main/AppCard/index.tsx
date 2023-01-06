@@ -1,6 +1,7 @@
 import React, {DetailedHTMLProps, HTMLAttributes} from "react";
 import styles from "./styles.module.scss";
 import cn from "classnames";
+import {useAppSelector} from "../../../core/hooks";
 
 interface ICardProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 	shadow?: "table";
@@ -13,7 +14,7 @@ type IBodyProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivEleme
 export const AppCard = ({children, shadow, className, rounded, ...props}: ICardProps) => {
 	return (
 		<div
-			className={cn(styles.card, className, {
+			className={cn("card", styles.card, className, {
 				[styles.tableShadow]: shadow === "table",
 				...(rounded ? {[`rounded-${rounded}`]: rounded} : {rounded: true}),
 			})}
@@ -29,11 +30,15 @@ const Header = ({children, className, ...props}: IHeaderProps) => (
 		<h3 className="text-table-header">{children}</h3>
 	</div>
 );
-const Body = ({children, className, ...props}: IBodyProps) => (
-	<div className={cn("rounded-bottom", styles.cardBody, className)} {...props}>
-		{children}
-	</div>
-);
+const Body = ({children, className, ...props}: IBodyProps) => {
+	const isDarkMode = useAppSelector(({global}) => global.isDarkMode);
+
+	return (
+		<div className={cn("rounded-bottom", styles.cardBody, className, {[styles.darkTheme]: isDarkMode})} {...props}>
+			{children}
+		</div>
+	);
+};
 
 AppCard.Header = Header;
 AppCard.Body = Body;

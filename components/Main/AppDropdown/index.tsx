@@ -4,7 +4,7 @@ import autoAnimate from "@formkit/auto-animate";
 import {AppButton} from "../AppButton";
 
 import styles from "./styles.module.scss";
-import {useOnClickOutside} from "../../../core/hooks";
+import {useAppSelector, useOnClickOutside} from "../../../core/hooks";
 
 interface IDropdownItem {
 	title: string;
@@ -20,6 +20,7 @@ interface AppDropdownProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivEleme
 }
 
 export const AppDropdown = ({list, position, textAlign, header, changeCb, children, className}: AppDropdownProps) => {
+	const isDarkMode = useAppSelector(({global}) => global.isDarkMode);
 	// react hooks
 	const [isOpen, setIsOpen] = useState(false);
 	const parentRef = useRef<HTMLDivElement>(null);
@@ -63,6 +64,7 @@ export const AppDropdown = ({list, position, textAlign, header, changeCb, childr
 						[styles.left]: position === "left",
 						[styles.right]: position === "right",
 						[styles[`text-${textAlign}`]]: textAlign,
+						[styles.darkTheme]: isDarkMode,
 					})}
 				>
 					{header && <li className={cn("text-main-bold", styles.listHeader)}>{header}</li>}

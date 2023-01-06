@@ -50,7 +50,7 @@ const MySelect = (
 
 	return isAsync ? (
 		<AsyncSelect
-			className={cn("text-main-regular", styles.mySelect, {
+			className={cn("text-main-regular my__select", styles.mySelect, {
 				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
 				...(bg ? {[styles[bg]]: bg} : {}),
 				[styles.autoHeight]: autoHeight,
@@ -69,7 +69,7 @@ const MySelect = (
 		/>
 	) : (
 		<Select
-			className={cn("text-main-regular", styles.mySelect, {
+			className={cn("text-main-regular my__select", styles.mySelect, {
 				...(dimension ? {[styles[dimension]]: dimension} : {[styles.sm]: true}),
 				...(bg ? {[styles[bg]]: bg} : {}),
 				[styles.autoHeight]: autoHeight,

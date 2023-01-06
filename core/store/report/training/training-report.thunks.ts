@@ -1,7 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportGetParams, IReportTrainingCreateParams} from "../../../models";
+import {eReportStatusType, FileModel, IReportGetParams, IReportTrainingCreateParams} from "../../../models";
 import {FileService, ReportService} from "../../../services";
+import {deleteFileThunk} from "../../file/file.thunks";
 import {
 	deleteTrainingReportAction,
 	setAllTrainingReportsAction,
@@ -25,6 +26,37 @@ export const createTrainingReportThunk = createAsyncThunk(
 	{dispatchConditionRejection: true},
 );
 
+export const updateTrainingReportThunk = createAsyncThunk(
+	"trainingReport/updateThunk",
+	async (
+		payload: {
+			id: number;
+			body: Partial<IReportTrainingCreateParams>;
+			deletingFilesIds?: number[];
+			formData?: FormData;
+		},
+		thunkAPI,
+	) => {
+		payload.deletingFilesIds?.forEach((id) => thunkAPI.dispatch(deleteFileThunk(id)));
+		const files: FileModel[] = [];
+
+		if (payload.formData) {
+			files.push(...(await FileService.post(payload.formData)));
+		}
+
+		const result = await ReportService.training.update(
+			{...payload, body: {...payload.body, files: files.map((f) => f.id)}},
+			thunkAPI.signal,
+		);
+
+		if (result) {
+			thunkAPI.dispatch(setTrainingReportByIdAction(result));
+			return result.id;
+		}
+	},
+	{dispatchConditionRejection: true},
+);
+
 export const getTrainingReportByIdThunk = createAsyncThunk(
 	"trainingReport/getThunk",
 	async (id: number, thunkAPI) => {
@@ -32,6 +64,7 @@ export const getTrainingReportByIdThunk = createAsyncThunk(
 
 		if (result) {
 			thunkAPI.dispatch(setTrainingReportByIdAction(result));
+			return result;
 		}
 	},
 	{dispatchConditionRejection: true},

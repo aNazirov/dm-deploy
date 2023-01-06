@@ -32,6 +32,10 @@
 	max-height: 35.938rem;
 	overflow: hidden auto;
 	padding: 0 0.375rem;
+
+	&.darkTheme {
+		background-color: var(--primary-dark-color);
+	}
 }
 
 .asideList {
@@ -42,6 +46,12 @@
 
 	li {
 		background-color: var(--white-color);
+	}
+}
+
+.darkTheme {
+	.asideList li, .asideLink, .asideSubList {
+		background-color: var(--primary-dark-color);
 	}
 }
 
