@@ -1,7 +1,6 @@
 import React, {DetailedHTMLProps, HTMLAttributes} from "react";
 import styles from "./styles.module.scss";
 import cn from "classnames";
-import {useAppSelector} from "../../../core/hooks";
 
 interface TableProps extends DetailedHTMLProps<HTMLAttributes<HTMLTableElement>, HTMLTableElement> {
 	wrapperClassName?: string;

@@ -4,7 +4,8 @@ import {ePlace} from "./table.model";
 import {ISpeciality, ITranslate, IUserShortInfo} from "./user.model";
 
 export enum eReportStatusType {
-	Sent = 1,
+	Created = 1,
+	Sent,
 	Approved,
 	Rejected,
 }

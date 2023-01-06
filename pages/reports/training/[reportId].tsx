@@ -115,6 +115,7 @@ const TrainingReportInfoPage = () => {
 				</AppButton>
 
 				<ReportPageUpdate
+					reportOrganizationId={report.organization.id}
 					reportCreatorId={report.user?.id}
 					reportStatusId={report.status.id}
 					paternalId={report.organization.paternalId}

@@ -49,7 +49,9 @@ export const visitForeignSpecialistsReportService = {
 				{signal},
 			)
 			.then((res) => {
-				if (statusId === eReportStatusType.Approved) {
+				if (statusId === eReportStatusType.Sent) {
+					Toast.info("Отправлено на рассмотрение.");
+				} else if (statusId === eReportStatusType.Approved) {
 					Toast.info("Принято.");
 				} else if (statusId === eReportStatusType.Rejected) {
 					Toast.info("Возвращено на модерацию.");

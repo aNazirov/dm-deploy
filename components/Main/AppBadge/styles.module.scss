@@ -29,3 +29,19 @@
 		background-color: var(--status-hover-submit-color);
 	}
 }
+
+.primaryOutline{
+	color: var(--main-button-color);
+	background-color: var(--white-color);
+	border: 1px solid var(--main-button-color);
+
+	&:hover,
+	&.active {
+		background-color: var(--main-button-color);
+		color: var(--white-color);
+
+		svg {
+			color: var(--white-color);
+		}
+	}
+}

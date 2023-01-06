@@ -221,7 +221,7 @@ const TelemedicineReportCreatePage = () => {
 				</AppButton>
 				<AppButton onClick={handleSubmit(onSubmit)} size="lg" variant="success" withIcon>
 					<SuccessIcon width="24px" height="24px" />
-					<span>Отправить отчёт</span>
+					<span>Создать отчёт</span>
 				</AppButton>
 			</div>
 		</>

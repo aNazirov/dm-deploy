@@ -4,7 +4,7 @@ import cn from "classnames";
 import {eReportStatusType} from "../../../core/models";
 
 interface AppBadgeProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-	variant?: "warning" | "success" | "danger";
+	variant?: "warning" | "success" | "danger" | "primary-outline";
 	statusId?: eReportStatusType;
 }
 export const AppBadge = ({className, variant, statusId, children, ...props}: AppBadgeProps) => {
@@ -14,6 +14,7 @@ export const AppBadge = ({className, variant, statusId, children, ...props}: App
 				[styles.warning]: statusId === eReportStatusType.Sent || variant === "warning",
 				[styles.danger]: statusId === eReportStatusType.Rejected || variant === "danger",
 				[styles.success]: statusId === eReportStatusType.Approved || variant === "success",
+				[styles.primaryOutline]: statusId === eReportStatusType.Created || variant === "primary-outline",
 			})}
 			{...props}
 		>

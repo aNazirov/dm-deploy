@@ -77,8 +77,17 @@ interface IProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLD
 	paternalId: number;
 	reportStatusId: eReportStatusType;
 	reportCreatorId?: number;
+	reportOrganizationId: number;
 }
-export const ReportPageUpdate = ({reportId, table, paternalId, reportCreatorId, reportStatusId, ...props}: IProps) => {
+export const ReportPageUpdate = ({
+	reportId,
+	table,
+	paternalId,
+	reportOrganizationId,
+	reportCreatorId,
+	reportStatusId,
+	...props
+}: IProps) => {
 	const router = useRouter();
 
 	const dispatch = useAppDispatch();
@@ -295,32 +304,59 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportCreatorId, 
 				reportStatusId !== eReportStatusType.Approved && (
 					<>
 						<AppInput type="text" onChange={onCommentChange} placeholder="Комментарий..." value={comment} />
-						<AppButton onClick={onEditing} size="lg" variant="print" withIcon>
-							<EditIcon width="24px" height="24px" />
-							<span>Редактировать</span>
-						</AppButton>
+
+						{user?.id === reportCreatorId && (
+							<AppButton onClick={onEditing} size="lg" variant="print" withIcon>
+								<EditIcon width="24px" height="24px" />
+								<span>Редактировать</span>
+							</AppButton>
+						)}
 					</>
 				)}
 
-			{currentPermission?.permissions.includes(eTablePermission.Delete) && (
-				<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
-					<DeleteIcon width="24px" height="24px" />
-					<span>Удалить</span>
-				</AppButton>
+			{currentPermission?.permissions.includes(eTablePermission.Delete) &&
+				reportStatusId !== eReportStatusType.Approved &&
+				user?.id === reportCreatorId && (
+					<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
+						<DeleteIcon width="24px" height="24px" />
+						<span>Удалить</span>
+					</AppButton>
+				)}
+
+			{currentPermission?.permissions.includes(eTablePermission.Status) && (
+				<>
+					{user?.organization.id === 1 && reportStatusId === eReportStatusType.Approved && (
+						<>
+							<AppInput type="text" onChange={onCommentChange} placeholder="Комментарий..." value={comment} />
+							<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
+								Отказать
+							</AppButton>
+						</>
+					)}
+
+					{(paternalId === 1 || paternalId === user?.organization.id) && reportStatusId === eReportStatusType.Sent && (
+						<>
+							<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
+								Отказать
+							</AppButton>
+							<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
+								Принять
+							</AppButton>
+						</>
+					)}
+
+					{reportStatusId === eReportStatusType.Created && (
+						<>
+							<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
+								Отказать
+							</AppButton>
+							<AppButton onClick={onUpdateStatus(eReportStatusType.Sent)} size="lg" variant="success">
+								Отправить
+							</AppButton>
+						</>
+					)}
+				</>
 			)}
-
-			{currentPermission?.permissions.includes(eTablePermission.Status) &&
-				reportStatusId === eReportStatusType.Sent &&
-				user?.organization.id === paternalId && (
-					<>
-						<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
-							Отказать
-						</AppButton>
-						<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
-							Принять
-						</AppButton>
-					</>
-				)}
 		</div>
 	);
 };
