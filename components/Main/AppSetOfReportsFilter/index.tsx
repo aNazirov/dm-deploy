@@ -46,13 +46,13 @@ export const AppSetOfReportsFilter = ({onFilterSubmit, exportUrl, disabledFilter
 		if (Array.isArray(field)) {
 			setValue(
 				name,
-				field.map((f) => f.value),
+				field.map((f) => +f.value),
 			);
 		} else {
 			if (name === "organizations") {
-				setValue(name, [field.value]);
+				setValue(name, [+field.value]);
 			} else {
-				setValue(name, field.value);
+				setValue(name, +field.value);
 			}
 		}
 	};
