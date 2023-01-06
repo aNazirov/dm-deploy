@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ReactSelect} from "../../External";
 import {AppButton} from "../AppButton";
 import ArrowToPrevIcon from "../../../assets/images/icons/filled/arrows/arrow-to-prev.svg";
@@ -16,6 +16,10 @@ interface IProps {
 
 export const AppPagination = ({cb, take = 20, skip = 0, totalCount = 0}: IProps) => {
 	const [pagination, setPagination] = useState({skip, take});
+
+	useEffect(() => {
+		setPagination((prev) => ({...prev, take, skip}));
+	}, [take, skip]);
 
 	const onTake = (option: unknown) => {
 		const field = option as {label: string; value: number};

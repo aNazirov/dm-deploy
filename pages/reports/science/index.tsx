@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 
@@ -7,7 +7,7 @@ import {getAllScienceReportsThunk} from "../../../core/store/report/science/scie
 import {useRouter} from "next/router";
 import {setAllScienceReportsAction} from "../../../core/store/report/science/science.slices";
 import Moment from "react-moment";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
 const ScienceReportListPage = () => {
@@ -16,17 +16,22 @@ const ScienceReportListPage = () => {
 	const dispatch = useAppDispatch();
 	const scienceReport = useAppSelector(({scienceReport}) => scienceReport);
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllScienceReportsThunk())];
+		const promises = [dispatch(getAllScienceReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllScienceReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/science/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -59,7 +64,7 @@ const ScienceReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.ScienceReport}>
+			<ReportListPageWrapper table={eTable.ScienceReport} cb={onPagination}>
 				{scienceReport.list.length > 0 ? (
 					<AppTable linked>
 						<AppTable.THead>
@@ -80,7 +85,7 @@ const ScienceReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination take={filters.take} skip={filters.skip} totalCount={scienceReport?.count} cb={onPagination} />
 				</div>
 			</ReportListPageWrapper>
 		</>

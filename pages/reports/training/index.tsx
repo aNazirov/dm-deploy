@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {getAllTrainingReportsThunk} from "../../../core/store/report/training/training-report.thunks";
 import {setAllTrainingReportsAction} from "../../../core/store/report/training/training-report.slices";
 import Moment from "react-moment";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
 const TrainingReportListPage = () => {
@@ -15,17 +15,22 @@ const TrainingReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllTrainingReportsThunk())];
+		const promises = [dispatch(getAllTrainingReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			setAllTrainingReportsAction({list: [], count: 0});
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/training/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +63,7 @@ const TrainingReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.TrainingReport}>
+			<ReportListPageWrapper table={eTable.TrainingReport} cb={onPagination}>
 				{trainingReport.list.length > 0 ? (
 					<AppTable linked>
 						<AppTable.THead>
@@ -79,7 +84,7 @@ const TrainingReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination take={filters.take} skip={filters.skip} totalCount={trainingReport?.count} cb={onPagination} />
 				</div>
 			</ReportListPageWrapper>
 		</>

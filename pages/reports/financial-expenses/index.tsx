@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {getAllFinancialExpensesReportsThunk} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
 import {setAllFinancialExpensesReportsAction} from "../../../core/store/report/financialExpenses/financial-expenses-report.slices";
 import Moment from "react-moment";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
 const CenterFinancialExpensesReportListPage = () => {
@@ -15,17 +15,23 @@ const CenterFinancialExpensesReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllFinancialExpensesReportsThunk())];
+		const promises = [dispatch(getAllFinancialExpensesReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllFinancialExpensesReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/financial-expenses/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		console.log(pagination);
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +64,7 @@ const CenterFinancialExpensesReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.FinancialExpensesReport}>
+			<ReportListPageWrapper table={eTable.FinancialExpensesReport} cb={onPagination}>
 				{financialReport.list.length > 0 ? (
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
@@ -79,7 +85,12 @@ const CenterFinancialExpensesReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination
+						take={filters.take}
+						skip={filters.skip}
+						totalCount={financialReport?.count}
+						cb={onPagination}
+					/>
 				</div>
 			</ReportListPageWrapper>
 		</>

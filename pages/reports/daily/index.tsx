@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -7,7 +7,7 @@ import {setAllDailyReportsAction} from "../../../core/store/report/daily/daily-r
 import Moment from "react-moment";
 import {useRouter} from "next/router";
 import {ReportListPageWrapper} from "../../../components/Layout";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 
 const DailyReportListPage = () => {
 	const dispatch = useAppDispatch();
@@ -15,17 +15,22 @@ const DailyReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllDailyReportsThunk())];
+		const promises = [dispatch(getAllDailyReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllDailyReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/daily/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +63,7 @@ const DailyReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.DailyReport}>
+			<ReportListPageWrapper table={eTable.DailyReport} cb={onPagination}>
 				{dailyReport.list.length > 0 ? (
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
@@ -79,7 +84,7 @@ const DailyReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination take={filters.take} skip={filters.skip} totalCount={dailyReport?.count} cb={onPagination} />
 				</div>
 			</ReportListPageWrapper>
 		</>

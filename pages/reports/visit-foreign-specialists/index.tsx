@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 
@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import Moment from "react-moment";
 import {getAllVisitForeignSpecialistsReportsThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
 import {setAllVisitForeignSpecialistsReportsAction} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.slices";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
 const VisitForeignSpecialistsReportListPage = () => {
@@ -18,17 +18,22 @@ const VisitForeignSpecialistsReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllVisitForeignSpecialistsReportsThunk())];
+		const promises = [dispatch(getAllVisitForeignSpecialistsReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			setAllVisitForeignSpecialistsReportsAction({list: [], count: 0});
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/visit-foreign-specialists/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -61,7 +66,7 @@ const VisitForeignSpecialistsReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.VisitsOfForeignSpecialistsReport}>
+			<ReportListPageWrapper table={eTable.VisitsOfForeignSpecialistsReport} cb={onPagination}>
 				{visitForeignSpecialistsReport.list.length > 0 ? (
 					<AppTable linked>
 						<AppTable.THead>
@@ -81,7 +86,12 @@ const VisitForeignSpecialistsReportListPage = () => {
 				)}
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination
+						take={filters.take}
+						skip={filters.skip}
+						totalCount={visitForeignSpecialistsReport?.count}
+						cb={onPagination}
+					/>
 				</div>
 			</ReportListPageWrapper>
 		</>

@@ -3,29 +3,15 @@ import styles from "./styles.module.scss";
 import {AppButton} from "../../Main";
 import FilterIcon from "../../../assets/images/icons/filled/filter.svg";
 import {eReportStatusType, eTable, eTablePermission, IReportGetParams} from "../../../core/models";
-import {useAppDispatch, useAppSelector} from "../../../core/hooks";
+import {useAppSelector} from "../../../core/hooks";
 import {useRouter} from "next/router";
 import cn from "classnames";
-import {getAllDailyReportsThunk} from "../../../core/store/report/daily/daily-report.thunks";
-import {getAllFinancialExpensesReportsThunk} from "../../../core/store/report/financialExpenses/financial-expenses-report.thunks";
-import {getAllMediaPlaceReportsThunk} from "../../../core/store/report/mediaPlace/mediaPlace.thunks";
-import {getAllTelemedicineReportsThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
-import {getAllTrainingReportsThunk} from "../../../core/store/report/training/training-report.thunks";
-import {getAllVisitForeignSpecialistsReportsThunk} from "../../../core/store/report/visitForeignSpecialists/visitForeignSpecialists.thunks";
-import {getAllScientificEventsReportsThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
-import {getAllScientificWorksReportsThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
-import {getAllScienceReportsThunk} from "../../../core/store/report/science/science.thunks";
-import {getAllInsuranceReportsThunk} from "../../../core/store/report/insurance/insurance-report.thunks";
-import {getAllImplementationReportsThunk} from "../../../core/store/report/implementation/implementation-report.thunks";
-import {getAllAppealsReportsThunk} from "../../../core/store/report/appeals/appeals-report.thunks";
-import {getAllDepartureReportsThunk} from "../../../core/store/report/departure/departure-report.thunks";
 
 interface TablePageWrapperProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-	cb?: () => void;
+	cb?: (filters: IReportGetParams) => void;
 	table: eTable;
 }
 export const ReportListPageWrapper = ({children, table, cb, className, ...props}: TablePageWrapperProps) => {
-	const dispatch = useAppDispatch();
 	const permissions = useAppSelector(({user}) => user.current?.permissions);
 
 	const currentPermission = permissions?.find((p) => p.table === table);
@@ -35,51 +21,8 @@ export const ReportListPageWrapper = ({children, table, cb, className, ...props}
 	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 
 	const onStatusChange = (statusId?: eReportStatusType) => () => {
-		setFilters((prev) => ({...prev, statusId}));
-
-		switch (table) {
-			case eTable.DailyReport:
-				dispatch(getAllDailyReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.FinancialExpensesReport:
-				dispatch(getAllFinancialExpensesReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.MediaReport:
-				dispatch(getAllMediaPlaceReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.TelemedicineReport:
-				dispatch(getAllTelemedicineReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.TrainingReport:
-				dispatch(getAllTrainingReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.VisitsOfForeignSpecialistsReport:
-				dispatch(getAllVisitForeignSpecialistsReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.ScientificEventsReport:
-				dispatch(getAllScientificEventsReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.ScientificWorksReport:
-				dispatch(getAllScientificWorksReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.ScienceReport:
-				dispatch(getAllScienceReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.InsuranceReport:
-				dispatch(getAllInsuranceReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.ImplementationReport:
-				dispatch(getAllImplementationReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.AppealsReport:
-				dispatch(getAllAppealsReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			case eTable.DepartureReport:
-				dispatch(getAllDepartureReportsThunk(statusId ? {statusId, skip: 0, take: 20} : undefined));
-				break;
-			default:
-				break;
-		}
+		setFilters((prev) => ({...prev, statusId, skip: 0, take: 20}));
+		cb?.(filters);
 	};
 
 	return (

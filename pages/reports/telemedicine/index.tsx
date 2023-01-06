@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 
@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import {getAllTelemedicineReportsThunk} from "../../../core/store/report/telemedicine/telemedicine.thunks";
 import {setAllTelemedicineReportsAction} from "../../../core/store/report/telemedicine/telemedicine.slices";
 import Moment from "react-moment";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {ReportListPageWrapper} from "../../../components/Layout";
 
 const TelemedicineReportListPage = () => {
@@ -16,17 +16,22 @@ const TelemedicineReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllTelemedicineReportsThunk())];
+		const promises = [dispatch(getAllTelemedicineReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllTelemedicineReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/telemedicine/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +63,7 @@ const TelemedicineReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.TelemedicineReport}>
+			<ReportListPageWrapper table={eTable.TelemedicineReport} cb={onPagination}>
 				{telemedicineReport.list.length > 0 ? (
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
@@ -79,7 +84,12 @@ const TelemedicineReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination
+						take={filters.take}
+						skip={filters.skip}
+						totalCount={telemedicineReport?.count}
+						cb={onPagination}
+					/>
 				</div>
 			</ReportListPageWrapper>
 		</>

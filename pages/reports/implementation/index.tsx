@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
@@ -7,7 +7,7 @@ import {setAllImplementationReportsAction} from "../../../core/store/report/impl
 import Moment from "react-moment";
 import {useRouter} from "next/router";
 import {ReportListPageWrapper} from "../../../components/Layout";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 
 const ImplementationReportListPage = () => {
 	const dispatch = useAppDispatch();
@@ -15,17 +15,22 @@ const ImplementationReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllImplementationReportsThunk())];
+		const promises = [dispatch(getAllImplementationReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllImplementationReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/implementation/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +63,7 @@ const ImplementationReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.ImplementationReport}>
+			<ReportListPageWrapper table={eTable.ImplementationReport} cb={onPagination}>
 				{implementationReport.list.length > 0 ? (
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
@@ -79,7 +84,12 @@ const ImplementationReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination
+						take={filters.take}
+						skip={filters.skip}
+						totalCount={implementationReport?.count}
+						cb={onPagination}
+					/>
 				</div>
 			</ReportListPageWrapper>
 		</>

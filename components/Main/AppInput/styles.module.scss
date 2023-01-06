@@ -20,6 +20,7 @@
 .input {
 	border: 1px solid var(--table-border-color);
 	transition: all 0.3s;
+	min-width: 5rem;
 
 	&::placeholder {
 		color: var(--muted-text-color);

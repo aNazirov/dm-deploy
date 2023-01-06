@@ -1,11 +1,11 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import {AppBadge, AppDivider, AppPagination, AppTable} from "../../../components/Main";
 import {useAppDispatch, useAppSelector} from "../../../core/hooks";
 import Moment from "react-moment";
 import {useRouter} from "next/router";
 import {ReportListPageWrapper} from "../../../components/Layout";
-import {eTable} from "../../../core/models";
+import {eTable, IReportGetParams} from "../../../core/models";
 import {getAllScientificEventsReportsThunk} from "../../../core/store/report/scientificEvents/scientific-events-report.thunks";
 import {setAllScientificEventsReportsAction} from "../../../core/store/report/scientificEvents/scientific-events-report.slices";
 
@@ -15,17 +15,22 @@ const ScientificEventsReportListPage = () => {
 
 	const router = useRouter();
 
+	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 	useEffect(() => {
-		const promises = [dispatch(getAllScientificEventsReportsThunk())];
+		const promises = [dispatch(getAllScientificEventsReportsThunk(filters))];
 
 		return () => {
 			promises.forEach((p) => p.abort());
 			dispatch(setAllScientificEventsReportsAction({list: [], count: 0}));
 		};
-	}, []);
+	}, [filters]);
 
 	const onOpenReport = (reportId: number) => () => {
 		void router.push(`/reports/scientific-events/${reportId}`);
+	};
+
+	const onPagination = (pagination: {take: number; skip: number}) => {
+		setFilters((prev) => ({...prev, ...pagination}));
 	};
 
 	const renderTableBodyRow = () => {
@@ -58,7 +63,7 @@ const ScientificEventsReportListPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<ReportListPageWrapper table={eTable.ScientificEventsReport}>
+			<ReportListPageWrapper table={eTable.ScientificEventsReport} cb={onPagination}>
 				{scientificEventsReport.list.length > 0 ? (
 					<AppTable linked wrapperClassName="p-0">
 						<AppTable.THead>
@@ -79,7 +84,12 @@ const ScientificEventsReportListPage = () => {
 
 				<div className="mt-auto">
 					<AppDivider className="my-1.25" />
-					<AppPagination />
+					<AppPagination
+						take={filters.take}
+						skip={filters.skip}
+						totalCount={scientificEventsReport?.count}
+						cb={onPagination}
+					/>
 				</div>
 			</ReportListPageWrapper>
 		</>
