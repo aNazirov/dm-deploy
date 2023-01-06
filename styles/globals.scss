@@ -158,6 +158,14 @@ svg {
 	background-color: var(--main-hover-button-color);
 }
 
+// react-select
+.my__single-value,
+.my__placeholder {
+	position: static !important;
+	transform: none !important;
+	max-width: none !important;
+}
+
 // border
 .border-w-0 {
 	border-width: 0;

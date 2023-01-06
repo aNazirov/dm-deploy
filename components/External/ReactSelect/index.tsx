@@ -59,8 +59,15 @@ const MySelect = (
 			styles={{
 				...reactStyles,
 				indicatorSeparator: () => ({display: "none"}),
+				menu: (base) => ({
+					...base,
+					width: "max-content !important",
+					minWidth: "100% !important",
+				}),
 			}}
 			instanceId={id}
+			menuPlacement="auto"
+			menuPosition="fixed"
 			classNamePrefix="my"
 			loadOptions={loadOptions}
 			defaultOptions={options}
@@ -78,6 +85,21 @@ const MySelect = (
 			styles={{
 				...reactStyles,
 				indicatorSeparator: () => ({display: "none"}),
+				placeholder: (provided) => ({
+					...provided,
+					position: "static",
+					transform: "none",
+				}),
+				singleValue: (provided) => ({
+					...provided,
+					position: "static",
+					transform: "none",
+				}),
+				menu: (base) => ({
+					...base,
+					width: "max-content !important",
+					minWidth: "100% !important",
+				}),
 			}}
 			instanceId={id}
 			classNamePrefix="my"

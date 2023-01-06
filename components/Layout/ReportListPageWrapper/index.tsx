@@ -21,8 +21,9 @@ export const ReportListPageWrapper = ({children, table, cb, className, ...props}
 	const [filters, setFilters] = useState<IReportGetParams>({skip: 0, take: 20});
 
 	const onStatusChange = (statusId?: eReportStatusType) => () => {
+		console.log(statusId);
 		setFilters((prev) => ({...prev, statusId, skip: 0, take: 20}));
-		cb?.(filters);
+		cb?.({...filters, statusId, skip: 0, take: 20});
 	};
 
 	return (
