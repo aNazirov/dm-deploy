@@ -292,9 +292,9 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportCreatorId, 
 	return (
 		<div className="d-flex gap-1.25" {...props}>
 			{currentPermission?.permissions.includes(eTablePermission.Update) &&
-				user?.id === reportCreatorId &&
 				reportStatusId !== eReportStatusType.Approved && (
 					<>
+						<AppInput type="text" onChange={onCommentChange} placeholder="Комментарий..." value={comment} />
 						<AppButton onClick={onEditing} size="lg" variant="print" withIcon>
 							<EditIcon width="24px" height="24px" />
 							<span>Редактировать</span>
@@ -302,31 +302,25 @@ export const ReportPageUpdate = ({reportId, table, paternalId, reportCreatorId, 
 					</>
 				)}
 
-			{currentPermission?.permissions.includes(eTablePermission.Delete) && user?.id === reportCreatorId && (
+			{currentPermission?.permissions.includes(eTablePermission.Delete) && (
 				<AppButton onClick={onDelete} size="lg" variant="danger" withIcon>
 					<DeleteIcon width="24px" height="24px" />
 					<span>Удалить</span>
 				</AppButton>
 			)}
 
-			{currentPermission?.permissions.includes(eTablePermission.Status) && user?.organization.id === paternalId && (
-				<>
-					{reportStatusId === eReportStatusType.Rejected ? (
-						<>
-							<AppInput type="text" onChange={onCommentChange} placeholder="Комментарий..." value={comment} />
-							<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
-								Принять
-							</AppButton>
-						</>
-					) : (
-						<>
-							<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
-								Отказать
-							</AppButton>
-						</>
-					)}
-				</>
-			)}
+			{currentPermission?.permissions.includes(eTablePermission.Status) &&
+				reportStatusId === eReportStatusType.Sent &&
+				user?.organization.id === paternalId && (
+					<>
+						<AppButton onClick={onUpdateStatus(eReportStatusType.Rejected)} size="lg" variant="danger">
+							Отказать
+						</AppButton>
+						<AppButton onClick={onUpdateStatus(eReportStatusType.Approved)} size="lg" variant="success">
+							Принять
+						</AppButton>
+					</>
+				)}
 		</div>
 	);
 };
