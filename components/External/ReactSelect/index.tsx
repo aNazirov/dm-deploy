@@ -1,4 +1,4 @@
-import React, {RefCallback, useId} from "react";
+import React, {useId} from "react";
 import Select, {GroupBase, OptionsOrGroups, Props} from "react-select";
 import cn from "classnames";
 import styles from "./styles.module.scss";
@@ -20,7 +20,7 @@ const MySelect = (
 		dimension,
 		options,
 		className,
-		styles: reactStyles,
+		styles: customStyles,
 		searchOptions,
 		isAsync,
 		autoHeight,
@@ -57,20 +57,20 @@ const MySelect = (
 				[`${className}`]: className,
 			})}
 			styles={{
-				...reactStyles,
+				...customStyles,
 				indicatorSeparator: () => ({display: "none"}),
 				menu: (base) => ({
 					...base,
-					width: "max-content !important",
-					minWidth: "100% !important",
+					width: "max-content",
+					maxWidth: "200%",
+					minWidth: "50%",
 				}),
 			}}
 			instanceId={id}
-			menuPlacement="auto"
-			menuPosition="fixed"
 			classNamePrefix="my"
 			loadOptions={loadOptions}
 			defaultOptions={options}
+			menuPlacement="auto"
 			ref={ref}
 			{...props}
 		/>
@@ -83,18 +83,8 @@ const MySelect = (
 				[`${className}`]: className,
 			})}
 			styles={{
-				...reactStyles,
+				...customStyles,
 				indicatorSeparator: () => ({display: "none"}),
-				placeholder: (provided) => ({
-					...provided,
-					position: "static",
-					transform: "none",
-				}),
-				singleValue: (provided) => ({
-					...provided,
-					position: "static",
-					transform: "none",
-				}),
 				menu: (base) => ({
 					...base,
 					width: "max-content !important",
@@ -104,6 +94,7 @@ const MySelect = (
 			instanceId={id}
 			classNamePrefix="my"
 			options={options}
+			menuPlacement="auto"
 			ref={ref}
 			{...props}
 		/>

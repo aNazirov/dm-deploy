@@ -90,8 +90,17 @@
 		color: var(--white-color);
 	}
 
-	.my__placeholder, .my__single-value {
+	.my__placeholder, .my__single-value, .my__input-container, .my__indicator, .my__indicator:hover, .my__menu-notice, .my__option--is-selected, .my__option--is-focused, .my__menu-notice {
 		color: var(--white-color);
+	}
+
+	.my__indicator:hover {
+		color: var(--muted-text-color);
+	}
+
+	.my__option--is-focused {
+		color: var(--white-color);
+		background-color: var(--muted-text-color);
 	}
 
 	.hr {
@@ -125,6 +134,8 @@ body {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	// remove line below, if need optimize project
+	transition: background-color 0.3s;
 }
 
 ul {
