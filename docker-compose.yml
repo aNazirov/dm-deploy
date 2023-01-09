@@ -1,13 +1,12 @@
-version: "3.3"
+version: '3'
 
 services:
   front:
+    build: ./
+    volumes:
+      - ./usr/src/app/.next
+      - ./usr/src/app/node_modules
+      - ./usr/src/app/public:/app/public
+    restart: always
     ports:
       - 3000:3000
-    build: .
-    volumes:
-      - /usr/src/app/node_modules
-      - /usr/src/app/public
-      - /usr/src/app/.next
-    env_file:
-      - .env
