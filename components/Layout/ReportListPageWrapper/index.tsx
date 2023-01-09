@@ -50,9 +50,16 @@ export const ReportListPageWrapper = ({
 	};
 
 	const onSelect = (option: unknown) => {
-		const field = option as {label: string; value: number};
+		const field = option as {label: string; value: number}[] | {label: string; value: number};
 
-		setValue("organizationId", +field.value);
+		if (Array.isArray(field)) {
+			setValue(
+				"organizations",
+				field.map((f) => +f.value),
+			);
+		} else {
+			setValue("organizations", [+field.value]);
+		}
 		setValue("skip", 0);
 		setValue("take", 20);
 	};
@@ -62,10 +69,10 @@ export const ReportListPageWrapper = ({
 	};
 
 	const onClear = () => {
-		setValue("organizationId", null as unknown as undefined);
+		setValue("organizations", null as unknown as undefined);
 		setValue("start", undefined);
 		setValue("end", undefined);
-		cb?.({...getValues(), organizationId: undefined, start: undefined, end: undefined});
+		cb?.({...getValues(), organizations: undefined, start: undefined, end: undefined});
 		setIsVisible(false);
 	};
 
@@ -138,7 +145,7 @@ export const ReportListPageWrapper = ({
 							{!disabledFilters?.includes(eCustomFilter.start) && <AppInput type="date" {...register("start")} />}
 							{!disabledFilters?.includes(eCustomFilter.end) && <AppInput type="date" {...register("end")} />}
 							{!disabledFilters?.includes(eCustomFilter.organizations) && (
-								<AppOrganizationSelect className="min-w-10 w-max-20" onChange={onSelect} />
+								<AppOrganizationSelect isMulti className="min-w-10 w-max-20" onChange={onSelect} />
 							)}
 							<AppButton variant="primary-outline" size="square">
 								<SearchIcon width="24px" height="24px" className="main-btn-text-color" />
