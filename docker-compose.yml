@@ -4,9 +4,9 @@ services:
   front:
     build: ./
     volumes:
-      - ./usr/src/app/.next
-      - ./usr/src/app/node_modules
-      - ./usr/src/app/public:/app/public
+      - /usr/src/app/.next
+      - /usr/src/app/node_modules
+      - /usr/src/app/public:/app/public
     restart: always
     ports:
       - 3000:3000
