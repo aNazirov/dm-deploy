@@ -8,6 +8,7 @@ import {ReportPageUpdate} from "../../../components/Layout";
 import {getScientificWorksReportByIdThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
 import {setScientificWorksReportByIdAction} from "../../../core/store/report/scientificWorks/scientific-works-report.slices";
 import {eTable} from "../../../core/models";
+import {FileService} from "../../../core/services";
 
 const ScientificWorksReportInfoPage = () => {
 	const router = useRouter();
@@ -33,6 +34,28 @@ const ScientificWorksReportInfoPage = () => {
 
 	if (!report) return null;
 
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			FileService.download(url, name);
+		};
+
+	const renderFileList = () => {
+		return report.files?.map((f) => (
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
+			</div>
+		));
+	};
+
 	return (
 		<div className="pe-0 flex-col h-100">
 			<Head>
@@ -44,7 +67,7 @@ const ScientificWorksReportInfoPage = () => {
 
 			<AppDivider className="my-1.25" />
 
-			<AppTable>
+			<AppTable wrapperClassName="mb-1.5">
 				<AppTable.THead extended>
 					<tr>
 						<th colSpan={6}>Количество статей</th>
@@ -85,6 +108,8 @@ const ScientificWorksReportInfoPage = () => {
 					</tr>
 				</AppTable.TBody>
 			</AppTable>
+
+			<div className="flex-col gap-0.5 mb-2.5">{renderFileList()}</div>
 
 			<div className="flex-justify-between mt-auto pe-2.5">
 				<AppButton useAs="link" href="/reports/scientific-works" size="lg" variant="dark" withIcon>

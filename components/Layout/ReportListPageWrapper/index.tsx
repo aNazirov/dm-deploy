@@ -25,7 +25,10 @@ export const ReportListPageWrapper = ({
 	disabledFilters,
 	...props
 }: TablePageWrapperProps) => {
-	const permissions = useAppSelector(({user}) => user.current?.permissions);
+	const [permissions, paternalId] = useAppSelector(({user}) => [
+		user.current?.permissions,
+		user.current?.organization.id,
+	]);
 
 	const currentPermission = permissions?.find((p) => p.table === table);
 
@@ -145,7 +148,12 @@ export const ReportListPageWrapper = ({
 							{!disabledFilters?.includes(eCustomFilter.start) && <AppInput type="date" {...register("start")} />}
 							{!disabledFilters?.includes(eCustomFilter.end) && <AppInput type="date" {...register("end")} />}
 							{!disabledFilters?.includes(eCustomFilter.organizations) && (
-								<AppOrganizationSelect isMulti className="min-w-10 w-max-20" onChange={onSelect} />
+								<AppOrganizationSelect
+									paternalId={paternalId}
+									isMulti
+									className="min-w-10 w-max-20"
+									onChange={onSelect}
+								/>
 							)}
 							<AppButton variant="primary-outline" size="square">
 								<SearchIcon width="24px" height="24px" className="main-btn-text-color" />

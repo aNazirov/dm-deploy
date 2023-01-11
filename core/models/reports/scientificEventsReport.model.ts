@@ -1,3 +1,4 @@
+import {IFile} from "../file.model";
 import {IShortOrganizationInfo} from "../organization.model";
 import {IStatus} from "../report.model";
 import {IUserShortInfo} from "../user.model";
@@ -24,6 +25,7 @@ export class ScientificEventsReportModel {
 	organization: IShortOrganizationInfo;
 	note?: string;
 	user?: IUserShortInfo;
+	files?: IFile[];
 	createdAt: Date;
 	updatedAt: Date;
 
@@ -49,6 +51,10 @@ export class ScientificEventsReportModel {
 		this.organization = report.organization;
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
+
+		if (report.files) {
+			this.files = report.files;
+		}
 
 		if (report.note) {
 			this.note = report.note;
@@ -77,4 +83,5 @@ export interface IReportScientificEventsCreateParams {
 	internationalConferencesOffline: number;
 	internationalConferencesOnline: number;
 	note?: string;
+	files?: number[];
 }

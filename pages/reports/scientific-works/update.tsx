@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Head from "next/head";
 import cn from "classnames";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
@@ -12,8 +12,10 @@ import {
 	getScientificWorksReportByIdThunk,
 	updateScientificWorksReportThunk,
 } from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
-import {IReportCreateScientificWorksParams, ScientificWorksReportModel} from "../../../core/models";
+import {IFile, IReportCreateScientificWorksParams, ScientificWorksReportModel} from "../../../core/models";
 import {setScientificWorksReportByIdAction} from "../../../core/store/report/scientificWorks/scientific-works-report.slices";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
+import {downloadFileThunk} from "../../../core/store/file/file.thunks";
 
 const fieldOptions = {
 	required: true,
@@ -27,13 +29,36 @@ const ScientificWorksReportUpdatePage = () => {
 
 	const dispatch = useAppDispatch();
 
+	const [files, setFiles] = useState<File[]>([]);
+	const [errText, setErrText] = useState("");
+	const [existingFiles, setExistingFiles] = useState<IFile[]>([]);
+	const [deletingFilesIds, setDeletingFilesIds] = useState<number[]>([]);
+
 	useEffect(() => {
 		if (reportId) {
 			const promise = dispatch(getScientificWorksReportByIdThunk(+reportId));
 			promise.then((res) => {
 				if (res.payload) {
 					const fields = res.payload as ScientificWorksReportModel;
-					reset(fields);
+					reset({
+						benefits: fields.benefits,
+						cisArticles: fields.cisArticles,
+						cisLectures: fields.cisLectures,
+						foreignArticles: fields.foreignArticles,
+						foreignLectures: fields.foreignLectures,
+						localArticles: fields.localArticles,
+						localLectures: fields.localLectures,
+						monographs: fields.monographs,
+						patents: fields.patents,
+						otherArticles: fields.otherArticles,
+						recommendations: fields.recommendations,
+						scopusArticles: fields.scopusArticles,
+						wosArticles: fields.wosArticles,
+					});
+
+					if (fields.files) {
+						setExistingFiles(fields.files);
+					}
 				}
 			});
 
@@ -47,12 +72,86 @@ const ScientificWorksReportUpdatePage = () => {
 	const {register, handleSubmit, reset} = useForm<IReportCreateScientificWorksParams>();
 
 	const onSubmit = async (fields: IReportCreateScientificWorksParams) => {
-		const action = await dispatch(updateScientificWorksReportThunk({id: +reportId, body: fields}));
-		const id = action.payload as number;
+		if (existingFiles.length || files.length) {
+			setErrText("");
+			const formData = new FormData();
+			files.forEach((f) => formData.append("files", f));
+			const action = await dispatch(
+				updateScientificWorksReportThunk({body: fields, id: +reportId, formData, deletingFilesIds}),
+			);
+			const id = action.payload as number;
 
-		if (id) {
-			void router.push(`/reports/scientific-works/${id}`);
+			if (id) {
+				void router.push(`/reports/scientific-works/${id}`);
+			}
+		} else {
+			setErrText("Пожалуйста, прикрепите файлы.");
 		}
+	};
+	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			for (const key in e.target.files) {
+				const file = e.target.files[key];
+
+				if (file instanceof File) {
+					if (!files.some((f) => f.name === file.name)) {
+						setFiles((prev) => [...prev, file]);
+					}
+				}
+			}
+		}
+	};
+
+	const onFileRemove = (fileName: string) => () => {
+		const index = files.findIndex((f) => f.name === fileName);
+		setFiles((prev) => prev.filter((f, i) => i !== index));
+	};
+
+	const onFileDelete = (id: number) => async () => {
+		setExistingFiles((prev) => prev?.filter((f) => f.id !== id));
+
+		if (!deletingFilesIds.includes(id)) {
+			setDeletingFilesIds((prev) => [...prev, id]);
+		}
+	};
+
+	const renderFiles = () => {
+		return files.map((file) => (
+			<div className="flex-center gap-0.5" key={file.name}>
+				<label className={styles.cardBodyLabel}>
+					<AppInput className="text-center" type="file" disabled readOnly placeholder={file.name} />
+				</label>
+
+				<AppButton onClick={onFileRemove(file.name)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
+	};
+
+	const downloadFile =
+		(url: string, name = "file") =>
+		() => {
+			dispatch(downloadFileThunk({url, name}));
+		};
+
+	const renderReceivedFiles = () => {
+		return existingFiles?.map((f) => (
+			<div className="d-flex gap-0.5 w-max" key={f.id}>
+				<AppButton
+					variant="print"
+					size="lg"
+					onClick={downloadFile(f.url, f.name)}
+					className="text-center"
+					type="button"
+				>
+					{f.name}
+				</AppButton>
+				<AppButton onClick={onFileDelete(f.id)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
 	};
 
 	return (
@@ -294,6 +393,31 @@ const ScientificWorksReportUpdatePage = () => {
 									</label>
 								</div>
 							</div>
+						</AppCard.Body>
+					</AppCard>
+				</div>
+			</div>
+
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid4, styles.bgWhite)}>
+				<div className={cn("pe-2", styles.cardWrapper)}>
+					<AppCard className="h-100">
+						<AppCard.Header>Подтверждающий документ</AppCard.Header>
+						<AppCard.Body className={cn(styles.cardBody, styles.fileCardBody)}>
+							<label className={styles.cardBodyLabel}>
+								<AppInput
+									onChange={onFileChange}
+									className="text-center"
+									type="file"
+									placeholder="Прикрепить файл"
+									multiple
+								/>
+							</label>
+
+							<AppDivider className="my-0.75" />
+
+							{renderReceivedFiles()}
+							{renderFiles()}
+							{errText}
 						</AppCard.Body>
 					</AppCard>
 				</div>
