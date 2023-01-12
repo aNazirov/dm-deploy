@@ -1,3 +1,4 @@
+import {IFile} from "../file.model";
 import {IShortOrganizationInfo} from "../organization.model";
 import {IStatus} from "../report.model";
 import {IUserShortInfo} from "../user.model";
@@ -21,6 +22,7 @@ export class ScientificWorksReportModel {
 	recommendations: number;
 	note?: string;
 	user?: IUserShortInfo;
+	files?: IFile[];
 	status: IStatus;
 	organization: IShortOrganizationInfo;
 	createdAt: Date;
@@ -46,6 +48,10 @@ export class ScientificWorksReportModel {
 		this.createdAt = new Date(report.createdAt);
 		this.updatedAt = new Date(report.updatedAt);
 
+		if (report.files) {
+			this.files = report.files;
+		}
+
 		if (report.note) {
 			this.note = report.note;
 		}
@@ -70,4 +76,5 @@ export interface IReportCreateScientificWorksParams {
 	benefits: number;
 	recommendations: number;
 	note?: string;
+	files?: number[];
 }

@@ -1,7 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-import {eReportStatusType, IReportGetParams, IReportScientificEventsCreateParams} from "../../../models";
-import {ReportService} from "../../../services";
+import {eReportStatusType, FileModel, IReportGetParams, IReportScientificEventsCreateParams} from "../../../models";
+import {FileService, ReportService} from "../../../services";
+import {deleteFileThunk} from "../../file/file.thunks";
 import {
 	deleteScientificEventsReportAction,
 	setAllScientificEventsReportsAction,
@@ -10,12 +11,19 @@ import {
 
 export const createScientificEventsReportThunk = createAsyncThunk(
 	"scientificEventsReport/createThunk",
-	async (payload: IReportScientificEventsCreateParams, thunkAPI) => {
-		const result = await ReportService.scientificEvents.create(payload, thunkAPI.signal);
+	async ({payload, formData}: {payload: IReportScientificEventsCreateParams; formData: FormData}, thunkAPI) => {
+		const files = await FileService.post(formData);
 
-		if (result) {
-			thunkAPI.dispatch(setScientificEventsReportByIdAction(result));
-			return result.id;
+		if (files) {
+			const result = await ReportService.scientificEvents.create(
+				{...payload, files: files.map((f) => f.id)},
+				thunkAPI.signal,
+			);
+
+			if (result) {
+				thunkAPI.dispatch(setScientificEventsReportByIdAction(result));
+				return result.id;
+			}
 		}
 	},
 	{dispatchConditionRejection: true},
@@ -23,8 +31,26 @@ export const createScientificEventsReportThunk = createAsyncThunk(
 
 export const updateScientificEventsReportThunk = createAsyncThunk(
 	"scientificEventsReport/updateThunk",
-	async (payload: {id: number; body: Partial<IReportScientificEventsCreateParams>}, thunkAPI) => {
-		const result = await ReportService.scientificEvents.update(payload, thunkAPI.signal);
+	async (
+		payload: {
+			id: number;
+			body: Partial<IReportScientificEventsCreateParams>;
+			deletingFilesIds?: number[];
+			formData?: FormData;
+		},
+		thunkAPI,
+	) => {
+		payload.deletingFilesIds?.forEach((id) => thunkAPI.dispatch(deleteFileThunk(id)));
+		const files: FileModel[] = [];
+
+		if (payload.formData) {
+			files.push(...(await FileService.post(payload.formData)));
+		}
+
+		const result = await ReportService.scientificEvents.update(
+			{...payload, body: {...payload.body, files: files.map((f) => f.id)}},
+			thunkAPI.signal,
+		);
 
 		if (result) {
 			thunkAPI.dispatch(setScientificEventsReportByIdAction(result));

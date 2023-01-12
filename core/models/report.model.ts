@@ -102,7 +102,7 @@ export interface IReportMediaPlaceCreateParams {
 export interface IReportGetParams {
 	skip: number;
 	take: number;
-	organizationId?: number;
+	organizations?: number[];
 	statusId?: eReportStatusType;
 	start?: Date;
 	end?: Date;

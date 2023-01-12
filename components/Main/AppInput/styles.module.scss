@@ -55,6 +55,8 @@
 	overflow: hidden;
 	visibility: hidden;
 	width: 0;
+	position: absolute;
+	z-index: -1;
 
 	&.sm,
 	&.lg {

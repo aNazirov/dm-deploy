@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ChangeEvent, useState} from "react";
 import Head from "next/head";
 import cn from "classnames";
 import {AppButton, AppCard, AppDivider, AppInput} from "../../../components/Main";
@@ -10,6 +10,7 @@ import {useAppDispatch} from "../../../core/hooks";
 import {useForm} from "react-hook-form";
 import {createScientificWorksReportThunk} from "../../../core/store/report/scientificWorks/scientific-works-report.thunks";
 import {IReportCreateScientificWorksParams} from "../../../core/models";
+import TrashIcon from "../../../assets/images/icons/filled/trash.svg";
 
 const fieldOptions = {
 	required: true,
@@ -21,15 +22,58 @@ const ScientificWorksReportCreatePage = () => {
 
 	const dispatch = useAppDispatch();
 
+	const [files, setFiles] = useState<File[]>([]);
+	const [errText, setErrText] = useState("");
+
 	const {register, handleSubmit} = useForm<IReportCreateScientificWorksParams>();
 
 	const onSubmit = async (fields: IReportCreateScientificWorksParams) => {
-		const action = await dispatch(createScientificWorksReportThunk(fields));
-		const id = action.payload as number;
+		if (files.length) {
+			setErrText("");
+			const formData = new FormData();
+			files.forEach((f) => formData.append("files", f));
 
-		if (id) {
-			void router.push(`/reports/scientific-works/${id}`);
+			const action = await dispatch(createScientificWorksReportThunk({payload: fields, formData}));
+			const id = action.payload as number;
+
+			if (id) {
+				void router.push(`/reports/scientific-works/${id}`);
+			}
+		} else {
+			setErrText("Пожалуйста, прикрепите файлы.");
 		}
+	};
+	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			for (const key in e.target.files) {
+				const file = e.target.files[key];
+
+				if (file instanceof File) {
+					if (!files.some((f) => f.name === file.name)) {
+						setFiles((prev) => [...prev, file]);
+					}
+				}
+			}
+		}
+	};
+
+	const onFileRemove = (fileName: string) => () => {
+		const index = files.findIndex((f) => f.name === fileName);
+		setFiles((prev) => prev.filter((f, i) => i !== index));
+	};
+
+	const renderFiles = () => {
+		return files.map((file) => (
+			<div className="flex-center gap-0.5" key={file.name}>
+				<label className={styles.cardBodyLabel}>
+					<AppInput className="text-center" type="file" disabled readOnly placeholder={file.name} />
+				</label>
+
+				<AppButton onClick={onFileRemove(file.name)} variant="danger" size="square">
+					<TrashIcon width="24px" height="24px" />
+				</AppButton>
+			</div>
+		));
 	};
 
 	return (
@@ -153,7 +197,7 @@ const ScientificWorksReportCreatePage = () => {
 				</div>
 			</div>
 
-			<div className={cn("mt-2.5 card-desk", styles.cardDesk, styles.cardDeskGrid2)}>
+			<div className={cn("mt-2.5 card-desk", styles.cardDesk, styles.cardDeskGrid2, styles.marginBottom)}>
 				<div className={styles.cardWrapper}>
 					<AppCard className="h-100">
 						<AppCard.Header>Количество лекций</AppCard.Header>
@@ -271,6 +315,30 @@ const ScientificWorksReportCreatePage = () => {
 									</label>
 								</div>
 							</div>
+						</AppCard.Body>
+					</AppCard>
+				</div>
+			</div>
+
+			<div className={cn("card-desk", styles.cardDesk, styles.cardDeskGrid4, styles.bgWhite)}>
+				<div className={cn("pe-2", styles.cardWrapper)}>
+					<AppCard className="h-100">
+						<AppCard.Header>Подтверждающий документ</AppCard.Header>
+						<AppCard.Body className={cn(styles.cardBody, styles.fileCardBody)}>
+							<label className={styles.cardBodyLabel}>
+								<AppInput
+									onChange={onFileChange}
+									className="text-center"
+									type="file"
+									placeholder="Прикрепить файл"
+									multiple
+								/>
+							</label>
+
+							<AppDivider className="my-0.75" />
+
+							{renderFiles()}
+							{errText}
 						</AppCard.Body>
 					</AppCard>
 				</div>
